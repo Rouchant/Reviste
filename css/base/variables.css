@@ -1,0 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+:root {
+    --brand-pink: #D63D82;
+    --brand-pink-soft: rgba(214, 61, 130, 0.1);
+    --brand-green: #84A98C;
+    --brand-green-dark: #52796F;
+    --brand-cream: #F4F1DE;
+    --brand-white: #FFFFFF;
+    --text-dark: #2D3436;
+    --text-muted: #636E72;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --radius-pill: 50px;
+    --radius-lg: 24px;
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
+}

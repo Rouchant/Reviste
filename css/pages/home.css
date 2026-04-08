@@ -1,0 +1,71 @@
+/* Hero Banner & Carousel */
+.hero-carousel {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.hero-banner {
+    min-height: 420px;
+    padding: 60px;
+    color: white;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border-radius: 0;
+    margin-bottom: 0;
+}
+
+.banner-eco {
+    background: linear-gradient(135deg, #D63D82 0%, #84A98C 100%);
+}
+
+.banner-fashion {
+    background: linear-gradient(135deg, #4834d4 0%, #be2edd 100%);
+}
+
+.banner-sellers {
+    background: linear-gradient(135deg, #f0932b 0%, #eb4d4b 100%);
+}
+
+.hero-banner h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    line-height: 1.1;
+    margin-bottom: 20px;
+    max-width: 650px;
+}
+
+.hero-banner p {
+    font-size: 1.2rem;
+    max-width: 500px;
+    opacity: 0.9;
+}
+
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 6px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-indicators .active {
+    background-color: white;
+    transform: scale(1.2);
+}
+
+.carousel-control-prev, .carousel-control-next {
+    width: 5%;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.hero-carousel:hover .carousel-control-prev,
+.hero-carousel:hover .carousel-control-next {
+    opacity: 0.5;
+}
+
+.hero-carousel:hover .carousel-control-prev:hover,
+.hero-carousel:hover .carousel-control-next:hover {
+    opacity: 1;
+}
