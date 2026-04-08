@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REVISTE | Marketplace de Moda Circular</title>
+    <title>REVISTE | Mercado Libre de Moda Circular</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Lucide Icons -->
@@ -17,7 +17,7 @@
     <nav class="navbar sticky-top">
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand" href="index.html">
-                <img src="assets/logo.png" alt="REVISTE Logo">
+                <img src="assets/logo-h.png" alt="REVISTE Logo" style="height: 40px;">
             </a>
             <div class="d-flex gap-3 align-items-center">
                 <a href="admin.html" class="text-dark d-none d-md-block" style="text-decoration: none; font-weight: 500;">Panel Admin</a>
@@ -30,17 +30,72 @@
     <!-- Main Content -->
     <main class="container mt-4 pb-5">
         
-        <!-- Search -->
-        <div class="mb-4">
-            <div class="position-relative">
-                <input type="text" class="search-bar" placeholder="Buscar prendas únicas, Y2K, vintage...">
-                <i data-lucide="search" class="position-absolute" style="top: 50%; right: 20px; transform: translateY(-50%); color: #636E72; width: 20px;"></i>
+        <!-- Search Header -->
+        <div class="mb-5 text-center px-md-5">
+            <h1 class="brand-font h2 mb-4">Encuentra tu estilo único</h1>
+            <div class="position-relative mx-auto" style="max-width: 700px;">
+                <input type="text" class="search-bar" placeholder="Buscar por marca, prenda o estilo (Y2K, Grunge, 90s)...">
+                <i data-lucide="search" class="position-absolute" style="top: 50%; right: 25px; transform: translateY(-50%); color: #636E72; width: 22px;"></i>
             </div>
         </div>
 
+        <!-- Hero Carousel -->
+        <div id="heroCarousel" class="carousel slide hero-carousel shadow-sm" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <!-- Slide 1: Eco -->
+                <div class="carousel-item active" data-bs-interval="5000">
+                    <div class="hero-banner banner-eco">
+                        <div class="z-1">
+                            <h1 class="brand-font">Renueva tu clóset sustentablemente</h1>
+                            <p class="lead mb-4">Moda circular con hasta 40% de descuento en marcas premium.</p>
+                            <button class="btn btn-primary">Explorar Ofertas</button>
+                        </div>
+                        <div class="position-absolute" style="right: 10%; bottom: -50px; width: 350px; height: 350px; background: rgba(255,255,255,0.15); border-radius: 50%; filter: blur(60px);"></div>
+                    </div>
+                </div>
+                <!-- Slide 2: Fashion/Y2K -->
+                <div class="carousel-item" data-bs-interval="5000">
+                    <div class="hero-banner banner-fashion">
+                        <div class="z-1">
+                            <h1 class="brand-font">Joyas de los 2000s: Edición Limitada</h1>
+                            <p class="lead mb-4">Descubre accesorios únicos que definieron una era. ¡Solo para coleccionistas!</p>
+                            <button class="btn btn-primary">Ver Accesorios</button>
+                        </div>
+                        <img src="assets/logo-h.png" class="position-absolute opacity-10" style="right: -50px; top: 20px; height: 300px; transform: rotate(-15deg); filter: invert(1);">
+                    </div>
+                </div>
+                <!-- Slide 3: Sellers -->
+                <div class="carousel-item" data-bs-interval="5000">
+                    <div class="hero-banner banner-sellers">
+                        <div class="z-1">
+                            <h1 class="brand-font">Tu clóset, tu negocio</h1>
+                            <p class="lead mb-4">Vende lo que ya no usas con 0% de comisión. Únete a la comunidad REVISTE.</p>
+                            <button class="btn btn-primary">Empezar a Vender</button>
+                        </div>
+                        <div class="position-absolute" style="right: 5%; top: 20%; width: 250px; height: 250px; border: 15px solid rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+
         <!-- Categories -->
-        <section class="mb-4">
-            <h2 class="h5 mb-3 brand-font">Explorar por Estilo</h2>
+        <section class="mb-5">
+            <div class="section-title">
+                <h2 class="h5 brand-font">Categorías Populares</h2>
+            </div>
             <div class="category-scroll">
                 <a href="#" class="category-pill active">Todos</a>
                 <a href="#" class="category-pill">Vintage 90s</a>
@@ -48,17 +103,103 @@
                 <a href="#" class="category-pill">Denim</a>
                 <a href="#" class="category-pill">Streetwear</a>
                 <a href="#" class="category-pill">Accesorios</a>
+                <a href="#" class="category-pill">Grunge</a>
             </div>
         </section>
 
-        <!-- Product Feed -->
-        <section>
-            <div class="d-flex justify-content-between align-items-end mb-4">
-                <h2 class="h4 mb-0 brand-font">Recién llegados</h2>
-                <a href="#" class="text-decoration-none" style="color: var(--brand-pink); font-weight: 600; font-size: 0.9rem;">Ver todo</a>
+        <!-- Section: Ofertas del Día -->
+        <section class="mb-5">
+            <div class="section-title">
+                <h2 class="h4 brand-font">Ofertas del Día</h2>
+                <a href="#" class="section-link">Ver todas</a>
             </div>
+            <div class="h-scroll">
+                <!-- Offer item 1 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">Vintage</span>
+                        <span class="product-offer-tag">30% OFF</span>
+                        <img src="assets/item2.png" alt="Suéter Retro" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(12)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Suéter Retro Color Block</h3>
+                        <div class="d-flex align-items-baseline">
+                            <span class="old-price">$26.000</span>
+                            <span class="product-price">$18.500</span>
+                        </div>
+                        <div class="shipping-tag mt-2">
+                            <i data-lucide="truck" style="width: 14px;"></i> Envío gratis
+                        </div>
+                    </div>
+                </div>
 
-            <div class="row g-3">
+                <!-- Offer item 2 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">Cargo</span>
+                        <span class="product-offer-tag">15% OFF</span>
+                        <img src="assets/item3.png" alt="Pantalones Cargo" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(8)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Pantalones Cargo Earthy</h3>
+                        <div class="d-flex align-items-baseline">
+                            <span class="old-price">$25.800</span>
+                            <span class="product-price">$22.000</span>
+                        </div>
+                        <div class="shipping-tag mt-2">
+                            <i data-lucide="truck" style="width: 14px;"></i> Envío gratis
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Recién Llegados -->
+        <section class="mb-5">
+            <div class="section-title">
+                <h2 class="h4 brand-font">Recién Llegados</h2>
+                <a href="#" class="section-link">Ver todo</a>
+            </div>
+            <div class="row g-4">
+                <!-- Item 4: Floral Dress -->
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <span class="product-tag">Grunge</span>
+                            <img src="assets/item4.png" alt="Vestido Grunge" class="product-image">
+                        </div>
+                        <div class="product-info">
+                            <div class="rating-stars">
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <span class="text-muted ms-1">(New!)</span>
+                            </div>
+                            <h3 class="h6 mb-1 text-truncate">Vestido Grunge Flora</h3>
+                            <p class="product-price">$15.000</p>
+                            <p class="text-muted small mb-0">Vendido por: <b>@EcoVibe</b></p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Item 1 -->
                 <div class="col-6 col-md-4 col-lg-3">
                     <div class="product-card">
@@ -67,52 +208,189 @@
                             <img src="assets/item1.png" alt="Chaqueta Denim" class="product-image">
                         </div>
                         <div class="product-info">
+                            <div class="rating-stars">
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" style="width: 14px;"></i>
+                                <span class="text-muted ms-1">(24)</span>
+                            </div>
                             <h3 class="h6 mb-1 text-truncate">Chaqueta Denim Vintage</h3>
-                            <p class="product-price mb-0">$25.990</p>
+                            <p class="product-price">$25.990</p>
+                            <p class="text-muted small mb-0">Vendido por: <b>@RetroShop</b></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Item 2 -->
+                <!-- Item 5: Flannel -->
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="product-card">
+                        <div class="product-image-container">
+                            <span class="product-tag">Grunge</span>
+                            <img src="assets/item5.png" alt="Camisa Flanela" class="product-image">
+                        </div>
+                        <div class="product-info">
+                            <div class="rating-stars">
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" style="width: 14px;"></i>
+                                <span class="text-muted ms-1">(15)</span>
+                            </div>
+                            <h3 class="h6 mb-1 text-truncate">Camisa Flanela Oversized</h3>
+                            <p class="product-price">$12.500</p>
+                            <p class="text-muted small mb-0">Vendido por: <b>@GrungeCity</b></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Item 6: Slip Dress -->
                 <div class="col-6 col-md-4 col-lg-3">
                     <div class="product-card">
                         <div class="product-image-container">
                             <span class="product-tag">90s</span>
-                            <img src="assets/item2.png" alt="Suéter Retro" class="product-image">
+                            <img src="assets/item6.png" alt="Vestido Satin" class="product-image">
                         </div>
                         <div class="product-info">
-                            <h3 class="h6 mb-1 text-truncate">Suéter Retro Color Block</h3>
-                            <p class="product-price mb-0">$18.500</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Item 3 -->
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-image-container">
-                            <span class="product-tag">Cargo</span>
-                            <img src="assets/item3.png" alt="Pantalones Cargo" class="product-image">
-                        </div>
-                        <div class="product-info">
-                            <h3 class="h6 mb-1 text-truncate">Pantalones Cargo Earthy</h3>
-                            <p class="product-price mb-0">$22.000</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Placeholder card to show grid -->
-                <div class="col-6 col-md-4 col-lg-3">
-                    <div class="product-card">
-                        <div class="product-image-container">
-                            <span class="product-tag">Nuevo</span>
-                            <div class="d-flex align-items-center justify-content-center h-100" style="background: #f8f9fa;">
-                                <i data-lucide="image" style="width: 40px; height: 40px; color: #dee2e6;"></i>
+                            <div class="rating-stars">
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                                <span class="text-muted ms-1">(19)</span>
                             </div>
+                            <h3 class="h6 mb-1 text-truncate">Vestido Satin Slip Lavender</h3>
+                            <p class="product-price">$19.990</p>
+                            <p class="text-muted small mb-0">Vendido por: <b>@PastelDream</b></p>
                         </div>
-                        <div class="product-info">
-                            <h3 class="h6 mb-1 text-truncate">Vestido Grunge Flora</h3>
-                            <p class="product-price mb-0">$15.000</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Accesorios Únicos -->
+        <section class="mb-5">
+            <div class="section-title">
+                <h2 class="h4 brand-font">Accesorios Únicos</h2>
+                <a href="#" class="section-link">Ver todos</a>
+            </div>
+            <div class="h-scroll">
+                <!-- Acc 1 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">Y2K</span>
+                        <img src="assets/acc1.png" alt="Lentes Pink" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(42)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Lentes Tintados Pink Y2K</h3>
+                        <p class="product-price">$8.500</p>
+                        <div class="shipping-tag mt-2">
+                            <i data-lucide="truck" style="width: 14px;"></i> Envío gratis
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acc 2 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">90s</span>
+                        <img src="assets/acc2.png" alt="Bucket Hat" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(15)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Bucket Hat Corduroy Mustard</h3>
+                        <p class="product-price">$12.000</p>
+                    </div>
+                </div>
+
+                <!-- Acc 3 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">Vintage</span>
+                        <img src="assets/acc3.png" alt="Cinturón Mariposa" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(27)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Cinturón Hebilla Mariposa</h3>
+                        <p class="product-price">$15.900</p>
+                    </div>
+                </div>
+
+                <!-- Acc 4 -->
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">Eco</span>
+                        <img src="assets/acc4.png" alt="Tote Bag" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(5)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Tote Bag Minimalist Retro</h3>
+                        <p class="product-price">$6.000</p>
+                        <div class="shipping-tag mt-2">
+                            <i data-lucide="truck" style="width: 14px;"></i> Envío gratis
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Los Más Valorados -->
+        <section class="mb-5">
+            <div class="section-title">
+                <h2 class="h4 brand-font">Los Más Valorados</h2>
+                <a href="#" class="section-link">Ver ranking</a>
+            </div>
+            <div class="h-scroll">
+                <div class="product-card">
+                    <div class="product-image-container">
+                        <span class="product-tag">90s</span>
+                        <img src="assets/item1.png" alt="90s Look" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <div class="rating-stars">
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                            <span class="text-muted ms-1">(120+)</span>
+                        </div>
+                        <h3 class="h6 mb-1 text-truncate">Must-have 90s Jacket</h3>
+                        <p class="product-price">$29.990</p>
+                        <div class="shipping-tag mt-2">
+                            <i data-lucide="shield-check" style="width: 14px;"></i> Vendedor verificado
                         </div>
                     </div>
                 </div>
