@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviste | Acceso</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/ui/logo.png">
+    <style>
+        body {
+            background: linear-gradient(135deg, var(--brand-cream) 0%, #E9EDC9 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        .orb-1 { width: 300px; height: 300px; background: var(--brand-pink-soft); top: -100px; left: -100px; }
+        .orb-2 { width: 400px; height: 400px; background: #ccd5ae; bottom: -150px; right: -100px; }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            width: 100%;
+            max-width: 550px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.1);
+            animation: slideUp 0.6s ease-out;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-logo {
+            display: block;
+            margin: 0 auto 30px;
+            height: 40px;
+        }
+
+        .nav-tabs-custom {
+            display: flex;
+            background: rgba(0,0,0,0.05);
+            padding: 5px;
+            border-radius: var(--radius-pill);
+            margin-bottom: 30px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 12px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: var(--brand-pink);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .form-label-custom {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: #444;
+        }
+
+        .form-control-custom {
+            background: white;
+            border: 1px solid #EEE;
+            border-radius: 15px;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .form-control-custom:focus {
+            border-color: var(--brand-pink);
+            box-shadow: 0 0 0 4px var(--brand-pink-soft);
+            outline: none;
+        }
+
+        .auth-btn {
+            background: var(--brand-pink);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 15px;
+            font-weight: 700;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(214, 61, 130, 0.3);
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-form { display: none; }
+        .auth-form.active { display: block; animation: fadeIn 0.4s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Password Strength Meter */
+        .strength-meter {
+            height: 4px;
+            background: #EEE;
+            border-radius: 2px;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            display: none;
+        }
+        .strength-bar {
+            height: 100%;
+            width: 0;
+            transition: all 0.3s;
+        }
+        .strength-text {
+            font-size: 0.75rem;
+            margin-bottom: 15px;
+            display: block;
+            margin-top: -12px;
+        }
+
+        .auth-card::-webkit-scrollbar { width: 6px; }
+        .auth-card::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="auth-card shadow-lg">
+        <a href="index.html">
+            <img src="assets/ui/logo-h.png" alt="REVISTE" class="auth-logo">
+        </a>
+
+        <div class="nav-tabs-custom">
+            <button class="tab-btn active" onclick="switchTab('login')">Ingresar</button>
+            <button class="tab-btn" onclick="switchTab('register')">Crear Cuenta</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="auth-form active">
+            <h2 class="h4 mb-4 fw-bold">Te extrañamos ✨</h2>
+            <form>
+                <div class="mb-1">
+                    <label class="form-label-custom">Correo Electrónico</label>
+                    <input type="email" class="form-control-custom" placeholder="ejemplo@correo.com" required>
+                </div>
+                <div class="mb-1">
+                    <label class="form-label-custom">Contraseña</label>
+                    <input type="password" class="form-control-custom" placeholder="••••••••" required>
+                </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="remember">
+                        <label class="form-check-label small" for="remember">Recuérdame</label>
+                    </div>
+                    <a href="#" class="small text-pink text-decoration-none">¿Olvidaste tu clave?</a>
+                </div>
+                <button type="submit" class="auth-btn">Iniciar Sesión</button>
+            </form>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="auth-form">
+            <h2 class="h4 mb-4 fw-bold">Únete a Reviste 🌿</h2>
+            <form>
+                <div class="mb-0">
+                    <label class="form-label-custom">Nombre Completo</label>
+                    <input type="text" class="form-control-custom" placeholder="Ej: Juan Pérez" required>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label-custom">Nombre de Usuario (Alias)</label>
+                    <input type="text" class="form-control-custom" placeholder="Ej: @juan_vintage" required>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label-custom">Correo Electrónico</label>
+                    <input type="email" class="form-control-custom" placeholder="tunombre@email.com" required>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label-custom">Número de Teléfono</label>
+                    <input type="tel" class="form-control-custom" placeholder="+56 9 1234 5678" required>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Región</label>
+                        <select class="form-control-custom" id="region-select" required onchange="updateComunas(this.value)">
+                            <option value="">Selecciona Región</option>
+                            <option value="RM">Región Metropolitana</option>
+                            <option value="VA">Valparaíso</option>
+                            <option value="BI">Biobío</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label-custom">Comuna</label>
+                        <select class="form-control-custom" id="comuna-select" required disabled>
+                            <option value="">Primero elige Región</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label-custom">Calle y Número</label>
+                    <input type="text" class="form-control-custom" placeholder="Av. Siempre Viva 742" required>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label-custom">Contraseña</label>
+                    <input type="password" class="form-control-custom" id="reg-password" placeholder="Mínimo 8 caracteres" required oninput="checkStrength(this.value)">
+                    <div class="strength-meter" id="strength-meter">
+                        <div class="strength-bar" id="strength-bar"></div>
+                    </div>
+                    <span class="strength-text" id="strength-text"></span>
+                </div>
+
+                <div class="mb-1">
+                    <label class="form-label-custom">Confirmar Contraseña</label>
+                    <input type="password" class="form-control-custom" placeholder="Repite tu contraseña" required>
+                </div>
+
+                <button type="submit" class="auth-btn">Crear mi cuenta</button>
+            </form>
+        </div>
+
+        <div class="auth-footer">
+            <a href="index.html" class="text-decoration-none text-muted"><i data-lucide="arrow-left" style="width: 14px;"></i> Volver a la tienda</a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const comunasMap = {
+            'RM': ['Santiago', 'Providencia', 'Las Condes', 'Ñuñoa', 'Maipú', 'Puente Alto'],
+            'VA': ['Valparaíso', 'Viña del Mar', 'Quilpué', 'Villa Alemana', 'Concón'],
+            'BI': ['Concepción', 'Talcahuano', 'San Pedro de la Paz', 'Chiguayante']
+        };
+
+        function updateComunas(region) {
+            const comunaSelect = document.getElementById('comuna-select');
+            comunaSelect.innerHTML = '<option value="">Selecciona Comuna</option>';
+            
+            if (region && comunasMap[region]) {
+                comunaSelect.disabled = false;
+                comunasMap[region].forEach(comuna => {
+                    const opt = document.createElement('option');
+                    opt.value = comuna.toLowerCase();
+                    opt.innerText = comuna;
+                    comunaSelect.appendChild(opt);
+                });
+            } else {
+                comunaSelect.disabled = true;
+                comunaSelect.innerHTML = '<option value="">Primero elige Región</option>';
+            }
+        }
+
+        function switchTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const btns = document.querySelectorAll('.tab-btn');
+
+            if (tab === 'login') {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                btns[0].classList.add('active');
+                btns[1].classList.remove('active');
+                window.location.hash = 'login';
+            } else {
+                loginForm.classList.remove('active');
+                registerForm.classList.add('active');
+                btns[0].classList.remove('active');
+                btns[1].classList.add('active');
+                window.location.hash = 'register';
+            }
+        }
+
+        function checkStrength(password) {
+            const meter = document.getElementById('strength-meter');
+            const bar = document.getElementById('strength-bar');
+            const text = document.getElementById('strength-text');
+            
+            if (password.length > 0) {
+                meter.style.display = 'block';
+            } else {
+                meter.style.display = 'none';
+                text.innerText = '';
+                return;
+            }
+
+            let strength = 0;
+            if (password.length >= 8) strength += 1;
+            if (/[A-Z]/.test(password)) strength += 1;
+            if (/[0-9]/.test(password)) strength += 1;
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+
+            let color = '';
+            let label = '';
+            let width = '';
+
+            switch (strength) {
+                case 0:
+                case 1:
+                    color = '#ff4d4d';
+                    label = 'Débil';
+                    width = '25%';
+                    break;
+                case 2:
+                    color = '#ffa500';
+                    label = 'Regular';
+                    width = '50%';
+                    break;
+                case 3:
+                    color = '#ffcc00';
+                    label = 'Buena';
+                    width = '75%';
+                    break;
+                case 4:
+                    color = '#2ecc71';
+                    label = '¡Fuerte! 💪';
+                    width = '100%';
+                    break;
+            }
+
+            bar.style.backgroundColor = color;
+            bar.style.width = width;
+            text.innerText = label;
+            text.style.color = color;
+        }
+
+        window.addEventListener('load', () => {
+            const hash = window.location.hash;
+            if (hash === '#register') {
+                switchTab('register');
+            } else {
+                switchTab('login');
+            }
+        });
+    </script>
+</body>
+</html>

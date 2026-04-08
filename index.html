@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -21,10 +21,18 @@
             <a class="navbar-brand" href="index.html">
                 <img src="assets/ui/logo-h.png" alt="REVISTE Logo">
             </a>
-            <div class="d-flex gap-3 align-items-center">
-                <a href="admin.html" class="text-dark d-none d-md-block" style="text-decoration: none; font-weight: 500;">Panel Admin</a>
-                <i data-lucide="shopping-bag" class="text-dark"></i>
-                <i data-lucide="user" class="text-dark"></i>
+            <div class="nav-actions d-flex gap-2 gap-md-3 align-items-center">
+                <a href="admin.html" class="text-dark d-none d-lg-block text-decoration-none fw-500 me-2">Panel Admin</a>
+                <div class="d-none d-md-flex gap-2">
+                    <a href="auth.html#login" class="btn btn-outline-primary btn-sm px-3 py-2 rounded-pill fw-600">Iniciar Sesión</a>
+                    <a href="auth.html#register" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-600 text-white">Regístrate</a>
+                </div>
+                <!-- Icons for small screens or auxiliary actions -->
+                <button class="btn p-1 text-dark position-relative">
+                    <i data-lucide="shopping-bag"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">2</span>
+                </button>
+                <a href="auth.html#login" class="btn p-1 text-dark d-md-none"><i data-lucide="user"></i></a>
             </div>
         </div>
     </nav>
