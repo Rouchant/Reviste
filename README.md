@@ -1,44 +1,75 @@
 # REVISTE - Marketplace de Moda Circular 👗♻️
 
-![REVISTE Logo](assets/ui/logo-h.png)
+![REVISTE Banner](assets/ui/logo-h.png)
 
-**REVISTE** es una plataforma premium de compra y venta de moda circular, diseñada para transformar la manera en que consumimos ropa y accesorios. Con una estética moderna, limpia y funcional inspirada en los grandes marketplaces globales como Mercado Libre, pero con un toque **Y2K/Grunge** único.
+**REVISTE** es una plataforma premium de compra y venta de moda circular, diseñada para transformar la manera en que consumimos ropa y accesorios. Fusionamos una estética **Y2K/Glassmorphism** de vanguardia con la funcionalidad robusta de los grandes marketplaces globales.
+
+---
 
 ## ✨ Características Principales
 
-- **Marketplace Sincronizado**: Navegación fluida mediante secciones de scroll horizontal y grillas responsivas.
-- **Estandarización Visual**: Todas las tarjetas de producto comparten dimensiones exactas para una experiencia de usuario simétrica.
-- **Página de Producto Premium**: Detalle exhaustivo con galería de imágenes, badges de confianza del vendedor ("MercadoLíder") y flujo de compra optimizado.
-- **Dashboard Administrativo**: Panel completo para la gestión de inventario, visualización de métricas de venta y control de usuarios.
-- **Diseño Adaptativo**: Experiencia optimizada para móviles con barra de navegación inferior integrada.
+### 🛒 Marketplace Dinámico
+- **Navegación Fluida**: Experiencia optimizada con secciones de scroll horizontal y grillas responsivas.
+- **Tarjetas Premium**: Diseño simétrico y estandarizado para una visualización limpia de tesoros circulares.
+
+### 🔐 Sistema de Autenticación Unificado
+- **Acceso sin Recargas**: Interfaz de pestañas (*tabs*) para alternar entre Login y Registro instantáneamente.
+- **Seguridad en Tiempo Real**: Medidor de fuerza de contraseña dinámico y validación de campos.
+- **Lógica Geográfica**: Selectores dinámicos de Región y Comuna filtrados automáticamente.
+
+### 📤 "Sube tu Prenda" (Inventory Intake)
+- **Flujo de Carga Ágil**: Formulario diseñado para capturar metadatos críticos (talla, categoría, estado, precio).
+- **Vista Previa Live**: Los vendedores pueden ver la foto de su prenda instantáneamente antes de publicar.
+
+### 📊 Dashboard Administrativo
+- **Control Total**: Panel para gestión de inventario, métricas de venta (Ventas Totales, Pedidos) y control de usuarios.
+- **Tablas Premium**: Visualización clara del estado de los productos (Disponible, Vendido, Reservado).
+
+---
 
 ## 🛠️ Stack Tecnológico
 
-- **Estructura**: HTML5 (Semántico)
-- **Estilos**: CSS3 (Glassmorphism, Gradientes, Custom Properties) & Bootstrap 5
-- **Iconografía**: Lucide Icons
-- **Tipografía**: Outfit & Montserrat (Google Fonts)
+- **Estructura**: HTML5 Semántico
+- **Estilos**: 
+  - **CSS3 Vanilla**: Arquitectura centralizada y optimizada.
+  - **Glassmorphism**: Backdrop filters, gradientes dinámicos y orbes decorativos.
+  - **Bootstrap 5**: Grid system y utilidades base.
+- **Iconografía**: [Lucide Icons](https://lucide.dev/) (SVG dinámicos)
+- **Tipografía**: Outfit & Playfair Display (Google Fonts)
+
+---
 
 ## 📁 Estructura del Proyecto
 
 ```text
 Reviste/
-├── index.html          # Página principal del Marketplace
-├── product.html        # Detalle de producto individual
-├── admin.html          # Dashboard de administración
+├── index.html          # Portal Principal y Marketplace
+├── auth.html           # Acceso Unificado (Login / Registro)
+├── upload.html         # Formulario de Publicación de Prendas
+├── product.html        # Detalle Premium de Producto
+├── admin.html          # Panel de Gestión Administrativa
 ├── css/
-│   └── style.css       # Sistema de diseño y estilos personalizados
+│   └── style.css       # Núcleo del Sistema de Diseño (Unificado)
 └── assets/
-    ├── products/       # Imágenes de prendas y accesorios
-    └── ui/             # Logotipos, banners y gráficos del sitio
+    ├── products/       # Catálogo de imágenes de productos
+    └── ui/             # Activos de marca (Logos, Banners)
 ```
 
-## 🎨 Identidad Visual
+---
 
-- **Marca**: `#D63D82` (Rosa Brand) / `#84A98C` (Verde Cero)
-- **Fondo**: `#F4F1DE` (Crema Suave)
-- **Estilo**: Bordes redondeados (`20px`), sombras suaves y efectos de difuminado (*Glassmorphism*).
+## 🎨 Identidad Visual (Design Tokens)
+
+- **Malla de Color**:
+  - `Brand Pink`: `#D63D82`
+  - `Eco Green`: `#84A98C`
+  - `Soft Cream`: `#F4F1DE`
+- **Componentes**: Bordes ultra-redondeados (`30px`), sombras suaves (`shadow-soft`) y desenfocs gaussionos para el efecto cristal.
 
 ---
+
+## 🚀 Cómo empezar
+1. Clona el repositorio.
+2. Abre `index.html` usando un servidor local (ej. *Live Server* de VS Code).
+3. ¡Explora el futuro de la moda circular!
 
 > "El futuro de la moda es circular." - **REVISTE SpA 2026**

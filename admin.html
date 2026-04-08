@@ -10,36 +10,6 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Custom CSS -->
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .admin-main {
-            background-color: #F8F9FA;
-            min-height: 100vh;
-        }
-        .table-premium {
-            background: white;
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            border: 1px solid #EEE;
-        }
-        .table-premium th {
-            background: #F8F9FA;
-            font-weight: 600;
-            padding: 15px;
-        }
-        .table-premium td {
-            padding: 15px;
-            vertical-align: middle;
-        }
-        .status-pill {
-            padding: 4px 12px;
-            border-radius: var(--radius-pill);
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .status-available { background: #E3F2FD; color: #1976D2; }
-        .status-sold { background: #E8F5E9; color: #2E7D32; }
-        .status-reserved { background: #FFF3E0; color: #EF6C00; }
-    </style>
 </head>
 <body>
 
@@ -48,7 +18,7 @@
             <!-- Sidebar -->
             <aside class="col-md-3 col-lg-2 d-none d-md-block admin-sidebar">
                 <div class="mb-5 px-3">
-                    <img src="assets/ui/logo.png" alt="REVISTE" style="height: 40px;">
+                    <img src="assets/ui/logo-h.png" alt="REVISTE" style="height: 60px;">
                 </div>
                 
                 <nav>
@@ -94,9 +64,9 @@
                         <h1 class="h3 brand-font mb-1">Panel de Control</h1>
                         <p class="text-muted">Bienvenido de nuevo, Administrador Reviste.</p>
                     </div>
-                    <button class="btn btn-primary d-none d-sm-block">
+                    <a href="upload.html" class="btn btn-primary d-none d-sm-block">
                         <i data-lucide="plus" class="me-2" style="width: 18px;"></i>Nueva Prenda
-                    </button>
+                    </a>
                 </div>
 
                 <!-- Stats Grid -->
