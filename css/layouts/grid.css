@@ -1,0 +1,74 @@
+@media (min-width: 992px) {
+    .col-lg-2-4 {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+}
+
+/* Horizontal Scroll Containers */
+.h-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 16px;
+    padding: 10px 0 20px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.h-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.h-scroll .product-card {
+    width: 280px;
+    min-width: 280px;
+    margin-bottom: 5px;
+}
+
+/* Scroll Fade Effect */
+.scroll-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.scroll-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(to right, transparent, var(--brand-cream));
+    pointer-events: none;
+    z-index: 2;
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+}
+
+/* Category Scroll */
+.category-scroll {
+    display: flex;
+    overflow-x: auto;
+    padding: 15px 0;
+    gap: 12px;
+    scrollbar-width: none;
+}
+
+.category-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* Section Headers */
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 20px;
+}
+
+.section-link {
+    color: var(--brand-pink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+}

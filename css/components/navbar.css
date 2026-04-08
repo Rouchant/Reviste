@@ -1,0 +1,28 @@
+/* Navbar */
+.navbar {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 1rem 0;
+}
+
+.navbar-brand img {
+    height: 60px;
+}
+
+.search-bar {
+    background: white;
+    border: 1px solid #E0E0E0;
+    border-radius: var(--radius-pill);
+    padding: 12px 25px;
+    width: 100%;
+    transition: all 0.3s;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.search-bar:focus {
+    outline: none;
+    border-color: var(--brand-pink);
+    box-shadow: 0 4px 20px rgba(214, 61, 130, 0.1);
+}

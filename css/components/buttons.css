@@ -1,0 +1,127 @@
+/* Bootstrap Overrides */
+.btn-primary {
+    background-color: var(--brand-pink);
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 12px 28px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #BD2E6B;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(214, 61, 130, 0.3);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--brand-pink);
+    color: var(--brand-pink);
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--brand-pink);
+    color: white;
+}
+
+/* Category Pills */
+.category-pill {
+    white-space: nowrap;
+    padding: 8px 20px;
+    background: white;
+    border: 1px solid #EEE;
+    border-radius: var(--radius-pill);
+    color: var(--text-dark);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.category-pill.active {
+    background: var(--brand-green);
+    color: white;
+    border-color: var(--brand-green);
+}
+
+/* Tab Buttons */
+.nav-tabs-custom {
+    display: flex;
+    background: rgba(0,0,0,0.05);
+    padding: 5px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 30px;
+}
+
+.tab-btn {
+    flex: 1;
+    border: none;
+    background: none;
+    padding: 12px;
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--brand-pink);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* Auth & Publish Buttons */
+.auth-btn, .btn-publish {
+    background: var(--brand-pink);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 15px;
+    font-weight: 700;
+    margin-top: 10px;
+    transition: all 0.3s;
+}
+
+.auth-btn:hover, .btn-publish:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(214, 61, 130, 0.3);
+}
+
+/* Floating Action Button */
+.fab-upload {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--brand-pink);
+    color: white !important;
+    border-radius: var(--radius-pill);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 10px 25px rgba(214, 61, 130, 0.4);
+    text-decoration: none;
+    z-index: 1000;
+    transition: all 0.3s;
+}
+
+.fab-upload:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(214, 61, 130, 0.5);
+}
+
+/* Status Pills */
+.status-pill {
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status-available { background: #E3F2FD; color: #1976D2; }
+.status-sold { background: #E8F5E9; color: #2E7D32; }
+.status-reserved { background: #FFF3E0; color: #EF6C00; }
