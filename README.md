@@ -1,6 +1,6 @@
 # REVISTE - Marketplace de Moda Circular 👗♻️
 
-![REVISTE Banner](assets/ui/logo-h.png)
+![REVISTE Banner](assets/images/ui/logo-h.png)
 
 **REVISTE** es una plataforma premium de compra y venta de moda circular, diseñada para transformar la manera en que consumimos ropa y accesorios. Fusionamos una estética **Y2K/Glassmorphism** de vanguardia con la funcionalidad robusta de los grandes marketplaces globales.
 
