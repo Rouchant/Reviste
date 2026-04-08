@@ -16,6 +16,13 @@
     --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
+@media (min-width: 992px) {
+    .col-lg-2-4 {
+        flex: 0 0 auto;
+        width: 20%;
+    }
+}
+
 body {
     background-color: var(--brand-cream);
     color: var(--text-dark);
@@ -75,7 +82,7 @@ h1, h2, h3, .brand-font {
 }
 
 .navbar-brand img {
-    height: 45px;
+    height: 60px;
 }
 
 .search-bar {
@@ -110,8 +117,29 @@ h1, h2, h3, .brand-font {
 }
 
 .h-scroll .product-card {
-    min-width: 260px;
+    width: 280px;
+    min-width: 280px;
     margin-bottom: 5px;
+}
+
+/* Scroll Fade Effect */
+.scroll-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.scroll-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100%;
+    background: linear-gradient(to right, transparent, var(--brand-cream));
+    pointer-events: none;
+    z-index: 2;
+    border-top-right-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
 }
 
 /* Category Pills */
@@ -152,7 +180,11 @@ h1, h2, h3, .brand-font {
     overflow: hidden;
     border: none;
     transition: transform 0.3s, box-shadow 0.3s;
-    margin-bottom: 20px;
+    margin: 0 auto 20px auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    max-width: 280px;
 }
 
 .product-card:hover {
@@ -203,6 +235,11 @@ h1, h2, h3, .brand-font {
 
 .product-info {
     padding: 15px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 160px;
 }
 
 .product-price {
@@ -377,22 +414,22 @@ h1, h2, h3, .brand-font {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    width: 65px;
-    height: 65px;
     background: var(--brand-pink);
-    color: white;
-    border-radius: 50%;
+    color: white !important;
+    border-radius: var(--radius-pill);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    padding: 15px 25px;
+    font-size: 1rem;
+    font-weight: 600;
     box-shadow: 0 10px 25px rgba(214, 61, 130, 0.4);
     text-decoration: none;
     z-index: 1000;
-    transition: transform 0.3s;
+    transition: all 0.3s;
 }
 
 .fab-upload:hover {
-    transform: scale(1.1) rotate(90deg);
-    color: white;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 30px rgba(214, 61, 130, 0.5);
 }
