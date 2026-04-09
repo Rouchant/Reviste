@@ -72,3 +72,20 @@
     font-weight: 600;
     font-size: 0.9rem;
 }
+
+/* Responsive Grid Adjustments */
+@media (max-width: 767px) {
+    .h-scroll {
+        gap: 12px;
+        padding-bottom: 15px;
+    }
+
+    .h-scroll .product-card {
+        width: 190px;
+        min-width: 190px;
+    }
+
+    .scroll-wrapper::after {
+        width: 60px; /* Smaller fade on mobile */
+    }
+}
