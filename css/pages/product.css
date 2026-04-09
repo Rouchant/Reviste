@@ -79,3 +79,49 @@
 
 .spec-label { color: var(--text-muted); }
 .spec-value { font-weight: 600; }
+
+/* Mobile Optimizations */
+@media (max-width: 991px) {
+    .product-gallery {
+        position: static;
+        margin-bottom: 20px;
+    }
+
+    .main-img-container {
+        border-radius: var(--radius-md);
+        margin: 0 -15px; /* Bleed to edges on mobile if desired, or keep as is */
+    }
+
+    .checkout-box {
+        position: static;
+        padding: 20px;
+        border: none;
+        box-shadow: none !important;
+        background: transparent;
+    }
+
+    .spec-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .spec-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0;
+        border: none;
+    }
+
+    .spec-label { font-size: 0.8rem; margin-bottom: 2px; }
+}
+
+/* Sticky CTA Mobile */
+.sticky-cta-mobile {
+    transform: translateY(100%);
+    transition: transform 0.3s ease-in-out;
+}
+
+.sticky-cta-mobile.show {
+    transform: translateY(0);
+}

@@ -8,22 +8,15 @@
 
 ## ✨ Características Principales
 
-### 🛒 Marketplace Dinámico
-- **Navegación Fluida**: Experiencia optimizada con secciones de scroll horizontal y grillas responsivas.
-- **Tarjetas Premium**: Diseño simétrico y estandarizado para una visualización limpia de tesoros circulares.
+### 📱 Experiencia Mobile-First
+- **Navegación Dual**: Barra superior minimalista para escritorio y **Fixed Bottom Nav** ergonómico para móviles, centralizando las acciones críticas (Admin, Carrito, Perfil).
+- **Sticky CTA bar**: En páginas de producto, el botón de compra permanece siempre accesible al hacer scroll.
+- **Layout Inteligente**: Reordenación dinámica de contenidos para móviles (ej. título y precio sobre la galería de imágenes).
 
-### 🔐 Sistema de Autenticación Unificado
-- **Acceso sin Recargas**: Interfaz de pestañas (*tabs*) para alternar entre Login y Registro instantáneamente.
-- **Seguridad en Tiempo Real**: Medidor de fuerza de contraseña dinámico y validación de campos.
-- **Lógica Geográfica**: Selectores dinámicos de Región y Comuna filtrados automáticamente.
-
-### 📤 "Sube tu Prenda" (Inventory Intake)
-- **Flujo de Carga Ágil**: Formulario diseñado para capturar metadatos críticos (talla, categoría, estado, precio).
-- **Vista Previa Live**: Los vendedores pueden ver la foto de su prenda instantáneamente antes de publicar.
-
-### 📊 Dashboard Administrativo
-- **Control Total**: Panel para gestión de inventario, métricas de venta (Ventas Totales, Pedidos) y control de usuarios.
-- **Tablas Premium**: Visualización clara del estado de los productos (Disponible, Vendido, Reservado).
+### 📊 Dashboard y Gestión
+- **Control Total**: Panel administrativo para gestión de inventario y métricas de venta.
+- **Mis Prendas**: Espacio dedicado para que los usuarios gestionen sus anuncios publicados.
+- **Configuración Unificada**: Acceso rápido a ajustes del sitio desde el footer y la navegación principal.
 
 ---
 
@@ -44,15 +37,19 @@
 ```text
 Reviste/
 ├── index.html          # Portal Principal y Marketplace
-├── auth.html           # Acceso Unificado (Login / Registro)
-├── upload.html         # Formulario de Publicación de Prendas
-├── product.html        # Detalle Premium de Producto
-├── admin.html          # Panel de Gestión Administrativa
+├── pages/
+│   ├── auth.html       # Acceso Unificado (Login / Registro)
+│   ├── upload.html     # Formulario de Publicación
+│   ├── product.html    # Detalle Premium de Producto
+│   ├── admin.html      # Panel de Gestión Administrativa
+│   ├── my-garments.html # Dashboard del Usuario
+│   ├── cart.html       # Visualización de Carrito
+│   └── settings.html   # Configuración de Cuenta
 ├── css/
-│   └── style.css       # Núcleo del Sistema de Diseño (Unificado)
-└── assets/
-    ├── products/       # Catálogo de imágenes de productos
-    └── ui/             # Activos de marca (Logos, Banners)
+│   ├── main.css        # Punto de entrada de estilos
+│   ├── components/     # Navbar, Cards, Buttons, etc.
+│   └── pages/          # Estilos específicos por vista
+└── assets/             # Recursos multimedia y logos
 ```
 
 ---

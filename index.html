@@ -21,18 +21,20 @@
             <a class="navbar-brand" href="index.html">
                 <img src="assets/images/ui/logo-h.png" alt="REVISTE Logo">
             </a>
-            <div class="nav-actions d-flex gap-2 gap-md-3 align-items-center">
-                <a href="pages/admin.html" class="text-dark d-none d-lg-block text-decoration-none fw-500 me-2">Panel Admin</a>
-                <div class="d-none d-md-flex gap-2">
-                    <a href="pages/auth.html#login" class="btn btn-outline-primary btn-sm px-3 py-2 rounded-pill fw-600">Iniciar Sesión</a>
-                    <a href="pages/auth.html#register" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-600 text-white">Regístrate</a>
-                </div>
-                <!-- Icons for small screens or auxiliary actions -->
-                <button class="btn p-1 text-dark position-relative">
+            <div class="nav-actions d-none d-md-flex gap-1 gap-md-2 align-items-center">
+                <a href="pages/admin.html" class="btn p-1" title="Administración" style="color: #BD2E6B;">
+                    <i data-lucide="user-star"></i>
+                </a>
+                <a href="pages/my-garments.html" class="btn p-1 text-dark" title="Mis Prendas">
+                    <i data-lucide="layout-panel-left"></i>
+                </a>
+                <a href="pages/cart.html" class="btn p-1 text-dark position-relative" title="Carrito">
                     <i data-lucide="shopping-bag"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">2</span>
-                </button>
-                <a href="pages/auth.html#login" class="btn p-1 text-dark d-md-none"><i data-lucide="user"></i></a>
+                </a>
+                <a href="pages/auth.html#login" class="btn p-1 text-dark" title="Iniciar Sesión">
+                    <i data-lucide="log-in"></i>
+                </a>
             </div>
         </div>
     </nav>
@@ -73,7 +75,7 @@
                     <div class="hero-banner banner-fashion">
                         <div class="z-1">
                             <h1 class="brand-font">Joyas de los 2000s: Edición Limitada</h1>
-                            <p class="lead mb-4">Descubre accesorios únicos que definieron una era. Â¡Solo para coleccionistas!</p>
+                            <p class="lead mb-4">Descubre accesorios únicos que definieron una era. ¡Solo para coleccionistas!</p>
                             <button class="btn btn-primary">Ver Accesorios</button>
                         </div>
                         <img src="assets/images/ui/logo-h.png" class="position-absolute opacity-10" style="right: -50px; top: 20px; height: 300px; transform: rotate(-15deg); filter: invert(1);">
@@ -84,7 +86,7 @@
                     <div class="hero-banner banner-sellers">
                         <div class="z-1">
                             <h1 class="brand-font">Tu clóset, tu negocio</h1>
-                            <p class="lead mb-4">Vende lo que ya no usas con 0% de comisión. Ãšnete a la comunidad REVISTE.</p>
+                            <p class="lead mb-4">Vende lo que ya no usas con 0% de comisión. Únete a la comunidad REVISTE.</p>
                             <button class="btn btn-primary">Empezar a Vender</button>
                         </div>
                         <div class="position-absolute" style="right: 5%; top: 20%; width: 250px; height: 250px; border: 15px solid rgba(255,255,255,0.1); border-radius: 50%;"></div>
@@ -641,22 +643,33 @@
         </section>
     </main>
 
-    <!-- Floating Action Button -->
-    <a href="pages/upload.html" class="fab-upload">
-        <i data-lucide="plus"></i>
-        <span class="ms-2">Sube tu prenda</span>
-    </a>
 
     <!-- Footer Mobile Nav -->
     <nav class="navbar fixed-bottom d-md-none border-top bg-white">
         <div class="container d-flex justify-content-around py-2">
-            <a href="index.html" class="text-pink"><i data-lucide="home"></i></a>
-            <a href="#" class="text-dark"><i data-lucide="search"></i></a>
-            <a href="#" class="text-dark"><i data-lucide="heart"></i></a>
-            <a href="#" class="text-dark"><i data-lucide="message-circle"></i></a>
-            <a href="pages/admin.html" class="text-dark"><i data-lucide="settings"></i></a>
+            <a href="pages/admin.html" style="color: #BD2E6B;"><i data-lucide="user-star"></i></a>
+            <a href="pages/my-garments.html" class="text-dark"><i data-lucide="layout-panel-left"></i></a>
+            <a href="pages/cart.html" class="text-dark position-relative">
+                <i data-lucide="shopping-bag"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.5rem; padding: 0.2rem 0.4rem;">2</span>
+            </a>
+            <a href="pages/auth.html#login" class="text-dark"><i data-lucide="log-in"></i></a>
         </div>
     </nav>
+
+    <!-- Footer Simple -->
+    <footer class="bg-white py-5 border-top mb-5 mb-md-0">
+        <div class="container text-center">
+            <img src="assets/images/ui/logo-h.png" alt="Logo" height="40" class="mb-4 opacity-75">
+            <div class="d-flex justify-content-center flex-wrap gap-4 mb-4">
+                <a href="#" class="text-muted text-decoration-none">Políticas</a>
+                <a href="#" class="text-muted text-decoration-none">Términos</a>
+                <a href="#" class="text-muted text-decoration-none">Ayuda</a>
+                <a href="pages/settings.html" class="text-muted text-decoration-none"><i data-lucide="settings" style="width: 16px; transform: translateY(-1px);"></i> Configuración</a>
+            </div>
+            <p class="text-muted small">"El futuro de la moda es circular." - <b>REVISTE SpA 2026</b></p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

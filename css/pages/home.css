@@ -14,6 +14,7 @@
     align-items: center;
     border-radius: 0;
     margin-bottom: 0;
+    overflow: hidden; /* Prevent absolute elements from causing layout issues */
 }
 
 .banner-eco {
@@ -68,4 +69,49 @@
 .hero-carousel:hover .carousel-control-prev:hover,
 .hero-carousel:hover .carousel-control-next:hover {
     opacity: 1;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .hero-banner {
+        height: 280px !important; /* Fixed height for consistency */
+        min-height: 280px !important;
+        padding: 30px 20px;
+    }
+
+    .hero-banner h1 {
+        font-size: 1.6rem;
+        margin-bottom: 12px;
+    }
+
+    .hero-banner p {
+        font-size: 0.95rem;
+        margin-bottom: 15px !important;
+        max-width: 100%; /* Ensure text doesn't overflow */
+    }
+
+    /* Standardize button size on mobile hero */
+    .hero-banner .btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+
+    /* Small fix for absolute images in banners on mobile */
+    .hero-banner img.position-absolute {
+        height: 180px !important;
+        right: -20px !important;
+        top: 50% !important;
+        transform: translateY(-50%) rotate(-15deg) !important;
+        opacity: 0.08 !important; /* Subtler background decor */
+    }
+
+    /* Mobile Carousel Indicators */
+    .carousel-indicators {
+        bottom: 5px;
+    }
+
+    .carousel-indicators [data-bs-target] {
+        width: 8px;
+        height: 8px;
+    }
 }

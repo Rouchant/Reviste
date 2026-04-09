@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Carrito | REVISTE</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/main.css">
+</head>
+<body class="bg-light">
+
+    <!-- Simple Navbar -->
+    <nav class="navbar sticky-top glass shadow-sm mb-4">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="../index.html">
+                <img src="../assets/images/ui/logo-h.png" alt="REVISTE Logo" style="height: 40px;">
+            </a>
+            <a href="../index.html" class="btn btn-outline-dark btn-sm rounded-pill px-3 d-none d-md-block">Seguir comprando</a>
+        </div>
+    </nav>
+
+    <main class="container py-4">
+        <h1 class="h3 brand-font mb-4">Tu Carrito <span class="text-muted">(2 productos)</span></h1>
+
+        <div class="row g-4">
+            <!-- Cart Items -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-body p-0">
+                        <!-- Item 1 -->
+                        <div class="d-flex p-4 border-bottom">
+                            <img src="../assets/images/products/item1.png" class="rounded-3 me-4" style="width: 100px; height: 100px; object-fit: cover;">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h2 class="h6 fw-bold mb-0">Chaqueta Denim Vintage Americana</h2>
+                                    <button class="btn btn-link text-danger p-0"><i data-lucide="trash-2" style="width: 18px;"></i></button>
+                                </div>
+                                <p class="text-muted small mb-3">Talla: M | Vendedor: @RetroShop</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="input-group input-group-sm" style="max-width: 100px;">
+                                        <button class="btn btn-outline-secondary border-0 bg-light" type="button">-</button>
+                                        <input type="text" class="form-control text-center border-0 bg-light fw-bold" value="1" readonly>
+                                        <button class="btn btn-outline-secondary border-0 bg-light" type="button">+</button>
+                                    </div>
+                                    <span class="fs-5 fw-bold">$25.990</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="d-flex p-4">
+                            <img src="../assets/images/products/best2.png" class="rounded-3 me-4" style="width: 100px; height: 100px; object-fit: cover;">
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h2 class="h6 fw-bold mb-0">Chunky Platform Sneakers</h2>
+                                    <button class="btn btn-link text-danger p-0"><i data-lucide="trash-2" style="width: 18px;"></i></button>
+                                </div>
+                                <p class="text-muted small mb-3">Talla: 38 | Vendedor: @TrendHunter</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="input-group input-group-sm" style="max-width: 100px;">
+                                        <button class="btn btn-outline-secondary border-0 bg-light" type="button">-</button>
+                                        <input type="text" class="form-control text-center border-0 bg-light fw-bold" value="1" readonly>
+                                        <button class="btn btn-outline-secondary border-0 bg-light" type="button">+</button>
+                                    </div>
+                                    <span class="fs-5 fw-bold">$35.000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Info Placeholder -->
+                <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+                    <h3 class="h6 fw-bold mb-3"><i data-lucide="truck" class="me-2" style="width: 18px;"></i>Opciones de envío</h3>
+                    <div class="p-3 bg-light rounded-3 d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="text-primary"><i data-lucide="map-pin"></i></div>
+                            <div>
+                                <p class="mb-0 fw-600">Enviar a: Mi Casa (Santiago)</p>
+                                <p class="mb-0 small text-muted">Llegada estimada: 12-14 de Abril</p>
+                            </div>
+                        </div>
+                        <a href="#" class="text-decoration-none small fw-bold">Cambiar</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top: 100px;">
+                    <h3 class="h6 fw-bold mb-4">Resumen de compra</h3>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal (2 productos)</span>
+                        <span>$60.990</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Envío</span>
+                        <span class="text-success fw-bold">Gratis</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="text-muted">Descuento</span>
+                        <span class="text-danger">-$0</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="h5 fw-bold mb-0">Total</span>
+                        <span class="h5 fw-bold mb-0 text-primary">$60.990</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-primary btn-lg py-3 rounded-pill shadow-sm">Continuar compra</button>
+                        <p class="text-center small text-muted mt-2">Paga seguro con <span class="fw-bold">Reviste Pay</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Mobile Nav -->
+    <nav class="navbar fixed-bottom d-md-none border-top bg-white">
+        <div class="container d-flex justify-content-around py-2">
+            <a href="admin.html" style="color: #BD2E6B;"><i data-lucide="user-star"></i></a>
+            <a href="my-garments.html" class="text-dark"><i data-lucide="layout-panel-left"></i></a>
+            <a href="cart.html" class="text-dark position-relative">
+                <i data-lucide="shopping-bag"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.5rem; padding: 0.2rem 0.4rem;">2</span>
+            </a>
+            <a href="auth.html#login" class="text-dark"><i data-lucide="log-in"></i></a>
+        </div>
+    </nav>
+
+    <!-- Footer Simple -->
+    <footer class="bg-white py-5 border-top mb-5 mb-md-0">
+        <div class="container text-center">
+            <img src="../assets/images/ui/logo-h.png" alt="Logo" height="40" class="mb-4 opacity-75">
+            <div class="d-flex justify-content-center flex-wrap gap-4 mb-4">
+                <a href="#" class="text-muted text-decoration-none">Políticas</a>
+                <a href="#" class="text-muted text-decoration-none">Términos</a>
+                <a href="#" class="text-muted text-decoration-none">Ayuda</a>
+                <a href="settings.html" class="text-muted text-decoration-none"><i data-lucide="settings" style="width: 16px; transform: translateY(-1px);"></i> Configuración</a>
+            </div>
+            <p class="text-muted small">"El futuro de la moda es circular." - <b>REVISTE SpA 2026</b></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

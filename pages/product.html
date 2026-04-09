@@ -26,18 +26,20 @@
                 </div>
             </div>
 
-            <div class="nav-actions d-flex gap-2 gap-md-3 align-items-center">
-                <a href="admin.html" class="text-dark d-none d-lg-block text-decoration-none fw-600 me-2">Panel Admin</a>
-                <div class="d-none d-md-flex gap-2">
-                    <a href="auth.html#login" class="btn btn-outline-primary btn-sm px-3 py-2 rounded-pill fw-600">Iniciar Sesión</a>
-                    <a href="auth.html#register" class="btn btn-primary btn-sm px-3 py-2 rounded-pill fw-600 text-white">Regístrate</a>
-                </div>
-                <!-- Icons -->
-                <button class="btn p-1 text-dark position-relative">
+            <div class="nav-actions d-none d-md-flex gap-1 gap-md-2 align-items-center">
+                <a href="admin.html" class="btn p-1" title="Administración" style="color: #BD2E6B;">
+                    <i data-lucide="user-star"></i>
+                </a>
+                <a href="my-garments.html" class="btn p-1 text-dark" title="Mis Prendas">
+                    <i data-lucide="layout-panel-left"></i>
+                </a>
+                <a href="cart.html" class="btn p-1 text-dark position-relative" title="Carrito">
                     <i data-lucide="shopping-bag"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">2</span>
-                </button>
-                <a href="auth.html#login" class="btn p-1 text-dark d-md-none"><i data-lucide="user"></i></a>
+                </a>
+                <a href="auth.html#login" class="btn p-1 text-dark" title="Iniciar Sesión">
+                    <i data-lucide="log-in"></i>
+                </a>
             </div>
         </div>
     </nav>
@@ -53,7 +55,20 @@
             </ol>
         </nav>
 
-        <div class="row g-5">
+        <div class="row g-4 g-lg-5">
+            <!-- Mobile Header (Visible only on mobile) -->
+            <div class="col-12 d-md-none mb-2">
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 mb-2">Usado - Como nuevo</span>
+                <h1 class="h3 brand-font mb-1">Chaqueta Denim Vintage Americana</h1>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h2 class="h4 fw-bold mb-0 text-primary">$25.990</h2>
+                    <div class="rating-stars text-warning small">
+                        <i data-lucide="star" fill="#FFD700" style="width: 14px;"></i>
+                        <span class="text-muted ms-1">4.8 (24)</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- Left: Gallery -->
             <div class="col-lg-7">
                 <div class="product-gallery">
@@ -84,7 +99,7 @@
             <!-- Right: Checkout & Details -->
             <div class="col-lg-5">
                 <div class="checkout-box shadow-sm">
-                    <div class="mb-3">
+                    <div class="d-none d-md-block mb-3">
                         <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1 mb-2">Usado - Como nuevo</span>
                         <h1 class="h2 brand-font mb-1">Chaqueta Denim Vintage Americana</h1>
                         <div class="d-flex align-items-center gap-2 mb-3">
@@ -175,27 +190,67 @@
         </div>
     </div>
 
-    <!-- Floating Action Button -->
-    <a href="upload.html" class="fab-upload">
-        <i data-lucide="plus"></i>
-        <span class="ms-2">Sube tu prenda</span>
-    </a>
+
+    <!-- Footer Mobile Nav -->
+    <nav class="navbar fixed-bottom d-md-none border-top bg-white">
+        <div class="container d-flex justify-content-around py-2">
+            <a href="admin.html" style="color: #BD2E6B;"><i data-lucide="user-star"></i></a>
+            <a href="my-garments.html" class="text-dark"><i data-lucide="layout-panel-left"></i></a>
+            <a href="cart.html" class="text-dark position-relative">
+                <i data-lucide="shopping-bag"></i>
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.5rem; padding: 0.2rem 0.4rem;">2</span>
+            </a>
+            <a href="auth.html#login" class="text-dark"><i data-lucide="log-in"></i></a>
+        </div>
+    </nav>
+
+    <!-- Sticky CTA Mobile -->
+    <div class="sticky-cta-mobile d-md-none border-top bg-white p-3 fixed-bottom shadow-lg z-3">
+        <div class="d-flex align-items-center gap-3">
+            <div class="flex-grow-1">
+                <span class="fw-bold fs-5">$25.990</span>
+                <p class="text-muted small mb-0 d-none d-sm-block">Envío gratis</p>
+            </div>
+            <button class="btn btn-outline-primary rounded-pill px-3"><i data-lucide="shopping-bag"></i></button>
+            <button class="btn btn-primary rounded-pill px-4 fw-600">Comprar</button>
+        </div>
+    </div>
 
     <!-- Footer Simple -->
-    <footer class="bg-white py-5 border-top">
+    <footer class="bg-white py-5 border-top mb-5 mb-md-0">
         <div class="container text-center">
             <img src="../assets/images/ui/logo-h.png" alt="Logo" height="40" class="mb-4 opacity-75">
-            <div class="d-flex justify-content-center gap-4 mb-4">
+            <div class="d-flex justify-content-center flex-wrap gap-4 mb-4">
                 <a href="#" class="text-muted text-decoration-none">Políticas</a>
                 <a href="#" class="text-muted text-decoration-none">Términos</a>
                 <a href="#" class="text-muted text-decoration-none">Ayuda</a>
+                <a href="settings.html" class="text-muted text-decoration-none"><i data-lucide="settings" style="width: 16px; transform: translateY(-1px);"></i> Configuración</a>
             </div>
-            <p class="text-muted small">Â© 2026 REVISTE SpA. El futuro de la moda es circular.</p>
+            <p class="text-muted small">"El futuro de la moda es circular." - <b>REVISTE SpA 2026</b></p>
         </div>
     </footer>
 
     <script>
         lucide.createIcons();
+
+        // Sticky CTA Toggle on scroll
+        window.addEventListener('scroll', function() {
+            const stickyCta = document.querySelector('.sticky-cta-mobile');
+            const bottomNav = document.querySelector('nav.fixed-bottom');
+            const mainBuyBtn = document.querySelector('.checkout-box .btn-primary');
+            
+            if (!mainBuyBtn) return;
+
+            const btnPosition = mainBuyBtn.getBoundingClientRect().top;
+            
+            if (btnPosition < 0) {
+                stickyCta.classList.add('show');
+                if (bottomNav) bottomNav.style.display = 'none';
+            } else {
+                stickyCta.classList.remove('show');
+                if (bottomNav) bottomNav.style.display = 'flex';
+            }
+        });
     </script>
 </body>
 </html>
