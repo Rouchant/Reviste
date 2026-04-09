@@ -63,7 +63,7 @@
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 .section-link {
@@ -77,15 +77,25 @@
 @media (max-width: 767px) {
     .h-scroll {
         gap: 12px;
-        padding-bottom: 15px;
+        padding-bottom: 12px;
+        padding-top: 5px;
     }
 
     .h-scroll .product-card {
-        width: 190px;
-        min-width: 190px;
+        width: 170px; /* Reduced from 190px for better fit */
+        min-width: 170px;
+    }
+
+    .section-title {
+        margin-bottom: 0px; /* User requested 0 margin */
+    }
+
+    .category-scroll {
+        padding: 10px 0;
+        gap: 8px;
     }
 
     .scroll-wrapper::after {
-        width: 60px; /* Smaller fade on mobile */
+        width: 40px; /* Smaller fade on mobile */
     }
 }

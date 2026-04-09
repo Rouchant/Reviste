@@ -96,6 +96,10 @@
         font-size: 0.9rem;
     }
 
+    .hero-carousel {
+        margin-bottom: 25px; /* Reduced from 40px */
+    }
+
     /* Small fix for absolute images in banners on mobile */
     .hero-banner img.position-absolute {
         height: 180px !important;

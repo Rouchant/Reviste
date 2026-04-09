@@ -140,31 +140,32 @@
 /* Mobile Adjustments */
 @media (max-width: 767px) {
     .product-card {
-        max-width: 190px;
-        border-radius: 18px; /* Slightly smaller radius for smaller card */
+        max-width: 170px;
+        border-radius: 16px;
+        margin-bottom: 12px;
     }
 
     .product-info {
-        padding: 12px;
-        min-height: 130px;
+        padding: 10px;
+        min-height: 120px;
     }
 
     .product-price {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
 
     .product-tag, .product-offer-tag {
-        padding: 3px 10px;
-        font-size: 0.7rem;
-        top: 8px;
+        padding: 2px 8px;
+        font-size: 0.65rem;
+        top: 6px;
     }
 
-    .product-tag { left: 8px; }
-    .product-offer-tag { right: 8px; }
+    .product-tag { left: 6px; }
+    .product-offer-tag { right: 6px; }
 
     .rating-stars {
-        font-size: 0.75rem;
-        margin-bottom: 3px;
+        font-size: 0.7rem;
+        margin-bottom: 2px;
     }
 
     .shipping-tag {

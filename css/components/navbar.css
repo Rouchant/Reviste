@@ -1,9 +1,9 @@
-/* Navbar */
 .navbar {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--glass-border);
-    padding: 0.5rem 0;
+    padding: calc(0.5rem + env(safe-area-inset-top, 0px)) 0 0.5rem 0;
+    transition: all 0.3s ease;
 }
 
 .navbar-brand img {
@@ -30,7 +30,7 @@
 /* Mobile Adjustments */
 @media (max-width: 768px) {
     .navbar {
-        padding: 0 !important;
+        padding: env(safe-area-inset-top, 10px) 0 5px 0 !important;
     }
     .navbar .container {
         justify-content: center !important;
@@ -41,11 +41,16 @@
 
     /* Fixed Bottom Nav Enhancements */
     .navbar.fixed-bottom {
-        height: 70px;
+        height: auto;
+        min-height: 70px;
         display: flex;
         align-items: center;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
         box-shadow: 0 -4px 15px rgba(0,0,0,0.05) !important;
         border-top: 1px solid rgba(0,0,0,0.05) !important;
+        bottom: 0 !important;
+        left: 0;
+        right: 0;
     }
 
     .navbar.fixed-bottom .container {
