@@ -47,9 +47,12 @@ Reviste/
 │   └── settings.html   # Configuración de Cuenta
 ├── css/
 │   ├── main.css        # Punto de entrada de estilos
-│   ├── components/     # Navbar, Cards, Buttons, etc.
+│   ├── base/           # Variables, tipografía y resets (Foundation)
+│   ├── components/     # Elementos reutilizables (Navbar, Cards, etc.)
+│   ├── layouts/        # Estructuras globales y Grid
 │   └── pages/          # Estilos específicos por vista
-└── assets/             # Recursos multimedia y logos
+└── assets/
+    └── images/         # Recursos visuales (UI y Productos)
 ```
 
 ---
