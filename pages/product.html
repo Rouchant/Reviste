@@ -164,6 +164,9 @@
         <div class="mt-5">
             <h3 class="brand-font mb-3 mb-md-4">También te podría gustar</h3>
             <div class="scroll-wrapper">
+                <button class="scroll-btn btn-left" onclick="scrollContainer(this, 'left')">
+                    <i data-lucide="chevron-left"></i>
+                </button>
                 <div class="h-scroll">
                     <!-- Reuse a few cards -->
                     <a href="#" class="text-decoration-none">
@@ -200,6 +203,9 @@
                         </div>
                     </a>
                 </div>
+                <button class="scroll-btn btn-right" onclick="scrollContainer(this, 'right')">
+                    <i data-lucide="chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -246,6 +252,46 @@
 
     <script>
         lucide.createIcons();
+
+        // Scroll Container Function
+        function scrollContainer(btn, direction) {
+            const wrapper = btn.closest('.scroll-wrapper');
+            const container = wrapper.querySelector('.h-scroll');
+            const scrollAmount = container.clientWidth * 0.8;
+            container.scrollBy({ 
+                left: direction === 'right' ? scrollAmount : -scrollAmount, 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Update Scroll Buttons and Fade Visibility
+        function updateScrollState(container) {
+            const wrapper = container.closest('.scroll-wrapper');
+            if (!wrapper) return;
+
+            const isStart = container.scrollLeft <= 10;
+            const isEnd = Math.abs(container.scrollLeft + container.clientWidth - container.scrollWidth) <= 10;
+
+            wrapper.classList.toggle('is-start', isStart);
+            wrapper.classList.toggle('is-end', isEnd);
+        }
+
+        // Initialize all scroll wrappers
+        function initScrollWrappers() {
+            const containers = document.querySelectorAll('.h-scroll');
+            containers.forEach(container => {
+                updateScrollState(container);
+                container.addEventListener('scroll', () => {
+                    updateScrollState(container);
+                }, { passive: true });
+            });
+            window.addEventListener('resize', () => {
+                containers.forEach(updateScrollState);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', initScrollWrappers);
+        window.addEventListener('load', initScrollWrappers);
 
         // Sticky CTA Toggle on scroll
         window.addEventListener('scroll', function() {

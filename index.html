@@ -140,6 +140,9 @@
                 <a href="#" class="section-link">Ver todas</a>
             </div>
             <div class="scroll-wrapper">
+                <button class="scroll-btn btn-left" onclick="scrollContainer(this, 'left')">
+                    <i data-lucide="chevron-left"></i>
+                </button>
                 <div class="h-scroll">
                     <!-- Offer item 1 -->
                     <a href="pages/product.html" class="text-decoration-none">
@@ -277,6 +280,9 @@
                         </div>
                     </a>
                 </div>
+                <button class="scroll-btn btn-right" onclick="scrollContainer(this, 'right')">
+                    <i data-lucide="chevron-right"></i>
+                </button>
             </div>
         </section>
 
@@ -287,6 +293,9 @@
                 <a href="#" class="section-link">Ver todo</a>
             </div>
             <div class="scroll-wrapper">
+                <button class="scroll-btn btn-left" onclick="scrollContainer(this, 'left')">
+                    <i data-lucide="chevron-left"></i>
+                </button>
                 <div class="h-scroll">
                     <!-- Item 4: Floral Dress -->
                     <a href="pages/product.html" class="text-decoration-none">
@@ -403,6 +412,9 @@
                         </div>
                     </a>
                 </div>
+                <button class="scroll-btn btn-right" onclick="scrollContainer(this, 'right')">
+                    <i data-lucide="chevron-right"></i>
+                </button>
             </div>
         </section>
 
@@ -413,6 +425,9 @@
                 <a href="#" class="section-link">Ver todos</a>
             </div>
             <div class="scroll-wrapper">
+                <button class="scroll-btn btn-left" onclick="scrollContainer(this, 'left')">
+                    <i data-lucide="chevron-left"></i>
+                </button>
                 <div class="h-scroll">
                     <!-- Acc 1 -->
                     <a href="pages/product.html" class="text-decoration-none">
@@ -530,6 +545,9 @@
                         </div>
                     </a>
                 </div>
+                <button class="scroll-btn btn-right" onclick="scrollContainer(this, 'right')">
+                    <i data-lucide="chevron-right"></i>
+                </button>
             </div>
         </section>
 
@@ -540,6 +558,9 @@
                 <a href="#" class="section-link">Ver ranking</a>
             </div>
             <div class="scroll-wrapper">
+                <button class="scroll-btn btn-left" onclick="scrollContainer(this, 'left')">
+                    <i data-lucide="chevron-left"></i>
+                </button>
                 <div class="h-scroll">
                     <!-- Best 1 -->
                     <a href="pages/product.html" class="text-decoration-none">
@@ -653,6 +674,9 @@
                         </div>
                     </a>
                 </div>
+                <button class="scroll-btn btn-right" onclick="scrollContainer(this, 'right')">
+                    <i data-lucide="chevron-right"></i>
+                </button>
             </div>
         </section>
     </main>
@@ -690,6 +714,53 @@
     <script>
         // Initialize Lucide icons
         lucide.createIcons();
+
+        // Scroll Container Function
+        function scrollContainer(btn, direction) {
+            const wrapper = btn.closest('.scroll-wrapper');
+            const container = wrapper.querySelector('.h-scroll');
+            const scrollAmount = container.clientWidth * 0.8;
+            container.scrollBy({ 
+                left: direction === 'right' ? scrollAmount : -scrollAmount, 
+                behavior: 'smooth' 
+            });
+        }
+
+        // Update Scroll Buttons and Fade Visibility
+        function updateScrollState(container) {
+            const wrapper = container.closest('.scroll-wrapper');
+            if (!wrapper) return;
+
+            const isStart = container.scrollLeft <= 10;
+            const isEnd = Math.abs(container.scrollLeft + container.clientWidth - container.scrollWidth) <= 10;
+
+            wrapper.classList.toggle('is-start', isStart);
+            wrapper.classList.toggle('is-end', isEnd);
+        }
+
+        // Initialize all scroll wrappers
+        function initScrollWrappers() {
+            const containers = document.querySelectorAll('.h-scroll');
+            containers.forEach(container => {
+                // Initial check
+                updateScrollState(container);
+                
+                // On scroll
+                container.addEventListener('scroll', () => {
+                    updateScrollState(container);
+                }, { passive: true });
+            });
+
+            // Re-check on window resize
+            window.addEventListener('resize', () => {
+                containers.forEach(updateScrollState);
+            });
+        }
+
+        // Run on load
+        document.addEventListener('DOMContentLoaded', initScrollWrappers);
+        // Fallback for icons and initial state
+        window.addEventListener('load', initScrollWrappers);
     </script>
 </body>
 </html>
