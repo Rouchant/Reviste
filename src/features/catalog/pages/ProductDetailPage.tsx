@@ -10,12 +10,14 @@ import { Button } from '../../../components/ui/button';
 import { Card } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
 
+import { Product } from '../types';
+
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const addItem = useCartStore((state) => state.addItem);
   
   // For now, let's just use the first product from any list or a mock one if ID doesn't match
-  const allProducts = [...mockData.featuredOffers, ...mockData.newArrivals];
+  const allProducts: Product[] = [...mockData.featuredOffers, ...mockData.newArrivals] as Product[];
   const product = allProducts.find(p => p.id === Number(id)) || allProducts[0];
   
   const getImageUrl = (src: string) => src.startsWith('http') || src.startsWith('/') ? src : `/Reviste/${src}`;

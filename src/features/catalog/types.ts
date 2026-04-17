@@ -5,6 +5,8 @@ export interface Product {
   oldPrice?: number;
   image: string;
   tag?: string;
+  rating?: number;
+  reviews?: number | string;
 }
 
 export interface HeroSlide {

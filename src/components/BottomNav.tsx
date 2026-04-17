@@ -2,10 +2,18 @@ import React from 'react';
 import { LayoutPanelLeft, LogIn, Heart } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
+interface NavItem {
+  icon: React.ReactNode;
+  label: string;
+  path: string;
+  color: string;
+  badge?: number;
+}
+
 const BottomNav: React.FC = () => {
   const location = useLocation();
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { icon: <LayoutPanelLeft size={26} />, label: 'Explorar', path: '/', color: 'text-brand-muted' },
     { icon: <Heart size={26} />, label: 'Favoritos', path: '/favorites', color: 'text-brand-pink' },
     { icon: <LogIn size={26} />, label: 'Perfil', path: '/auth', color: 'text-brand-muted' },
