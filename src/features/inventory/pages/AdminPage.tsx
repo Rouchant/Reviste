@@ -14,7 +14,7 @@ const AdminPage: React.FC = () => {
     <AdminLayout>
       {/* Mobile Header */}
       <div className="md:hidden flex justify-between items-center mb-8 px-2">
-        <img src="/assets/images/ui/logo-h.png" alt="REVISTE" className="h-8" />
+        <img src="assets/images/ui/logo-h.png" alt="REVISTE" className="h-8" />
         <div className="flex gap-2">
           <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-brand-pink bg-white shadow-sm">
             <User size={20} />
@@ -91,7 +91,7 @@ const AdminPage: React.FC = () => {
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm">
               <InventoryRow 
-                img="/assets/images/products/item1.png"
+                img="assets/images/products/item1.png"
                 name="Chaqueta Denim Vintage"
                 id="#4592"
                 category="Denim"
@@ -100,7 +100,7 @@ const AdminPage: React.FC = () => {
                 statusVariant="success"
               />
               <InventoryRow 
-                img="/assets/images/products/item2.png"
+                img="assets/images/products/item2.png"
                 name="Suéter Retro Color Block"
                 id="#4588"
                 category="Vintage 90s"
@@ -109,7 +109,7 @@ const AdminPage: React.FC = () => {
                 statusVariant="destructive"
               />
               <InventoryRow 
-                img="/assets/images/products/item3.png"
+                img="assets/images/products/item3.png"
                 name="Pantalones Cargo Earthy"
                 id="#4580"
                 category="Streetwear"

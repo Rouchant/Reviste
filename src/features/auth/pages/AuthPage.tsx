@@ -51,7 +51,7 @@ const AuthPage: React.FC = () => {
     <AuthLayout>
       <Card className="w-full max-w-[450px] p-8 md:p-10 z-10 shadow-2xl shadow-brand-pink/10 border-transparent">
         <Link to="/" className="block mb-8">
-          <img src="/assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 mx-auto transition-transform hover:scale-105" />
+          <img src="assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 mx-auto transition-transform hover:scale-105" />
         </Link>
 
         {/* Tab Switcher */}

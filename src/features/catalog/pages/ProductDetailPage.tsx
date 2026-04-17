@@ -45,7 +45,7 @@ const ProductDetailPage: React.FC = () => {
               </Card>
               
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                {[product.image, "/assets/images/products/item4.png", "/assets/images/products/item5.png", "/assets/images/products/item6.png"].map((img, idx) => (
+                {[product.image, "assets/images/products/item4.png", "assets/images/products/item5.png", "assets/images/products/item6.png"].map((img, idx) => (
                   <button 
                     key={idx}
                     onClick={() => setSelectedImage(img)}

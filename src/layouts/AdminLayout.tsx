@@ -26,7 +26,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <aside className="hidden md:flex w-64 lg:w-72 bg-white border-r border-gray-100 flex-col sticky top-0 h-screen p-6 shadow-sm z-30">
         <div className="mb-12 px-2">
           <Link to="/">
-            <img src="/assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 transition-transform hover:scale-105" />
+            <img src="assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 transition-transform hover:scale-105" />
           </Link>
         </div>
         

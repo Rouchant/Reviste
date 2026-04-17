@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
           
           {/* Brand Info */}
           <div className="space-y-6">
-            <img src="/assets/images/ui/logo.png" alt="REVISTE" className="h-10" />
+            <img src="assets/images/ui/logo.png" alt="REVISTE" className="h-10" />
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs italic">
               "El futuro de la moda es circular. Dale una segunda vida a tu ropa y sé parte del cambio."
             </p>

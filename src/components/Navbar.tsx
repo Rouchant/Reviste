@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
         <div className="hidden md:block w-40 lg:w-48 flex-shrink-0">
           <Link to="/">
             <img 
-              src="/assets/images/ui/logo-h.png" 
+              src="assets/images/ui/logo-h.png" 
               alt="REVISTE Logo" 
               className="h-10 md:h-12 w-auto transition-transform hover:scale-105" 
             />
@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
         <div className="flex md:hidden absolute left-1/2 -translate-x-1/2">
           <Link to="/">
             <img 
-              src="/assets/images/ui/logo-h.png" 
+              src="assets/images/ui/logo-h.png" 
               alt="REVISTE Logo" 
               className="h-9 w-auto" 
             />

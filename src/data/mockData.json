@@ -17,7 +17,7 @@
       "tag": "Vintage",
       "rating": 4.5,
       "reviews": 12,
-      "image": "/assets/images/products/item2.png",
+      "image": "assets/images/products/item2.png",
       "freeShipping": true
     },
     {
@@ -29,7 +29,7 @@
       "tag": "Cargo",
       "rating": 5,
       "reviews": 8,
-      "image": "/assets/images/products/item3.png",
+      "image": "assets/images/products/item3.png",
       "freeShipping": true
     },
     {
@@ -41,7 +41,7 @@
       "tag": "Y2K",
       "rating": 4,
       "reviews": 18,
-      "image": "/assets/images/products/off1.png",
+      "image": "assets/images/products/off1.png",
       "freeShipping": false
     },
     {
@@ -53,7 +53,7 @@
       "tag": "Accesorio",
       "rating": 4.8,
       "reviews": 15,
-      "image": "/assets/images/products/acc1.png",
+      "image": "assets/images/products/acc1.png",
       "freeShipping": true
     },
     {
@@ -65,7 +65,7 @@
       "tag": "Vintage",
       "rating": 4.7,
       "reviews": 22,
-      "image": "/assets/images/products/off2.png",
+      "image": "assets/images/products/off2.png",
       "freeShipping": true
     }
   ],
@@ -77,7 +77,7 @@
       "tag": "Grunge",
       "rating": 5,
       "reviews": "New!",
-      "image": "/assets/images/products/item4.png",
+      "image": "assets/images/products/item4.png",
       "seller": "@EcoVibe"
     },
     {
@@ -87,7 +87,7 @@
       "tag": "Y2K",
       "rating": 4,
       "reviews": 24,
-      "image": "/assets/images/products/item1.png",
+      "image": "assets/images/products/item1.png",
       "seller": "@RetroShop"
     },
     {
@@ -97,7 +97,7 @@
       "tag": "90s",
       "rating": 4.9,
       "reviews": 5,
-      "image": "/assets/images/products/item5.png",
+      "image": "assets/images/products/item5.png",
       "seller": "@OldSchool"
     },
     {
@@ -107,7 +107,7 @@
       "tag": "Y2K",
       "rating": 5,
       "reviews": 10,
-      "image": "/assets/images/products/acc2.png",
+      "image": "assets/images/products/acc2.png",
       "seller": "@PinkVibe"
     },
     {
@@ -117,7 +117,7 @@
       "tag": "Baggy",
       "rating": 4.6,
       "reviews": 32,
-      "image": "/assets/images/products/item6.png",
+      "image": "assets/images/products/item6.png",
       "seller": "@DenimMaster"
     }
   ],
@@ -127,21 +127,21 @@
       "title": "Renueva tu clóset sustentablemente",
       "subtitle": "Moda circular con hasta 40% de descuento en marcas premium.",
       "buttonText": "Explorar Ofertas",
-      "image": "/assets/images/hero/hero-fashion.png"
+      "image": "assets/images/hero/hero-fashion.png"
     },
     {
       "id": 2,
       "title": "Joyas de los 2000s: Edición Limitada",
       "subtitle": "Descubre accesorios únicos que definieron una era. ¡Solo para coleccionistas!",
       "buttonText": "Ver Accesorios",
-      "image": "/assets/images/hero/hero-eco.png"
+      "image": "assets/images/hero/hero-eco.png"
     },
     {
       "id": 3,
       "title": "Tu clóset, tu negocio",
       "subtitle": "Vende lo que ya no usas con 0% de comisión. Únete a la comunidad REVISTE.",
       "buttonText": "Empezar a Vender",
-      "image": "/assets/images/hero/hero-sellers.png"
+      "image": "assets/images/hero/hero-sellers.png"
     }
   ]
 }

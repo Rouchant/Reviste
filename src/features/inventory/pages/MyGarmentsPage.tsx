@@ -61,7 +61,7 @@ const MyGarmentsPage: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-gray-50">
                 <GarmentRow 
-                  img="/assets/images/products/item1.png"
+                  img="assets/images/products/item1.png"
                   name="Chaqueta Denim Vintage"
                   date="Publicada hace 2 días"
                   price="$25.990"
@@ -69,7 +69,7 @@ const MyGarmentsPage: React.FC = () => {
                   views="452"
                 />
                 <GarmentRow 
-                  img="/assets/images/products/item2.png"
+                  img="assets/images/products/item2.png"
                   name="Suéter Retro Color Block"
                   date="Publicada hace 5 días"
                   price="$18.500"
