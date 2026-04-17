@@ -21,7 +21,7 @@ const PageLoader = () => (
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Reviste/">
       <div className="min-h-screen bg-brand-cream/10 text-brand-dark">
         <Suspense fallback={<PageLoader />}>
           <Routes>
