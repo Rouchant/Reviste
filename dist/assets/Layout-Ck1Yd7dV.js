@@ -1,1 +1,0 @@
-import{j as s}from"./index-CDAAea-G.js";import{N as o,F as r}from"./Footer-Dj2PgpZh.js";const t=({children:a})=>s.jsxs("div",{className:"flex flex-col min-h-screen",children:[s.jsx(o,{}),s.jsx("main",{className:"flex-grow container mx-auto px-4 mt-4 md:mt-8",children:a}),s.jsx(r,{})]});export{t as L};
