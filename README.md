@@ -1,75 +1,90 @@
 # REVISTE - Marketplace de Moda Circular 👗♻️
 
-![REVISTE Banner](assets/images/ui/logo-h.png)
+![REVISTE Banner](public/assets/images/ui/logo-h.png)
 
-**REVISTE** es una plataforma premium de compra y venta de moda circular, diseñada para transformar la manera en que consumimos ropa y accesorios. Fusionamos una estética **Y2K/Glassmorphism** de vanguardia con la funcionalidad robusta de los grandes marketplaces globales.
+**REVISTE** es una plataforma premium de compra y venta de moda circular, diseñada para transformar la manera en que consumimos ropa y accesorios. Fusionamos una estética **Y2K/Glassmorphism** de vanguardia con la funcionalidad robusta de los grandes marketplaces globales, construida sobre un stack moderno de React y Tailwind CSS.
 
 ---
 
 ## ✨ Características Principales
 
-### 📱 Experiencia Mobile-First
-- **Navegación Dual**: Barra superior minimalista para escritorio y **Fixed Bottom Nav** ergonómico para móviles, centralizando las acciones críticas (Admin, Carrito, Perfil).
-- **Sticky CTA bar**: En páginas de producto, el botón de compra permanece siempre accesible al hacer scroll.
-- **Layout Inteligente**: Reordenación dinámica de contenidos para móviles (ej. título y precio sobre la galería de imágenes).
+### 📱 Arquitectura Mobile-First & Premium UI
+- **Navegación Inteligente**: Sistema dual con barra superior minimalista para escritorio y **Fixed Bottom Nav** ergonómico para móviles.
+- **Micro-interacciones**: Animaciones fluidas, efectos de glassmorphism y hover states dinámicos.
+- **Sticky CTA**: Barra de compra persistente en móviles para agilizar la conversión.
+- **Componentes CVA**: Sistema de diseño basado en átomos reutilizables con variantes controladas (Class Variance Authority).
 
-### 📊 Dashboard y Gestión
-- **Control Total**: Panel administrativo para gestión de inventario y métricas de venta.
-- **Mis Prendas**: Espacio dedicado para que los usuarios gestionen sus anuncios publicados.
-- **Configuración Unificada**: Acceso rápido a ajustes del sitio desde el footer y la navegación principal.
+### 🏗️ Arquitectura de "Vertical Slices"
+El proyecto utiliza una estructura orientada a funcionalidades (**Feature-driven architecture**), eliminando el código espagueti y facilitando la escalabilidad:
+- **Features aisladas**: Cada funcionalidad (Carrito, Catálogo, Admin) contiene sus propios componentes, hooks y lógica.
+- **Layout System**: Jerarquía de layouts especializados (`MainLayout`, `AuthLayout`, `AdminLayout`) para manejar diferentes contextos de usuario.
+- **Zustand State**: Gestión de estado global ligera y eficiente para el carrito de compras.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-- **Estructura**: HTML5 Semántico
+- **Core**: [React 18](https://reactjs.org/) + [Vite](https://vitejs.dev/) (Build System)
+- **Lenguaje**: [TypeScript](https://www.typescriptlang.org/) (Estabilidad y tipado fuerte)
 - **Estilos**: 
-  - **CSS3 Vanilla**: Arquitectura centralizada y optimizada.
-  - **Glassmorphism**: Backdrop filters, gradientes dinámicos y orbes decorativos.
-  - **Bootstrap 5**: Grid system y utilidades base.
-- **Iconografía**: [Lucide Icons](https://lucide.dev/) (SVG dinámicos)
-- **Tipografía**: Outfit & Playfair Display (Google Fonts)
+  - [Tailwind CSS](https://tailwindcss.com/) (Styling utilitario)
+  - [CVA](https://cva.style/) (Gestión de variantes de componentes)
+  - [Lucide React](https://lucide.dev/) (Iconografía dinámica)
+- **Estado**: [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) (Store reactivo)
+- **Navegación**: [React Router v6](https://reactrouter.com/)
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```text
-Reviste/
-├── index.html          # Portal Principal y Marketplace
-├── pages/
-│   ├── auth.html       # Acceso Unificado (Login / Registro)
-│   ├── upload.html     # Formulario de Publicación
-│   ├── product.html    # Detalle Premium de Producto
-│   ├── admin.html      # Panel de Gestión Administrativa
-│   ├── my-garments.html # Dashboard del Usuario
-│   ├── cart.html       # Visualización de Carrito
-│   └── settings.html   # Configuración de Cuenta
-├── css/
-│   ├── main.css        # Punto de entrada de estilos
-│   ├── base/           # Variables, tipografía y resets (Foundation)
-│   ├── components/     # Elementos reutilizables (Navbar, Cards, etc.)
-│   ├── layouts/        # Estructuras globales y Grid
-│   └── pages/          # Estilos específicos por vista
-└── assets/
-    └── images/         # Recursos visuales (UI y Productos)
+src/
+├── components/         # COMPONENTES GLOBALES (Átomos UI)
+│   └── ui/             # Button, Input, Badge, Card (CVA)
+├── layouts/            # ESTRUCTURAS DE PÁGINA
+│   ├── MainLayout.tsx  # Marketplace convencional
+│   ├── AuthLayout.tsx  # Foco en Login/Registro
+│   └── AdminLayout.tsx # Dashboard administrativo
+├── features/           # VERTICAL SLICES (El corazón de la app)
+│   ├── catalog/        # Home, Detalle, Búsqueda, Hooks de datos
+│   ├── cart/           # Lógica de carrito, Store, Ventana de compra
+│   ├── auth/           # Login, Configuración de perfil
+│   └── inventory/      # Panel admin, Mis prendas, Subida de productos
+├── data/               # MockData y configuraciones persistentes
+├── lib/                # Utilidades y configuración de Tailwind Merge
+└── App.tsx             # Enrutamiento centralizado y lazy loading
 ```
 
 ---
 
-## 🎨 Identidad Visual (Design Tokens)
+## 🎨 Design System
 
-- **Malla de Color**:
-  - `Brand Pink`: `#D63D82`
-  - `Eco Green`: `#84A98C`
-  - `Soft Cream`: `#F4F1DE`
-- **Componentes**: Bordes ultra-redondeados (`30px`), sombras suaves (`shadow-soft`) y desenfocs gaussionos para el efecto cristal.
+- **Colores Brand**: 
+  - `Brand Pink`: `#D63D82` (Primario)
+  - `Eco Green`: `#84A98C` (Sustentabilidad)
+  - `Brand Dark`: `#111827` (Estratificación)
+- **Tipografía**: Outfit (Modernidad) & Playfair Display (Elegancia)
+- **Estética**: Corner radius adaptativo (`32px`), sombras suaves y `backdrop-blur` para el efecto cristal.
 
 ---
 
 ## 🚀 Cómo empezar
-1. Clona el repositorio.
-2. Abre `index.html` usando un servidor local (ej. *Live Server* de VS Code).
-3. ¡Explora el futuro de la moda circular!
+
+1.  **Clonar y configurar**:
+    ```bash
+    git clone https://github.com/usuario/reviste.git
+    cd reviste
+    npm install
+    ```
+
+2.  **Desarrollo**:
+    ```bash
+    npm run dev
+    ```
+
+3.  **Compilación**:
+    ```bash
+    npm run build
+    ```
 
 > "El futuro de la moda es circular." - **REVISTE SpA 2026**
