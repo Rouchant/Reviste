@@ -11,7 +11,7 @@ const buttonVariants = cva(
         outline: "border-2 border-brand-pink text-brand-pink bg-white hover:bg-brand-pink/5",
         ghost: "hover:bg-gray-100 text-gray-600",
         secondary: "bg-brand-green text-white shadow-lg shadow-brand-green/20 hover:bg-[#729379]",
-        muted: "bg-gray-100 text-gray-500 hover:bg-gray-200",
+        muted: "bg-gray-50 border border-gray-300 text-gray-500 hover:bg-gray-100 hover:border-gray-400",
       },
       size: {
         default: "h-12 px-8 py-4",

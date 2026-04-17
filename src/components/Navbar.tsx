@@ -1,21 +1,48 @@
 import React from 'react';
-import { ShoppingBag, LogIn, ShieldCheck, LayoutPanelLeft, Search } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ShoppingBag, LogIn, ShieldCheck, Search } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../features/cart/store/useCartStore';
+import { useCatalogStore } from '../features/catalog/store/useCatalogStore';
 import { Input } from './ui/input';
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const cartCount = useCartStore((state) => state.getItemCount());
+  const { searchQuery, setSearchQuery } = useCatalogStore();
+
+  const handleSearchFocus = () => {
+    if (location.pathname !== '/search') {
+      navigate('/search');
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    if (location.pathname !== '/search' && e.target.value.length > 0) {
+      navigate('/search');
+    }
+  };
 
   return (
-    <nav className="sticky top-0 bg-white/80 backdrop-blur-lg z-50 border-b border-gray-100 py-3 md:py-4 transition-all">
+    <nav className="sticky top-0 bg-white/80 backdrop-blur-lg z-50 border-b border-gray-100 transition-all min-h-[56px] md:min-h-0 py-3 md:py-4">
       <div className="container mx-auto px-4 flex items-center justify-between">
         
-        {/* Placeholder for small screen balance if needed, or just left-aligned on md */}
+        {/* Mobile Left: Search Toggle */}
+        <div className="flex md:hidden w-10">
+          <button 
+            onClick={() => navigate('/search')}
+            className="p-2 -ml-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all"
+          >
+            <Search size={24} />
+          </button>
+        </div>
+
+        {/* Desktop Left Logo */}
         <div className="hidden md:block w-40 lg:w-48 flex-shrink-0">
           <Link to="/">
             <img 
-              src="assets/images/ui/logo-h.png" 
+              src="/Reviste/assets/images/ui/logo-h.png" 
               alt="REVISTE Logo" 
               className="h-10 md:h-12 w-auto transition-transform hover:scale-105" 
             />
@@ -26,19 +53,22 @@ const Navbar: React.FC = () => {
         <div className="flex md:hidden absolute left-1/2 -translate-x-1/2">
           <Link to="/">
             <img 
-              src="assets/images/ui/logo-h.png" 
+              src="/Reviste/assets/images/ui/logo-h.png" 
               alt="REVISTE Logo" 
-              className="h-9 w-auto" 
+              className="h-8 w-auto" 
             />
           </Link>
         </div>
         
-        {/* Desktop Search Bar: Only visible on md+ */}
+        {/* Desktop Search Bar */}
         <div className="hidden md:flex flex-grow max-w-2xl mx-8 lg:mx-16">
           <div className="relative w-full group">
             <Input 
               type="text" 
               variant="standard"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onFocus={handleSearchFocus}
               className="!py-3 !px-6 !pr-12 text-sm"
               placeholder="Busca tesoros circulares (Y2K, Grunge, 90s)..."
             />
@@ -49,14 +79,12 @@ const Navbar: React.FC = () => {
           </div>
         </div>
 
-        {/* Action Buttons: Hidden on mobile, moved to BottomNav */}
-        <div className="hidden md:flex items-center gap-1 md:gap-4 w-40 lg:w-48 justify-end">
-          <Link to="/admin" className="p-2 text-brand-pink hover:bg-pink-50 rounded-xl transition-all flex" title="Administración">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-1 md:gap-4 w-40 lg:w-48 justify-end">
+          <Link to="/admin" className="p-2 text-brand-pink hover:bg-pink-50 rounded-xl transition-all hidden md:flex" title="Administración">
             <ShieldCheck size={24} />
           </Link>
-          <Link to="/my-garments" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all flex" title="Mis Prendas">
-            <LayoutPanelLeft size={24} />
-          </Link>
+          
           <Link to="/cart" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all relative" title="Carrito">
             <ShoppingBag size={24} />
             {cartCount > 0 && (
@@ -65,15 +93,11 @@ const Navbar: React.FC = () => {
               </span>
             )}
           </Link>
-          <Link to="/auth" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all" title="Iniciar Sesión">
+
+          <Link to="/auth" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title="Iniciar Sesión">
             <LogIn size={24} />
           </Link>
         </div>
-
-        {/* Mobile Spacer (to keep space for the centered logo if we had a burger menu or similar on the left) */}
-        <div className="md:hidden w-10"></div>
-        <div className="md:hidden w-10"></div>
-
       </div>
     </nav>
   );

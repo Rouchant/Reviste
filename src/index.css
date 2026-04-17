@@ -46,3 +46,48 @@
 .animate-slide-up {
   animation: slideUp 0.8s ease forwards;
 }
+
+/* Horizontal Scroll Gradients */
+.scroll-container-mask {
+  position: relative;
+}
+
+.scroll-container-mask::before,
+.scroll-container-mask::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.scroll-container-mask::before {
+  left: 0;
+  background: linear-gradient(to left, transparent, #F4F1DE);
+}
+
+.scroll-container-mask::after {
+  right: 0;
+  background: linear-gradient(to right, transparent, #F4F1DE);
+}
+
+.scroll-container-mask.mask-left::before {
+  opacity: 1;
+}
+
+.scroll-container-mask.mask-right::after {
+  opacity: 1;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}

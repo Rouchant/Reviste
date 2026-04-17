@@ -6,20 +6,35 @@ import HeroCarousel from '../../../components/HeroCarousel';
 import { Search } from 'lucide-react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
+import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../../cart/store/useCartStore';
 import { useCatalog } from '../hooks/useCatalog';
 import { Product } from '../types';
 
 const HomePage: React.FC = () => {
   const addItem = useCartStore((state) => state.addItem);
+  const navigate = useNavigate();
   const { 
     categories, 
     selectedCategory, 
     setSelectedCategory, 
     featuredOffers, 
     newArrivals, 
-    heroSlides 
+    heroSlides,
+    searchQuery,
+    setSearchQuery
   } = useCatalog();
+
+  const handleSearchFocus = () => {
+    navigate('/search');
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    if (e.target.value.length > 0) {
+      navigate('/search');
+    }
+  };
 
   const renderProduct = (product: Product, customTag?: string) => {
     const discount = product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : 0;
@@ -48,15 +63,18 @@ const HomePage: React.FC = () => {
     <MainLayout>
       <div className="container mx-auto px-4 mt-4 md:mt-8">
         
-        {/* Search Header: ONLY visible on Mobile to avoid duplication with Navbar */}
-        <div className="mb-8 md:hidden text-center max-w-2xl mx-auto">
+        {/* Search Header: ONLY visible on Mobile */}
+        <div className="mb-8 md:hidden text-center max-w-2xl mx-auto animate-fade-in">
           <h1 className="text-3xl font-black mb-6 font-brand tracking-tight text-brand-dark leading-tight">
             Encuentra tu estilo único
           </h1>
           <div className="relative group">
             <Input 
               type="text" 
-              className="!py-5 !px-8 !pr-14 shadow-sm bg-white"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              onFocus={handleSearchFocus}
+              className="!py-5 !px-8 !pr-14 shadow-sm bg-white border-gray-200"
               placeholder="Buscar por marca, prenda o estilo..."
             />
             <Search 
@@ -71,13 +89,13 @@ const HomePage: React.FC = () => {
           <HeroCarousel slides={heroSlides as any[]} />
         </div>
 
-        {/* Categories */}
+        {/* Categories Cloud on Mobile / Scroll on Desktop */}
         <section className="mb-10 md:mb-16">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xs font-bold font-sans text-brand-muted uppercase tracking-[0.2em]">Categorías Populares</h2>
           </div>
-          <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
-            {categories.map((category) => (
+          <div className="flex flex-wrap md:flex-nowrap md:overflow-x-auto gap-3 pb-4 scrollbar-hide md:scroll-container-mask justify-center md:justify-start">
+            {categories.slice(0, 8).map((category) => (
               <Button 
                 key={category}
                 variant={selectedCategory === category ? "primary" : "muted"}

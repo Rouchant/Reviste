@@ -1,16 +1,13 @@
 import React from 'react';
-import { Search, LayoutPanelLeft, ShoppingBag, LogIn } from 'lucide-react';
+import { LayoutPanelLeft, LogIn, Heart } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
-import { useCartStore } from '../features/cart/store/useCartStore';
 
 const BottomNav: React.FC = () => {
   const location = useLocation();
-  const cartCount = useCartStore((state) => state.getItemCount());
 
   const navItems = [
-    { icon: <Search size={26} />, label: 'Buscar', path: '/search', color: 'text-brand-pink' },
     { icon: <LayoutPanelLeft size={26} />, label: 'Explorar', path: '/', color: 'text-brand-muted' },
-    { icon: <ShoppingBag size={26} />, label: 'Carrito', path: '/cart', color: 'text-brand-muted', badge: cartCount },
+    { icon: <Heart size={26} />, label: 'Favoritos', path: '/favorites', color: 'text-brand-pink' },
     { icon: <LogIn size={26} />, label: 'Perfil', path: '/auth', color: 'text-brand-muted' },
   ];
 

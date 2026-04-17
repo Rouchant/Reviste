@@ -5,7 +5,10 @@
     "Denim",
     "Streetwear",
     "Accesorios",
-    "Grunge"
+    "Grunge",
+    "Gorpcore",
+    "Minimalist",
+    "Baggy"
   ],
   "featuredOffers": [
     {
@@ -67,6 +70,30 @@
       "reviews": 22,
       "image": "assets/images/products/off2.png",
       "freeShipping": true
+    },
+    {
+      "id": 11,
+      "name": "Chaqueta Cortavientos Retro",
+      "price": 32000,
+      "oldPrice": 45000,
+      "discount": "29% OFF",
+      "tag": "Gorpcore",
+      "rating": 4.9,
+      "reviews": 14,
+      "image": "/Reviste/assets/images/products/jacket.png",
+      "freeShipping": true
+    },
+    {
+      "id": 12,
+      "name": "Botas Trekking Urbanas",
+      "price": 45000,
+      "oldPrice": 58000,
+      "discount": "22% OFF",
+      "tag": "Gorpcore",
+      "rating": 4.6,
+      "reviews": 9,
+      "image": "/Reviste/assets/images/products/botastrekking.webp",
+      "freeShipping": true
     }
   ],
   "newArrivals": [
@@ -119,6 +146,36 @@
       "reviews": 32,
       "image": "assets/images/products/item6.png",
       "seller": "@DenimMaster"
+    },
+    {
+      "id": 13,
+      "name": "Camiseta Oversize Minimal",
+      "price": 12000,
+      "tag": "Minimalist",
+      "rating": 4.8,
+      "reviews": 11,
+      "image": "assets/images/products/oversize-minimal.webp",
+      "seller": "@PureStyle"
+    },
+    {
+      "id": 14,
+      "name": "Pantalón Sastre Relaxed",
+      "price": 24500,
+      "tag": "Minimalist",
+      "rating": 4.7,
+      "reviews": 7,
+      "image": "assets/images/products/pantsrosa.png",
+      "seller": "@CleanCut"
+    },
+    {
+      "id": 15,
+      "name": "Gafas de Sol Matrix",
+      "price": 9990,
+      "tag": "Y2K",
+      "rating": 4.5,
+      "reviews": 19,
+      "image": "assets/images/products/gafasmatrix.jpg",
+      "seller": "@CyberCycle"
     }
   ],
   "heroSlides": [

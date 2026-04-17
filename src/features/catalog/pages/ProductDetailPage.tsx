@@ -15,9 +15,12 @@ const ProductDetailPage: React.FC = () => {
   const addItem = useCartStore((state) => state.addItem);
   
   // For now, let's just use the first product from any list or a mock one if ID doesn't match
-  const product = mockData.featuredOffers.find(p => p.id === Number(id)) || mockData.featuredOffers[0];
+  const allProducts = [...mockData.featuredOffers, ...mockData.newArrivals];
+  const product = allProducts.find(p => p.id === Number(id)) || allProducts[0];
   
-  const [selectedImage, setSelectedImage] = useState(product.image);
+  const getImageUrl = (src: string) => src.startsWith('http') || src.startsWith('/') ? src : `/Reviste/${src}`;
+  
+  const [selectedImage, setSelectedImage] = useState(getImageUrl(product.image));
 
   return (
     <MainLayout>
@@ -45,17 +48,20 @@ const ProductDetailPage: React.FC = () => {
               </Card>
               
               <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                {[product.image, "assets/images/products/item4.png", "assets/images/products/item5.png", "assets/images/products/item6.png"].map((img, idx) => (
-                  <button 
-                    key={idx}
-                    onClick={() => setSelectedImage(img)}
-                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all ${
-                      selectedImage === img ? "border-brand-pink" : "border-transparent hover:border-gray-200"
-                    }`}
-                  >
-                    <img src={img} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
-                  </button>
-                ))}
+                {[product.image, "assets/images/products/item4.png", "assets/images/products/item5.png", "assets/images/products/item6.png"].map((img, idx) => {
+                  const thumbUrl = getImageUrl(img);
+                  return (
+                    <button 
+                      key={idx}
+                      onClick={() => setSelectedImage(thumbUrl)}
+                      className={`w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all ${
+                        selectedImage === thumbUrl ? "border-brand-pink" : "border-transparent hover:border-gray-200"
+                      }`}
+                    >
+                      <img src={thumbUrl} alt={`Thumb ${idx}`} className="w-full h-full object-cover" />
+                    </button>
+                  );
+                })}
               </div>
 
               <Card className="mt-8 p-6 md:p-8 border-transparent bg-white shadow-sm">

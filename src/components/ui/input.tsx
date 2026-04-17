@@ -7,8 +7,8 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-50 placeholder:text-gray-300 focus:bg-white focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5",
-        standard: "bg-gray-50 border-gray-100 placeholder:text-gray-400 focus:bg-white focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5",
+        default: "bg-gray-50 border-gray-300 placeholder:text-gray-300 focus:bg-white focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5",
+        standard: "bg-gray-50 border-gray-300 placeholder:text-gray-400 focus:bg-white focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5",
         ghost: "bg-transparent border-none px-0",
       },
       size: {
