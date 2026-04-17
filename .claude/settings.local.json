@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cp assets/products/* assets/images/products/)",
+      "Bash(cp assets/ui/* assets/images/ui/)"
+    ]
+  }
+}
