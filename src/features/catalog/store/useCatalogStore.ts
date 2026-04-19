@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Product, HeroSlide } from '../types';
+import mockData from '../../../data/mockData.json';
 
 interface CatalogState {
   searchQuery: string;
@@ -38,20 +39,29 @@ export const useCatalogStore = create<CatalogState>()(
             fetch('/api/catalog/hero-slides')
           ]);
 
-          if (!catRes.ok || !prodRes.ok || !heroRes.ok) throw new Error('Failed to fetch data');
+          if (catRes.ok && prodRes.ok && heroRes.ok) {
+            const categories = await catRes.json();
+            const products = await prodRes.json();
+            const heroSlides = await heroRes.json();
 
-          const categories = await catRes.json();
-          const products = await prodRes.json();
-          const heroSlides = await heroRes.json();
-
+            set({ 
+              categories: ['Todos', ...categories], 
+              products, 
+              heroSlides, 
+              isLoading: false 
+            });
+          } else {
+            throw new Error('API not available');
+          }
+        } catch (error) {
+          console.warn('API fetch failed, falling back to mock data:', error);
+          // Fallback to local mock data
           set({ 
-            categories: ['Todos', ...categories], 
-            products, 
-            heroSlides, 
+            categories: ['Todos', ...mockData.categories],
+            products: mockData.featuredOffers.concat(mockData.newArrivals) as Product[],
+            heroSlides: mockData.heroSlides as HeroSlide[],
             isLoading: false 
           });
-        } catch (error) {
-          set({ error: (error as Error).message, isLoading: false });
         }
       },
     }),
