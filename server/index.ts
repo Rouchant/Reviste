@@ -29,26 +29,31 @@ app.get('/health', (req, res) => {
 
 // 1. Categories
 app.get('/api/catalog/categories', async (req, res) => {
+  console.log('Fetching categories...');
   try {
-    const categories = await Categoria.find().sort({ id: 1 });
+    const categories = await Categoria.find().sort({ id: 1 }).maxTimeMS(5000);
+    console.log(`Found ${categories.length} categories.`);
     // Map to simple array of names to match mockData.categories format
     const names = categories.map(c => c.NOMBRE_CATEGORIA);
     res.json(names);
   } catch (error) {
     console.error('Error fetching categories:', error);
-    res.status(500).json({ error: 'Error fetching categories' });
+    res.status(500).json({ error: 'Error fetching categories', details: (error as Error).message });
   }
 });
 
 // 2. Products (Prendas)
 app.get('/api/catalog/products', async (req, res) => {
+  console.log('Fetching products...');
   try {
     const [prendas, images, sellers, categories] = await Promise.all([
-      Prenda.find(),
-      PrendaImagen.find(),
-      Usuario.find(),
-      Categoria.find()
+      Prenda.find().maxTimeMS(5000),
+      PrendaImagen.find().maxTimeMS(5000),
+      Usuario.find().maxTimeMS(5000),
+      Categoria.find().maxTimeMS(5000)
     ]);
+    console.log(`Fetched data: ${prendas.length} products, ${images.length} images.`);
+    console.log(`Fetched data: ${prendas.length} products, ${images.length} images.`);
     
     // Create maps for quick lookup
     const imageMap = new Map(images.map(img => [img.ID_PRENDA, img.URL]));
@@ -94,7 +99,7 @@ export default app;
 if (process.env.NODE_ENV !== 'production') {
   async function start() {
     try {
-      await mongoose.connect(MONGODB_URI);
+      await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
       console.log('API conectada a MongoDB (Local).');
       app.listen(PORT, () => {
         console.log(`Servidor API corriendo en http://localhost:${PORT}`);
@@ -108,5 +113,6 @@ if (process.env.NODE_ENV !== 'production') {
 } else {
   // In production (Vercel), we connect on demand or at the top level
   // Mongoose handles connection buffering automatically
-  mongoose.connect(MONGODB_URI).catch(err => console.error('MongoDB connection error:', err));
+  mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 })
+    .catch(err => console.error('MongoDB connection error:', err));
 }
