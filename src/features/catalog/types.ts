@@ -7,6 +7,9 @@ export interface Product {
   tag?: string;
   rating?: number;
   reviews?: number | string;
+  discount?: string;
+  seller?: string;
+  freeShipping?: boolean;
 }
 
 export interface HeroSlide {

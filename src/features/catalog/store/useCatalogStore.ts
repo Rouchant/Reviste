@@ -58,7 +58,7 @@ export const useCatalogStore = create<CatalogState>()(
           // Fallback to local mock data
           set({ 
             categories: ['Todos', ...mockData.categories],
-            products: mockData.featuredOffers.concat(mockData.newArrivals) as Product[],
+            products: ([...mockData.featuredOffers, ...mockData.newArrivals] as unknown as Product[]),
             heroSlides: mockData.heroSlides as HeroSlide[],
             isLoading: false 
           });
