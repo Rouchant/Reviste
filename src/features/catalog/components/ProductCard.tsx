@@ -29,7 +29,7 @@ const ProductImage: React.FC<{ src: string; alt: string; id: number; tag?: strin
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const favorite = isFavorite(id);
 
-  const imageUrl = src.startsWith('http') || src.startsWith('/') ? src : `/Reviste/${src}`;
+  const imageUrl = src.startsWith('http') || src.startsWith('/') ? src : `/${src}`;
 
   return (
     <div className="relative aspect-[4/5] overflow-hidden">

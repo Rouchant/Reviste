@@ -20,7 +20,7 @@ const ProductDetailPage: React.FC = () => {
   const allProducts: Product[] = [...mockData.featuredOffers, ...mockData.newArrivals] as Product[];
   const product = allProducts.find(p => p.id === Number(id)) || allProducts[0];
   
-  const getImageUrl = (src: string) => src.startsWith('http') || src.startsWith('/') ? src : `/Reviste/${src}`;
+  const getImageUrl = (src: string) => src.startsWith('http') || src.startsWith('/') ? src : `/${src}`;
   
   const [selectedImage, setSelectedImage] = useState(getImageUrl(product.image));
 

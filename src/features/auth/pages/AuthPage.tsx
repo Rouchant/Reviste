@@ -69,7 +69,7 @@ const AuthPage: React.FC = () => {
     <AuthLayout>
       <Card className="w-full max-w-[450px] p-8 md:p-10 z-10 shadow-2xl shadow-brand-pink/10 border-transparent">
         <Link to="/" className="block mb-8">
-          <img src="/Reviste/assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 mx-auto transition-transform hover:scale-105" />
+          <img src="/assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 mx-auto transition-transform hover:scale-105" />
         </Link>
 
         {/* Tab Switcher */}
@@ -109,6 +109,8 @@ const AuthPage: React.FC = () => {
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Contraseña</label>
                 <Input 
                   type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••" 
                 />
               </div>

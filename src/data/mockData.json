@@ -80,7 +80,7 @@
       "tag": "Gorpcore",
       "rating": 4.9,
       "reviews": 14,
-      "image": "/Reviste/assets/images/products/jacket.png",
+      "image": "/assets/images/products/jacket.png",
       "freeShipping": true
     },
     {
@@ -92,7 +92,7 @@
       "tag": "Gorpcore",
       "rating": 4.6,
       "reviews": 9,
-      "image": "/Reviste/assets/images/products/botastrekking.webp",
+      "image": "/assets/images/products/botastrekking.webp",
       "freeShipping": true
     }
   ],
