@@ -1,6 +1,4 @@
-import { useMemo } from 'react';
-import mockData from '../../../data/mockData.json';
-import { Product } from '../types';
+import { useMemo, useEffect } from 'react';
 import { useCatalogStore } from '../store/useCatalogStore';
 
 export const useCatalog = () => {
@@ -8,31 +6,34 @@ export const useCatalog = () => {
     searchQuery, 
     setSearchQuery, 
     selectedCategory, 
-    setSelectedCategory 
+    setSelectedCategory,
+    categories,
+    products,
+    heroSlides,
+    isLoading,
+    error,
+    fetchCatalog
   } = useCatalogStore();
 
-  const categories = useMemo(() => ['Todos', ...mockData.categories], []);
+  useEffect(() => {
+    // Only fetch if we don't have products yet (basic cache)
+    if (products.length === 0) {
+      fetchCatalog();
+    }
+  }, [fetchCatalog, products.length]);
 
+  // Compatibility with the previous static structure
   const featuredOffers = useMemo(() => 
-    mockData.featuredOffers as Product[], 
-    []
+    products.slice(0, 7), 
+    [products]
   );
 
   const newArrivals = useMemo(() => 
-    mockData.newArrivals as Product[], 
-    []
+    products.slice(7), 
+    [products]
   );
 
-  const heroSlides = useMemo(() => 
-    mockData.heroSlides, 
-    []
-  );
-
-  // Helper to get all products combining featured and new arrivals
-  const allProducts = useMemo(() => 
-    ([...featuredOffers, ...newArrivals]),
-    [featuredOffers, newArrivals]
-  );
+  const allProducts = products;
 
   return {
     searchQuery,
@@ -43,6 +44,8 @@ export const useCatalog = () => {
     featuredOffers,
     newArrivals,
     heroSlides,
-    allProducts
+    allProducts,
+    isLoading,
+    error
   };
 };

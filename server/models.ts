@@ -85,7 +85,9 @@ export interface IPrenda extends Document {
   TALLA?: string;
   PRECIO_VENTA_PUBLICO: number;
   ESTADO_CONSERVACION?: string;
-  // Extra fields from JSON not in Dict but useful
+  // Extra fields from JSON to support frontend expectations
+  OLD_PRICE?: number;
+  DISCOUNT?: string;
   RATING?: number;
   REVIEWS_COUNT?: number;
   FREE_SHIPPING?: boolean;
@@ -102,6 +104,8 @@ const PrendaSchema = new Schema<IPrenda>({
   TALLA: { type: String },
   PRECIO_VENTA_PUBLICO: { type: Number, required: true },
   ESTADO_CONSERVACION: { type: String },
+  OLD_PRICE: { type: Number },
+  DISCOUNT: { type: String },
   RATING: { type: Number },
   REVIEWS_COUNT: { type: Number },
   FREE_SHIPPING: { type: Boolean, default: false }

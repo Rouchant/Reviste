@@ -114,6 +114,8 @@ async function migrate() {
         TALLA: 'M', // Placeholder
         PRECIO_VENTA_PUBLICO: p.price,
         ESTADO_CONSERVACION: 'Excelente',
+        OLD_PRICE: p.oldPrice || null,
+        DISCOUNT: p.discount || null,
         RATING: p.rating || 0,
         REVIEWS_COUNT: typeof p.reviews === 'number' ? p.reviews : 0,
         FREE_SHIPPING: p.freeShipping || false
