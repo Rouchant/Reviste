@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Product } from '../types';
+import { Product, HeroSlide } from '../types';
 
 interface CatalogState {
   searchQuery: string;
   selectedCategory: string;
   categories: string[];
   products: Product[];
-  heroSlides: any[];
+  heroSlides: HeroSlide[];
   isLoading: boolean;
   error: string | null;
   setSearchQuery: (query: string) => void;

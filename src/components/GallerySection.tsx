@@ -5,10 +5,11 @@ interface GallerySectionProps {
   title: string;
   linkText?: string;
   linkHref?: string;
+  onLinkClick?: () => void;
   children: React.ReactNode;
 }
 
-const GallerySection: React.FC<GallerySectionProps> = ({ title, linkText, linkHref, children }) => {
+const GallerySection: React.FC<GallerySectionProps> = ({ title, linkText, linkHref, onLinkClick, children }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(true);
@@ -43,9 +44,18 @@ const GallerySection: React.FC<GallerySectionProps> = ({ title, linkText, linkHr
       <div className="flex justify-between items-end mb-6 px-1">
         <h2 className="text-2xl md:text-3xl font-black font-brand text-brand-dark tracking-tight">{title}</h2>
         {linkText && (
-          <a href={linkHref || "#"} className="text-xs font-bold text-brand-pink hover:underline uppercase tracking-widest">
-            {linkText}
-          </a>
+          onLinkClick ? (
+            <button 
+              onClick={onLinkClick} 
+              className="text-xs font-bold text-brand-pink hover:underline uppercase tracking-widest cursor-pointer"
+            >
+              {linkText}
+            </button>
+          ) : (
+            <a href={linkHref || "#"} className="text-xs font-bold text-brand-pink hover:underline uppercase tracking-widest">
+              {linkText}
+            </a>
+          )
         )}
       </div>
 

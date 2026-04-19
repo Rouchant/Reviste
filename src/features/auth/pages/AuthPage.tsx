@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Card } from '../../../components/ui/card';
+import { useAuthStore } from '../store/useAuthStore';
 import AuthLayout from '../../../layouts/AuthLayout';
 
 const comunasMap: Record<string, string[]> = {
@@ -14,16 +15,23 @@ const comunasMap: Record<string, string[]> = {
 
 const AuthPage: React.FC = () => {
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
+  const navigate = useNavigate();
+  const login = useAuthStore(state => state.login);
+  const [activeTab, setActiveTab] = useState<'login' | 'register'>(
+    location.hash === '#register' ? 'register' : 'login'
+  );
+  const [email, setEmail] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const [password, setPassword] = useState('');
   const [strength, setStrength] = useState({ label: '', color: '', width: '0%' });
 
   useEffect(() => {
-    if (location.hash === '#register') {
+    if (location.hash === '#register' && activeTab !== 'register') {
       setActiveTab('register');
+    } else if (location.hash !== '#register' && activeTab === 'register' && !location.hash) {
+      setActiveTab('login');
     }
-  }, [location]);
+  }, [location.hash, activeTab]);
 
   const checkStrength = (val: string) => {
     setPassword(val);
@@ -47,11 +55,21 @@ const AuthPage: React.FC = () => {
     setStrength(levels[Math.min(s, levels.length - 1)]);
   };
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    // Simple magic: if email contains "admin", log in as admin
+    const role = email.includes('admin') ? 'admin' : 'user';
+    login(email, role);
+    navigate('/');
+  };
+
   return (
     <AuthLayout>
       <Card className="w-full max-w-[450px] p-8 md:p-10 z-10 shadow-2xl shadow-brand-pink/10 border-transparent">
         <Link to="/" className="block mb-8">
-          <img src="assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 mx-auto transition-transform hover:scale-105" />
+          <img src="/Reviste/assets/images/ui/logo-h.png" alt="REVISTE" className="h-10 mx-auto transition-transform hover:scale-105" />
         </Link>
 
         {/* Tab Switcher */}
@@ -77,11 +95,13 @@ const AuthPage: React.FC = () => {
         {activeTab === 'login' ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h2 className="text-xl font-bold mb-6 text-gray-800 font-brand">Te extrañamos ✨</h2>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLogin}>
               <div>
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Correo Electrónico</label>
                 <Input 
                   type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="ejemplo@correo.com" 
                 />
               </div>
@@ -107,14 +127,20 @@ const AuthPage: React.FC = () => {
         ) : (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-h-[60vh] overflow-y-auto pr-2 scrollbar-thin">
             <h2 className="text-xl font-bold mb-6 text-gray-800 font-brand">Únete a Reviste 🌿</h2>
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleLogin}>
               <div>
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre Completo</label>
                 <Input type="text" placeholder="Ej: Juan Pérez" className="h-12" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Alias (Usuario)</label>
-                <Input type="text" placeholder="@usuario_vibe" className="h-12" />
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Correo Electrónico</label>
+                <Input 
+                  type="email" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="ejemplo@correo.com" 
+                  className="h-12"
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>

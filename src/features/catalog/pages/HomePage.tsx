@@ -112,7 +112,7 @@ const HomePage: React.FC = () => {
 
         {/* Hero Section */}
         <div className="mb-12">
-          <HeroCarousel slides={heroSlides as any[]} />
+          <HeroCarousel slides={heroSlides} />
         </div>
 
         {/* Categories Cloud on Mobile / Scroll on Desktop */}
@@ -126,7 +126,10 @@ const HomePage: React.FC = () => {
                 key={category}
                 variant={selectedCategory === category ? "primary" : "muted"}
                 size="sm"
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => {
+                  setSelectedCategory(category);
+                  navigate('/search');
+                }}
                 className="rounded-full flex-shrink-0"
               >
                 {category}
@@ -136,7 +139,14 @@ const HomePage: React.FC = () => {
         </section>
 
         {/* Sections... */}
-        <GallerySection title="Ofertas del Día" linkText="Ver todas">
+        <GallerySection 
+          title="Ofertas del Día" 
+          linkText="Ver todas" 
+          onLinkClick={() => {
+            setSearchQuery('Oferta');
+            navigate('/search');
+          }}
+        >
           {featuredOffers.map(product => (
             <div key={product.id} className="w-[200px] md:w-[280px] flex-shrink-0 snap-start">
               {renderProduct(product)}
@@ -144,7 +154,14 @@ const HomePage: React.FC = () => {
           ))}
         </GallerySection>
 
-        <GallerySection title="Recién Llegados" linkText="Ver todo">
+        <GallerySection 
+          title="Recién Llegados" 
+          linkText="Ver todo"
+          onLinkClick={() => {
+            setSearchQuery('Nuevo');
+            navigate('/search');
+          }}
+        >
           {newArrivals.map(product => (
             <div key={product.id} className="w-[200px] md:w-[280px] flex-shrink-0 snap-start">
               {renderProduct(product)}
@@ -152,7 +169,14 @@ const HomePage: React.FC = () => {
           ))}
         </GallerySection>
 
-        <GallerySection title="Accesorios únicos" linkText="Ver todos">
+        <GallerySection 
+          title="Accesorios únicos" 
+          linkText="Ver todos"
+          onLinkClick={() => {
+            setSelectedCategory('Accesorios');
+            navigate('/search');
+          }}
+        >
           {featuredOffers.slice().reverse().map(product => (
             <div key={`acc-${product.id}`} className="w-[200px] md:w-[280px] flex-shrink-0 snap-start">
               {renderProduct(product, "Accesorio")}
@@ -161,7 +185,14 @@ const HomePage: React.FC = () => {
         </GallerySection>
 
         <div className="mb-16">
-           <GallerySection title="Más Vendidos" linkText="Ver ranking">
+           <GallerySection 
+            title="Más Vendidos" 
+            linkText="Ver ranking"
+            onLinkClick={() => {
+              setSearchQuery('Top');
+              navigate('/search');
+            }}
+          >
             {newArrivals.map(product => (
               <div key={`best-${product.id}`} className="w-[200px] md:w-[280px] flex-shrink-0 snap-start">
                 {renderProduct(product, "Top 10")}

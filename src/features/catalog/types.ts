@@ -16,4 +16,5 @@ export interface HeroSlide {
   image: string;
   color: string;
   link: string;
+  buttonText: string;
 }

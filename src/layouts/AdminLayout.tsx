@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   LayoutDashboard, ShoppingBag, ShoppingCart, Users, BarChart3, 
-  ArrowLeft, LogOut, Heart
+  ArrowLeft, LogOut
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 

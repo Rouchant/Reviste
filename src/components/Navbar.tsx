@@ -1,13 +1,15 @@
 import React from 'react';
-import { ShoppingBag, LogIn, ShieldCheck, Search } from 'lucide-react';
+import { ShoppingBag, LogIn, ShieldCheck, Search, UserRoundCog } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../features/cart/store/useCartStore';
 import { useCatalogStore } from '../features/catalog/store/useCatalogStore';
+import { useAuthStore } from '../features/auth/store/useAuthStore';
 import { Input } from './ui/input';
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isAuthenticated, user } = useAuthStore();
   const cartCount = useCartStore((state) => state.getItemCount());
   const { searchQuery, setSearchQuery } = useCatalogStore();
 
@@ -81,21 +83,25 @@ const Navbar: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1 md:gap-4 w-40 lg:w-48 justify-end">
-          <Link to="/admin" className="p-2 text-brand-pink hover:bg-pink-50 rounded-xl transition-all hidden md:flex" title="Administración">
-            <ShieldCheck size={24} />
-          </Link>
+          {isAuthenticated && user?.role === 'admin' && (
+            <Link to="/admin" className="p-2 text-brand-pink hover:bg-pink-50 rounded-xl transition-all hidden md:flex" title="Administración">
+              <ShieldCheck size={24} />
+            </Link>
+          )}
           
-          <Link to="/cart" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all relative" title="Carrito">
-            <ShoppingBag size={24} />
-            {cartCount > 0 && (
-              <span className="absolute top-1.5 right-1.5 bg-brand-pink text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center animate-bounce">
-                {cartCount}
-              </span>
-            )}
-          </Link>
+          {isAuthenticated && (
+            <Link to="/cart" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all relative" title="Carrito">
+              <ShoppingBag size={24} />
+              {cartCount > 0 && (
+                <span className="absolute top-1.5 right-1.5 bg-brand-pink text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center animate-bounce">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          )}
 
-          <Link to="/auth" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title="Iniciar Sesión">
-            <LogIn size={24} />
+          <Link to={isAuthenticated ? "/settings" : "/auth"} className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title={isAuthenticated ? "Mi Perfil" : "Iniciar Sesión"}>
+            {isAuthenticated ? <UserRoundCog size={24} /> : <LogIn size={24} />}
           </Link>
         </div>
       </div>

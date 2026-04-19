@@ -1,6 +1,6 @@
 import React from 'react';
 import MainLayout from '../../../layouts/MainLayout';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { useCatalog } from '../hooks/useCatalog';

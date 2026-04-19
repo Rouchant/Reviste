@@ -1,16 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
-interface Slide {
-  id: number;
-  title: string;
-  subtitle: string;
-  buttonText: string;
-  image: string;
-}
+import { HeroSlide } from '../features/catalog/types';
 
 interface HeroCarouselProps {
-  slides: Slide[];
+  slides: HeroSlide[];
 }
 
 const HeroCarousel: React.FC<HeroCarouselProps> = ({ slides }) => {
@@ -86,7 +79,10 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ slides }) => {
               <p className="text-base md:text-xl opacity-90 mb-8 font-medium max-w-lg leading-relaxed">
                 {slide.subtitle}
               </p>
-              <button className="btn-primary !px-8 !py-4 text-sm md:text-base">
+              <button 
+                onClick={() => (window.location.href = slide.link)}
+                className="btn-primary !px-8 !py-4 text-sm md:text-base cursor-pointer"
+              >
                 {slide.buttonText}
               </button>
             </div>

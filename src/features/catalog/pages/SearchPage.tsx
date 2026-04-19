@@ -9,13 +9,19 @@ import { useCatalog } from '../hooks/useCatalog';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
-  const { searchQuery, setSearchQuery, featuredOffers } = useCatalog();
+  const { searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, allProducts } = useCatalog();
 
-  // Simple filtering for demonstration
-  const filteredProducts = featuredOffers.filter(p => 
-    p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.tag?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Enhanced filtering logic
+  const filteredProducts = allProducts.filter(p => {
+    const matchesSearch = !searchQuery || 
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.tag?.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesCategory = selectedCategory === 'Todos' || 
+      p.tag === selectedCategory; // Mocking category matching via tags for now if category field is missing from Product
+    
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <MainLayout>
@@ -82,7 +88,10 @@ const SearchPage: React.FC = () => {
               <p className="text-gray-500 font-medium">No encontramos resultados para tu búsqueda.</p>
               <Button 
                 variant="ghost" 
-                onClick={() => setSearchQuery('')}
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedCategory('Todos');
+                }}
                 className="mt-2 text-brand-pink font-bold"
               >
                 Ver todo el catálogo
