@@ -33,7 +33,7 @@ const ProductDetailPage: React.FC = () => {
       }
       setIsDetailLoading(true);
       try {
-        const response = await fetch(`http://localhost:5000/api/catalog/products/${id}`);
+        const response = await fetch(`/api/catalog/products/${id}`);
         if (!response.ok) throw new Error('Producto no encontrado');
         const data = await response.json();
         setProductDetail(data);
