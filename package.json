@@ -9,6 +9,8 @@
   "homepage": "https://reviste.vercel.app/",
   "scripts": {
     "dev": "vite",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:full": "concurrently -k -n \"API,Vite\" -c \"cyan,magenta\" \"npm run dev:server\" \"npm run dev\"",
     "build": "tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -40,6 +42,7 @@
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.0",
     "autoprefixer": "^10.4.19",
+    "concurrently": "^9.2.1",
     "dotenv": "^17.4.2",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
