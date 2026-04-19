@@ -89,16 +89,24 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
 
 // --- SERVER START ---
 
-async function start() {
-  try {
-    await mongoose.connect(MONGODB_URI);
-    console.log('API conectada a MongoDB.');
-    app.listen(PORT, () => {
-      console.log(`Servidor API corriendo en http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error('Error al iniciar el servidor:', error);
-  }
-}
+export default app;
 
-start();
+if (process.env.NODE_ENV !== 'production') {
+  async function start() {
+    try {
+      await mongoose.connect(MONGODB_URI);
+      console.log('API conectada a MongoDB (Local).');
+      app.listen(PORT, () => {
+        console.log(`Servidor API corriendo en http://localhost:${PORT}`);
+      });
+    } catch (error) {
+      console.error('Error al iniciar el servidor:', error);
+    }
+  }
+
+  start();
+} else {
+  // In production (Vercel), we connect on demand or at the top level
+  // Mongoose handles connection buffering automatically
+  mongoose.connect(MONGODB_URI).catch(err => console.error('MongoDB connection error:', err));
+}
