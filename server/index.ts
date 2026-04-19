@@ -10,10 +10,37 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/Reviste';
+
+// Use real MongoDB from Env or fallback for local dev
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI && process.env.NODE_ENV === 'production') {
+  console.error('CRITICAL: MONGODB_URI is not defined in production environment!');
+}
+
+const URI = MONGODB_URI || 'mongodb://localhost:27017/Reviste';
 
 app.use(cors());
 app.use(express.json());
+
+// Middleware to ensure DB is connected before any request (Robust for Serverless)
+app.use(async (req, res, next) => {
+  if (mongoose.connection.readyState !== 1) {
+    try {
+      console.log('Attaching to MongoDB...');
+      await mongoose.connect(URI, { serverSelectionTimeoutMS: 5000 });
+      console.log('MongoDB Connected.');
+    } catch (err) {
+      console.error('Database connection error during request:', err);
+      return res.status(500).json({ 
+        error: 'Database connection failed', 
+        details: (err as Error).message,
+        hint: 'Check MONGODB_URI in Vercel settings and Atlas IP Whitelist'
+      });
+    }
+  }
+  next();
+});
 
 // Log all requests
 app.use((req, res, next) => {
@@ -97,22 +124,11 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
 export default app;
 
 if (process.env.NODE_ENV !== 'production') {
-  async function start() {
-    try {
-      await mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 });
-      console.log('API conectada a MongoDB (Local).');
-      app.listen(PORT, () => {
-        console.log(`Servidor API corriendo en http://localhost:${PORT}`);
-      });
-    } catch (error) {
-      console.error('Error al iniciar el servidor:', error);
-    }
-  }
-
-  start();
-} else {
-  // In production (Vercel), we connect on demand or at the top level
-  // Mongoose handles connection buffering automatically
-  mongoose.connect(MONGODB_URI, { serverSelectionTimeoutMS: 5000 })
-    .catch(err => console.error('MongoDB connection error:', err));
+  const server = app.listen(PORT, () => {
+    console.log(`Servidor API corriendo en http://localhost:${PORT}`);
+  });
+  
+  server.on('error', (err) => {
+    console.error('Server error:', err);
+  });
 }
