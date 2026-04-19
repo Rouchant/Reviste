@@ -1,11 +1,11 @@
-import express from 'express';
-const app = express();
+import app from '../server/index.js';
 
+// Canary endpoint - if this works, the problem is deeper in the logic
 app.get('/api/canary', (req, res) => {
   res.json({ 
-    status: 'minimal-alive', 
-    node: process.version,
-    env: process.env.NODE_ENV 
+    status: 'alive', 
+    environment: process.env.NODE_ENV,
+    node: process.version
   });
 });
 

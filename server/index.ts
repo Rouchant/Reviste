@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { 
   Categoria, Prenda, PrendaImagen, HeroSlide, Usuario 
-} from './models';
+} from './models.js';
 
 dotenv.config();
 
