@@ -4,12 +4,13 @@ import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getProductUrl } from '../../../lib/slugify';
 import { useCartStore, Product, CartState } from '../../cart/store/useCartStore';
 import { useFavoritesStore } from '../store/useFavoritesStore';
 
 // Compound Component Types
 interface ProductCardComposition {
-  Image: React.FC<{ src: string; alt: string; id: number; tag?: string; discount?: number; onQuickAdd?: () => void }>;
+  Image: React.FC<{ src: string; alt: string; id: number; name: string; tag?: string; discount?: number; onQuickAdd?: () => void }>;
   Info: React.FC<{ name: string; price: number; oldPrice?: number; id: number }>;
   Action: React.FC<{ onClick: () => void }>;
 }
@@ -23,8 +24,8 @@ const ProductCard: React.FC<{ children: React.ReactNode }> & ProductCardComposit
 };
 
 // 1. Image Component
-const ProductImage: React.FC<{ src: string; alt: string; id: number; tag?: string; discount?: number; onQuickAdd?: () => void }> = ({ 
-  src, alt, id, tag, discount, onQuickAdd 
+const ProductImage: React.FC<{ src: string; alt: string; id: number; name: string; tag?: string; discount?: number; onQuickAdd?: () => void }> = ({ 
+  src, alt, id, name, tag, discount, onQuickAdd 
 }) => {
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const favorite = isFavorite(id);
@@ -33,7 +34,7 @@ const ProductImage: React.FC<{ src: string; alt: string; id: number; tag?: strin
 
   return (
     <div className="relative aspect-[4/5] overflow-hidden">
-      <Link to={`/product/${id}`}>
+      <Link to={getProductUrl(id, name)}>
         <img 
           src={imageUrl} 
           alt={alt} 
@@ -43,9 +44,24 @@ const ProductImage: React.FC<{ src: string; alt: string; id: number; tag?: strin
         />
       </Link>
       
-      <div className="absolute top-4 left-4 flex flex-col items-start gap-2">
-        {tag && <Badge variant="default">{tag}</Badge>}
-        {discount && discount > 0 ? <Badge variant="secondary">-{discount}%</Badge> : null}
+      <div className="absolute top-4 left-4 flex flex-col items-start gap-1.5 pointer-events-none">
+        {tag?.split(' | ').map((t, idx) => {
+          let variant: any = "outline";
+          if (t === 'Oferta') variant = "secondary";
+          if (t === 'Nuevo') variant = "default";
+          if (t === 'Top') variant = "warning";
+          
+          return (
+            <Badge key={idx} variant={variant} className="shadow-sm">
+              {t}
+            </Badge>
+          );
+        })}
+        {discount && discount > 0 ? (
+          <Badge variant="destructive" className="bg-red-500 text-white border-transparent">
+            -{discount}%
+          </Badge>
+        ) : null}
       </div>
 
       <button 
@@ -82,7 +98,7 @@ const ProductInfo: React.FC<{ name: string; price: number; oldPrice?: number; id
   name, price, oldPrice, id 
 }) => (
   <CardContent className="p-4 pt-4">
-    <Link to={`/product/${id}`} className="block group/title">
+    <Link to={getProductUrl(id, name)} className="block group/title">
       <h3 className="font-bold text-brand-dark group-hover/title:text-brand-pink transition-colors line-clamp-1 mb-1">
         {name}
       </h3>
@@ -124,6 +140,7 @@ export const ProductCardLegacy: React.FC<Product> = (props) => {
         src={image} 
         alt={name} 
         id={id} 
+        name={name}
         tag={tag} 
         discount={discount} 
         onQuickAdd={() => addItem(props)} 

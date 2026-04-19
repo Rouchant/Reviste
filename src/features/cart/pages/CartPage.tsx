@@ -1,6 +1,7 @@
 import React from 'react';
 import MainLayout from '../../../layouts/MainLayout';
 import { Trash2, ShoppingBag, Truck, MapPin } from 'lucide-react';
+import { getProductUrl } from '../../../lib/slugify';
 import { useCartStore } from '../store/useCartStore';
 import { Link } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
@@ -43,7 +44,7 @@ const CartPage: React.FC = () => {
                       
                       <div className="flex-grow min-w-0">
                         <div className="flex justify-between items-start gap-4 mb-1">
-                          <Link to={`/product/${item.id}`}>
+                          <Link to={getProductUrl(item.id, item.name)}>
                             <h2 className="text-sm md:text-lg font-bold text-gray-900 line-clamp-2 leading-tight hover:text-brand-pink transition-colors">
                               {item.name}
                             </h2>

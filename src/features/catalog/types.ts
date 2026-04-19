@@ -10,6 +10,7 @@ export interface Product {
   discount?: string;
   seller?: string;
   freeShipping?: boolean;
+  description?: string;
 }
 
 export interface HeroSlide {

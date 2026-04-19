@@ -3,13 +3,23 @@ import MainLayout from '../../../layouts/MainLayout';
 import { Search as SearchIcon, ArrowLeft } from 'lucide-react';
 import { Input } from '../../../components/ui/input';
 import { Button } from '../../../components/ui/button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import { useCatalog } from '../hooks/useCatalog';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, allProducts } = useCatalog();
+
+  // Sync with URL parameters
+  React.useEffect(() => {
+    const q = searchParams.get('q') || '';
+    const cat = searchParams.get('cat') || 'Todos';
+    
+    setSearchQuery(q);
+    setSelectedCategory(cat);
+  }, [searchParams, setSearchQuery, setSelectedCategory]);
 
   // Enhanced filtering logic
   const filteredProducts = allProducts.filter(p => {
@@ -18,7 +28,10 @@ const SearchPage: React.FC = () => {
       p.tag?.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesCategory = selectedCategory === 'Todos' || 
-      p.tag === selectedCategory; // Mocking category matching via tags for now if category field is missing from Product
+      p.tag?.split(' | ').some(t => 
+        t === selectedCategory || 
+        (selectedCategory === 'Accesorios' && t === 'Accesorio')
+      );
     
     return matchesSearch && matchesCategory;
   });
@@ -68,6 +81,7 @@ const SearchPage: React.FC = () => {
                       src={product.image} 
                       alt={product.name} 
                       id={product.id} 
+                      name={product.name}
                       tag={product.tag}
                     />
                     <ProductCard.Info 

@@ -255,6 +255,7 @@ export interface IHeroSlide extends Document {
   subtitle: string;
   buttonText: string;
   image: string;
+  link: string;
 }
 
 const HeroSlideSchema = new Schema<IHeroSlide>({
@@ -262,7 +263,8 @@ const HeroSlideSchema = new Schema<IHeroSlide>({
   title: { type: String, required: true },
   subtitle: { type: String, required: true },
   buttonText: { type: String, required: true },
-  image: { type: String, required: true }
+  image: { type: String, required: true },
+  link: { type: String, default: '/search' }
 });
 
 // --- MODELS EXPORT ---

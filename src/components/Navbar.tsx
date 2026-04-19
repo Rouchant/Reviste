@@ -11,18 +11,22 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated, user } = useAuthStore();
   const cartCount = useCartStore((state) => state.getItemCount());
-  const { searchQuery, setSearchQuery } = useCatalogStore();
+  const { searchQuery, setSearchQuery, setSelectedCategory } = useCatalogStore();
+
+  const isSearchPage = location.pathname === '/search';
 
   const handleSearchFocus = () => {
-    if (location.pathname !== '/search') {
+    if (!isSearchPage) {
+      setSelectedCategory('Todos');
       navigate('/search');
     }
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    if (location.pathname !== '/search' && e.target.value.length > 0) {
-      navigate('/search');
+    if (!isSearchPage && e.target.value.length > 0) {
+      setSelectedCategory('Todos');
+      navigate(`/search?q=${encodeURIComponent(e.target.value)}`);
     }
   };
 
@@ -62,8 +66,8 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
         
-        {/* Desktop Search Bar */}
-        <div className="hidden md:flex flex-grow max-w-2xl mx-8 lg:mx-16">
+        {/* Desktop Search Bar: Hidden on Search Page */}
+        <div className={`hidden md:flex flex-grow max-w-2xl mx-8 lg:mx-16 transition-opacity duration-300 ${isSearchPage ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
           <div className="relative w-full group">
             <Input 
               type="text" 

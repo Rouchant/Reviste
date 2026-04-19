@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import { Categoria, Prenda } from './server/models';
+import { Categoria, Prenda, HeroSlide } from '../server/models';
 
 dotenv.config();
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -11,12 +11,14 @@ async function check() {
     await mongoose.connect(MONGODB_URI!, { serverSelectionTimeoutMS: 5000 });
     console.log('Connected.');
     
-    const catCount = await Categoria.countDocuments();
-    const prodCount = await Prenda.countDocuments();
+    const heroCount = await HeroSlide.countDocuments();
+    console.log('HeroSlides count:', heroCount);
     
-    console.log('Categories:', catCount);
-    console.log('Products:', prodCount);
-    
+    if (heroCount > 0) {
+      const sampleHero = await HeroSlide.findOne().lean();
+      console.log('Sample HeroSlide Data:', JSON.stringify(sampleHero, null, 2));
+    }
+
     process.exit(0);
   } catch (err) {
     console.error('Error:', err);

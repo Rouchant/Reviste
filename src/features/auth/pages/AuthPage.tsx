@@ -20,18 +20,24 @@ const AuthPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>(
     location.hash === '#register' ? 'register' : 'login'
   );
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedComuna, setSelectedComuna] = useState('');
+  const [street, setStreet] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [strength, setStrength] = useState({ label: '', color: '', width: '0%' });
 
   useEffect(() => {
-    if (location.hash === '#register' && activeTab !== 'register') {
+    if (location.hash === '#register') {
       setActiveTab('register');
-    } else if (location.hash !== '#register' && activeTab === 'register' && !location.hash) {
+    } else if (location.hash === '' || location.hash === '#login') {
       setActiveTab('login');
     }
-  }, [location.hash, activeTab]);
+  }, [location.hash]);
 
   const checkStrength = (val: string) => {
     setPassword(val);
@@ -75,7 +81,10 @@ const AuthPage: React.FC = () => {
         {/* Tab Switcher */}
         <div className="flex bg-gray-50 p-1.5 rounded-2xl mb-8 border border-gray-100">
           <button 
-            onClick={() => setActiveTab('login')}
+            onClick={() => {
+              setActiveTab('login');
+              navigate('/auth', { replace: true });
+            }}
             className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${
               activeTab === 'login' ? "bg-white text-brand-pink shadow-sm" : "text-gray-400 hover:text-gray-600"
             }`}
@@ -83,7 +92,10 @@ const AuthPage: React.FC = () => {
             Ingresar
           </button>
           <button 
-            onClick={() => setActiveTab('register')}
+            onClick={() => {
+              setActiveTab('register');
+              navigate('/auth#register', { replace: true });
+            }}
             className={`flex-1 py-3 text-sm font-bold rounded-xl transition-all ${
               activeTab === 'register' ? "bg-white text-brand-pink shadow-sm" : "text-gray-400 hover:text-gray-600"
             }`}
@@ -132,7 +144,13 @@ const AuthPage: React.FC = () => {
             <form className="space-y-4" onSubmit={handleLogin}>
               <div>
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre Completo</label>
-                <Input type="text" placeholder="Ej: Juan Pérez" className="h-12" />
+                <Input 
+                  type="text" 
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Ej: Juan Pérez" 
+                  className="h-12" 
+                />
               </div>
               <div>
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Correo Electrónico</label>
@@ -146,10 +164,51 @@ const AuthPage: React.FC = () => {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Usuario</label>
+                  <div className="relative">
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">@</span>
+                    <Input 
+                      type="text" 
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value.replace(/^@/, ''))}
+                      placeholder="usuario" 
+                      className="h-12 pl-8" 
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Teléfono</label>
+                  <Input 
+                    type="tel" 
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+56 9..." 
+                    className="h-12" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Dirección (Calle y Número)</label>
+                <Input 
+                  type="text" 
+                  value={street}
+                  onChange={(e) => setStreet(e.target.value)}
+                  placeholder="Ej: Av. Providencia 1234, depto 501" 
+                  className="h-12" 
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Región</label>
                   <select 
                     className="flex h-12 w-full rounded-2xl border border-transparent bg-gray-50 px-4 py-3 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none"
-                    onChange={(e) => setSelectedRegion(e.target.value)}
+                    value={selectedRegion}
+                    onChange={(e) => {
+                      setSelectedRegion(e.target.value);
+                      setSelectedComuna('');
+                    }}
                   >
                     <option value="">Selecciona</option>
                     <option value="RM">Metropolitana</option>
@@ -162,6 +221,8 @@ const AuthPage: React.FC = () => {
                   <select 
                     className="flex h-12 w-full rounded-2xl border border-transparent bg-gray-50 px-4 py-3 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none disabled:opacity-50 appearance-none"
                     disabled={!selectedRegion}
+                    value={selectedComuna}
+                    onChange={(e) => setSelectedComuna(e.target.value)}
                   >
                     <option value="">Comuna</option>
                     {selectedRegion && comunasMap[selectedRegion].map(c => (
@@ -174,6 +235,7 @@ const AuthPage: React.FC = () => {
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Contraseña</label>
                 <Input 
                   type="password" 
+                  value={password}
                   className="h-12"
                   placeholder="Mínimo 8 caracteres"
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => checkStrength(e.target.value)}
@@ -185,6 +247,19 @@ const AuthPage: React.FC = () => {
                     </div>
                     <p className="text-[10px] font-bold uppercase text-right" style={{ color: strength.color }}>{strength.label}</p>
                   </div>
+                )}
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Confirmar Contraseña</label>
+                <Input 
+                  type="password" 
+                  value={confirmPassword}
+                  className={`h-12 ${confirmPassword && password !== confirmPassword ? 'border-red-400 focus:border-red-500' : ''}`}
+                  placeholder="Repite tu contraseña"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                {confirmPassword && password !== confirmPassword && (
+                  <p className="text-[10px] text-red-500 font-bold mt-1 ml-1">Las contraseñas no coinciden</p>
                 )}
               </div>
               <Button type="submit" className="w-full mt-4" size="lg">

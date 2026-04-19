@@ -34,6 +34,7 @@ const FavoritesPage: React.FC = () => {
                   src={product.image} 
                   alt={product.name} 
                   id={product.id} 
+                  name={product.name}
                   tag={product.tag}
                   discount={product.oldPrice ? Math.round(((product.oldPrice - product.price) / product.oldPrice) * 100) : undefined}
                 />
@@ -68,7 +69,7 @@ const FavoritesPage: React.FC = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-60">
               {allProducts.slice(0, 4).map(product => (
                  <div key={`rec-${product.id}`} className="scale-95 grayscale">
-                    <ProductCard.Image src={product.image} alt={product.name} id={product.id} />
+                    <ProductCard.Image src={product.image} alt={product.name} id={product.id} name={product.name} />
                  </div>
               ))}
             </div>

@@ -15,6 +15,7 @@ const HomePage: React.FC = () => {
   const addItem = useCartStore((state) => state.addItem);
   const navigate = useNavigate();
   const { 
+    allProducts,
     categories, 
     selectedCategory, 
     setSelectedCategory, 
@@ -71,6 +72,7 @@ const HomePage: React.FC = () => {
           src={product.image} 
           alt={product.name} 
           id={product.id} 
+          name={product.name}
           tag={customTag || product.tag}
           discount={discount}
           onQuickAdd={() => addItem(product)}
@@ -127,8 +129,7 @@ const HomePage: React.FC = () => {
                 variant={selectedCategory === category ? "primary" : "muted"}
                 size="sm"
                 onClick={() => {
-                  setSelectedCategory(category);
-                  navigate('/search');
+                  navigate(`/search?cat=${encodeURIComponent(category)}`);
                 }}
                 className="rounded-full flex-shrink-0"
               >
@@ -143,8 +144,7 @@ const HomePage: React.FC = () => {
           title="Ofertas del Día" 
           linkText="Ver todas" 
           onLinkClick={() => {
-            setSearchQuery('Oferta');
-            navigate('/search');
+            navigate('/search?q=Oferta');
           }}
         >
           {featuredOffers.map(product => (
@@ -158,8 +158,7 @@ const HomePage: React.FC = () => {
           title="Recién Llegados" 
           linkText="Ver todo"
           onLinkClick={() => {
-            setSearchQuery('Nuevo');
-            navigate('/search');
+            navigate('/search?q=Nuevo');
           }}
         >
           {newArrivals.map(product => (
@@ -173,13 +172,14 @@ const HomePage: React.FC = () => {
           title="Accesorios únicos" 
           linkText="Ver todos"
           onLinkClick={() => {
-            setSelectedCategory('Accesorios');
-            navigate('/search');
+            navigate('/search?cat=Accesorios');
           }}
         >
-          {featuredOffers.slice().reverse().map(product => (
+          {allProducts
+            .filter((p: Product) => p.tag?.toLowerCase().includes('accesorio'))
+            .map((product: Product) => (
             <div key={`acc-${product.id}`} className="w-[200px] md:w-[280px] flex-shrink-0 snap-start">
-              {renderProduct(product, "Accesorio")}
+              {renderProduct(product)}
             </div>
           ))}
         </GallerySection>
@@ -189,8 +189,7 @@ const HomePage: React.FC = () => {
             title="Más Vendidos" 
             linkText="Ver ranking"
             onLinkClick={() => {
-              setSearchQuery('Top');
-              navigate('/search');
+              navigate('/search?q=Top');
             }}
           >
             {newArrivals.map(product => (

@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { HeroSlide } from '../features/catalog/types';
+import { useNavigate } from 'react-router-dom';
 
 interface HeroCarouselProps {
   slides: HeroSlide[];
 }
 
 const HeroCarousel: React.FC<HeroCarouselProps> = ({ slides }) => {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isAutoScrolling = useRef(false);
@@ -80,7 +82,7 @@ const HeroCarousel: React.FC<HeroCarouselProps> = ({ slides }) => {
                 {slide.subtitle}
               </p>
               <button 
-                onClick={() => (window.location.href = slide.link)}
+                onClick={() => navigate(slide.link || '/search')}
                 className="btn-primary !px-8 !py-4 text-sm md:text-base cursor-pointer"
               >
                 {slide.buttonText}
