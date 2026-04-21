@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Camera, Info, ArrowLeft } from 'lucide-react';
+import { Camera, Info, ArrowLeft, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../../auth/store/useAuthStore';
+import { useCatalogStore } from '../../catalog/store/useCatalogStore';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
 import { Card } from '../../../components/ui/card';
@@ -8,7 +10,26 @@ import MainLayout from '../../../layouts/MainLayout';
 
 const UploadPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
+  const fetchCatalog = useCatalogStore(state => state.fetchCatalog);
   const [preview, setPreview] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    name: '',
+    price: '',
+    oldPrice: '',
+    categoryId: '1',
+    talla: 'M',
+    estado: 'como_nuevo',
+    description: ''
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -20,10 +41,43 @@ const UploadPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('¡Genial! Tu prenda ha sido enviada a revisión.');
-    navigate('/');
+    if (!preview) {
+      alert('Por favor, sube una foto de la prenda');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/catalog/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          price: Number(formData.price),
+          oldPrice: formData.oldPrice ? Number(formData.oldPrice) : undefined,
+          categoryId: Number(formData.categoryId),
+          sellerId: user?.id ? Number(user.id) : 10,
+          image: preview
+        })
+      });
+
+      if (response.ok) {
+        alert('¡Genial! Tu prenda ha sido publicada exitosamente.');
+        await fetchCatalog(); // Refresh store
+        navigate('/my-store'); // Go back to "Mi Tienda"
+      } else {
+        const error = await response.json();
+        alert(`Error al subir prenda: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Ocurrió un error inesperado al subir la prenda.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,11 +115,13 @@ const UploadPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Basic Info */}
               <div>
                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Título de la publicación</label>
                 <Input 
+                  name="name"
                   type="text" 
+                  value={formData.name}
+                  onChange={handleInputChange}
                   placeholder="Ej: Chaqueta Denim Vintage 90s" 
                   required 
                 />
@@ -74,8 +130,13 @@ const UploadPage: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Categoría</label>
-                  <select className="flex h-14 w-full rounded-2xl border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none cursor-pointer" required>
-                    <option value="">Seleccionar...</option>
+                  <select 
+                    name="categoryId"
+                    value={formData.categoryId}
+                    onChange={handleInputChange}
+                    className="flex h-14 w-full rounded-2xl border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none cursor-pointer" 
+                    required
+                  >
                     <option value="1">Vintage 90s</option>
                     <option value="2">Y2K Style</option>
                     <option value="3">Denim</option>
@@ -85,8 +146,13 @@ const UploadPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Talla</label>
-                  <select className="flex h-14 w-full rounded-2xl border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none cursor-pointer" required>
-                    <option value="">Seleccionar...</option>
+                  <select 
+                    name="talla"
+                    value={formData.talla}
+                    onChange={handleInputChange}
+                    className="flex h-14 w-full rounded-2xl border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none cursor-pointer" 
+                    required
+                  >
                     <option value="XS">XS</option>
                     <option value="S">S</option>
                     <option value="M">M</option>
@@ -103,7 +169,10 @@ const UploadPage: React.FC = () => {
                   <div className="relative">
                     <span className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-400 font-bold z-10">$</span>
                     <Input 
+                      name="price"
                       type="number" 
+                      value={formData.price}
+                      onChange={handleInputChange}
                       className="!pl-10" 
                       placeholder="0" 
                       required 
@@ -112,8 +181,13 @@ const UploadPage: React.FC = () => {
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Estado</label>
-                  <select className="flex h-14 w-full rounded-2xl border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none cursor-pointer" required>
-                    <option value="">Seleccionar...</option>
+                  <select 
+                    name="estado"
+                    value={formData.estado}
+                    onChange={handleInputChange}
+                    className="flex h-14 w-full rounded-2xl border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none appearance-none cursor-pointer" 
+                    required
+                  >
                     <option value="nuevo">Nuevo con etiqueta</option>
                     <option value="como_nuevo">Como nuevo</option>
                     <option value="bueno">Buen estado</option>
@@ -124,6 +198,9 @@ const UploadPage: React.FC = () => {
               <div>
                 <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Detalles de la prenda</label>
                 <textarea 
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
                   className="flex w-full rounded-[24px] border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all placeholder:text-gray-300 focus:bg-white focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5 outline-none disabled:cursor-not-allowed disabled:opacity-50" 
                   rows={4} 
                   placeholder="Cuéntanos más sobre el material, calce, desperfectos, etc." 
@@ -138,8 +215,14 @@ const UploadPage: React.FC = () => {
                 </p>
               </div>
 
-              <Button type="submit" className="w-full h-16 text-base" size="lg">
-                Publicar prenda
+              <Button type="submit" className="w-full h-16 text-base" size="lg" disabled={isLoading}>
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="animate-spin" /> Publicando...
+                  </span>
+                ) : (
+                  'Publicar prenda'
+                )}
               </Button>
               
               <div className="text-center">

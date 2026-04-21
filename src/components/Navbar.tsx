@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, LogIn, ShieldCheck, Search, UserRoundCog } from 'lucide-react';
+import { ShoppingBag, LogIn, ShieldCheck, Search, UserRoundCog, Store } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../features/cart/store/useCartStore';
 import { useCatalogStore } from '../features/catalog/store/useCatalogStore';
@@ -104,7 +104,13 @@ const Navbar: React.FC = () => {
             </Link>
           )}
 
-          <Link to={isAuthenticated ? "/settings" : "/auth"} className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title={isAuthenticated ? "Mi Perfil" : "Iniciar Sesión"}>
+          {isAuthenticated && (
+            <Link to="/my-store" className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title="Mi Tienda">
+              <Store size={24} />
+            </Link>
+          )}
+
+          <Link to={isAuthenticated ? "/settings" : "/auth"} className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title={isAuthenticated ? "Configuración" : "Iniciar Sesión"}>
             {isAuthenticated ? <UserRoundCog size={24} /> : <LogIn size={24} />}
           </Link>
         </div>

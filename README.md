@@ -64,6 +64,27 @@ graph TD
 
 ---
 
+## 🚀 API Reference
+
+El backend de REVISTE expone los siguientes endpoints para el manejo del catálogo y transacciones:
+
+### Catálogo
+- `GET /api/catalog/categories`: Obtiene la lista de nombres de categorías.
+- `GET /api/catalog/products`: Obtiene todos los productos con sus imágenes y vendedores vinculados.
+- `GET /api/catalog/products/:id`: Obtiene el detalle completo de una prenda específica.
+- `POST /api/catalog/products`: Crea una nueva prenda (requiere body con detalles y URL de imagen).
+- `GET /api/catalog/hero-slides`: Obtiene las diapositivas dinámicas para el carrusel de inicio.
+
+---
+
+## 👕 Gestión de Productos (Vendedores/Admin)
+
+¿Dónde se añaden las prendas?
+1. **Acceso Admin**: Los usuarios con permisos de administrador pueden acceder al panel central en `/admin`.
+2. **Subida Directa**: En el menú lateral del panel administrativo (o vía `/upload`), los usuarios pueden completar el formulario de curatoria para publicar nuevos tesoros circulares.
+
+---
+
 ## 📁 Estructura del Proyecto
 
 ```text

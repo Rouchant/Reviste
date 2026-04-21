@@ -160,6 +160,87 @@ app.get('/api/catalog/products/:id', async (req, res) => {
   }
 });
 
+// 2.2 Create Product (New)
+
+app.post('/api/catalog/products', async (req, res) => {
+  console.log('Creando nuevo producto...');
+  try {
+    const { name, price, oldPrice, description, categoryId, sellerId, image, talla, estado } = req.body;
+    
+    // Get next ID
+    const lastProduct = await Prenda.findOne().sort({ id: -1 });
+    const nextId = (lastProduct?.id || 0) + 1;
+
+    const newProduct = new Prenda({
+      id: nextId,
+      NOMBRE_PRENDA: name,
+      PRECIO_VENTA_PUBLICO: price,
+      OLD_PRICE: oldPrice,
+      DESCRIPCION: description || `Prenda: ${name}`,
+      ID_CATEGORIA: categoryId || 1,
+      ID_USUARIO_VENDEDOR: sellerId || 10, // Default to RevisteOfficial if not provided
+      FECHA_PUBLICACION: new Date(),
+      ESTADO_VENTA: 'Disponible',
+      TALLA: talla || 'M',
+      ESTADO_CONSERVACION: estado || 'Excelente',
+      RATING: 5,
+      REVIEWS_COUNT: 0,
+      FREE_SHIPPING: false
+    });
+
+    await newProduct.save();
+
+    if (image) {
+      const lastImg = await PrendaImagen.findOne().sort({ id: -1 });
+      const nextImgId = (lastImg?.id || 0) + 1;
+      
+      const newImage = new PrendaImagen({
+        id: nextImgId,
+        ID_PRENDA: nextId,
+        URL: image
+      });
+      await newImage.save();
+    }
+
+    console.log(`Producto creado exitosamente con ID: ${nextId}`);
+    res.status(201).json({ 
+      message: 'Producto creado exitosamente', 
+      id: nextId,
+      product: newProduct 
+    });
+  } catch (error) {
+    console.error('Error al crear producto:', error);
+    res.status(500).json({ error: 'Error al crear producto', details: (error as Error).message });
+  }
+});
+
+// 2.3 Get Products by Seller
+app.get('/api/catalog/products/seller/:sellerId', async (req, res) => {
+  const { sellerId } = req.params;
+  console.log(`Obteniendo productos del vendedor: ${sellerId}`);
+  try {
+    const [prendas, images] = await Promise.all([
+      Prenda.find({ ID_USUARIO_VENDEDOR: Number(sellerId) }).lean(),
+      PrendaImagen.find()
+    ]);
+    
+    const imageMap = new Map(images.map(img => [img.ID_PRENDA, img.URL]));
+
+    const products = prendas.map(p => ({
+      id: p.id,
+      name: p.NOMBRE_PRENDA,
+      price: p.PRECIO_VENTA_PUBLICO,
+      status: p.ESTADO_VENTA,
+      image: imageMap.get(p.id) || ''
+    }));
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error al obtener productos del vendedor:', error);
+    res.status(500).json({ error: 'Error al obtener tus productos' });
+  }
+});
+
 // 3. Hero Slides
 app.get('/api/catalog/hero-slides', async (req, res) => {
   try {
