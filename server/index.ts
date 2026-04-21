@@ -249,6 +249,9 @@ app.put('/api/catalog/products/:id', async (req, res) => {
   if (req.body.price !== undefined) updates.PRECIO_VENTA_PUBLICO = req.body.price;
   if (req.body.description !== undefined) updates.DESCRIPCION = req.body.description;
   if (req.body.status !== undefined) updates.ESTADO_VENTA = req.body.status;
+  if (req.body.categoryId !== undefined) updates.ID_CATEGORIA = req.body.categoryId;
+  if (req.body.talla !== undefined) updates.TALLA = req.body.talla;
+  if (req.body.estado !== undefined) updates.ESTADO_PRENDA = req.body.estado;
 
   console.log(`Actualizando producto ${id} con:`, updates);
   try {
@@ -257,7 +260,18 @@ app.put('/api/catalog/products/:id', async (req, res) => {
       { $set: updates },
       { new: true }
     );
+    
     if (!updatedProduct) return res.status(404).json({ error: 'Producto no encontrado' });
+
+    // Handle Image Update if provided
+    if (req.body.image) {
+      await PrendaImagen.findOneAndUpdate(
+        { ID_PRENDA: Number(id) },
+        { URL: req.body.image },
+        { upsert: true }
+      );
+    }
+
     res.json(updatedProduct);
   } catch (error) {
     console.error('Error al actualizar producto:', error);

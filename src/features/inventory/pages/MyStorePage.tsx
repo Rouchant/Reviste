@@ -53,33 +53,6 @@ const MyStorePage: React.FC = () => {
     }
   };
 
-  const handleEditPrice = async (id: number, currentPrice: number, name: string) => {
-    const newPriceStr = prompt(`Ajustar precio para "${name}":`, currentPrice.toString());
-    if (newPriceStr === null) return;
-    
-    const newPrice = Number(newPriceStr);
-    if (isNaN(newPrice) || newPrice <= 0) {
-      alert('Por favor ingresa un precio válido.');
-      return;
-    }
-
-    try {
-      const res = await fetch(`/api/catalog/products/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price: newPrice })
-      });
-      if (res.ok) {
-        fetchUserProducts();
-      } else {
-        alert('Error al actualizar el precio.');
-      }
-    } catch (error) {
-      console.error('Edit error:', error);
-      alert('Error de conexión al actualizar.');
-    }
-  };
-
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -156,13 +129,13 @@ const MyStorePage: React.FC = () => {
                       </td>
                       <td className="px-8 py-6">
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                          <button 
-                            onClick={() => handleEditPrice(p.id, p.price, p.name)}
+                          <Link 
+                            to={`/edit-product/${p.id}`}
                             className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-brand-pink hover:bg-white hover:shadow-md transition-all"
-                            title="Ajustar Precio"
+                            title="Editar Publicación"
                           >
                             <Edit2 size={16} />
-                          </button>
+                          </Link>
                           <button 
                             onClick={() => handleDelete(p.id, p.name)}
                             className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 hover:shadow-md transition-all"

@@ -12,6 +12,7 @@ const SettingsPage = lazy(() => import('./features/auth/pages/SettingsPage'));
 const SearchPage = lazy(() => import('./features/catalog/pages/SearchPage'));
 const FavoritesPage = lazy(() => import('./features/catalog/pages/FavoritesPage'));
 const MyStorePage = lazy(() => import('./features/inventory/pages/MyStorePage'));
+const EditProductPage = lazy(() => import('./features/inventory/pages/EditProductPage'));
 
 // Shared Loading Spinner
 const PageLoader = () => (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/my-store" element={<MyStorePage />} />
+            <Route path="/edit-product/:id" element={<EditProductPage />} />
             <Route path="/upload" element={<UploadPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
