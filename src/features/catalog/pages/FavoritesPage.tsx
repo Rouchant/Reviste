@@ -6,10 +6,21 @@ import ProductCard from '../components/ProductCard';
 import { useCatalog } from '../hooks/useCatalog';
 import { useFavoritesStore } from '../store/useFavoritesStore';
 import { Button } from '../../../components/ui/button';
+import { useAuthStore } from '../../auth/store/useAuthStore';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const FavoritesPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore();
   const { allProducts } = useCatalog();
   const { itemIds } = useFavoritesStore();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/auth');
+    }
+  }, [isAuthenticated, navigate]);
 
   const favoriteProducts = allProducts.filter(p => itemIds.includes(p.id));
 

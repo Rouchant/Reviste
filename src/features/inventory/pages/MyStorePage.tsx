@@ -14,25 +14,71 @@ const MyStorePage: React.FC = () => {
   const [userProducts, setUserProducts] = React.useState<any[]>([]);
   const [isProductsLoading, setIsProductsLoading] = React.useState(false);
 
-  React.useEffect(() => {
-    if (user?.id) {
-      const fetchUserProducts = async () => {
-        setIsProductsLoading(true);
-        try {
-          const res = await fetch(`/api/catalog/products/seller/${user.id}`);
-          if (res.ok) {
-            const data = await res.json();
-            setUserProducts(data);
-          }
-        } catch (error) {
-          console.error('Error fetching user products:', error);
-        } finally {
-          setIsProductsLoading(false);
-        }
-      };
-      fetchUserProducts();
+  const fetchUserProducts = React.useCallback(async () => {
+    if (!user?.id) return;
+    setIsProductsLoading(true);
+    try {
+      const res = await fetch(`/api/catalog/products/seller/${user.id}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUserProducts(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user products:', error);
+    } finally {
+      setIsProductsLoading(false);
     }
   }, [user?.id]);
+
+  React.useEffect(() => {
+    fetchUserProducts();
+  }, [fetchUserProducts]);
+
+  const handleDelete = async (id: number, name: string) => {
+    if (!confirm(`¿Estás seguro de que deseas eliminar "${name}"? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/catalog/products/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        alert('Producto eliminado correctamente.');
+        fetchUserProducts();
+      } else {
+        alert('Error al eliminar el producto.');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('Error de conexión al eliminar.');
+    }
+  };
+
+  const handleEditPrice = async (id: number, currentPrice: number, name: string) => {
+    const newPriceStr = prompt(`Ajustar precio para "${name}":`, currentPrice.toString());
+    if (newPriceStr === null) return;
+    
+    const newPrice = Number(newPriceStr);
+    if (isNaN(newPrice) || newPrice <= 0) {
+      alert('Por favor ingresa un precio válido.');
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/catalog/products/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ price: newPrice })
+      });
+      if (res.ok) {
+        fetchUserProducts();
+      } else {
+        alert('Error al actualizar el precio.');
+      }
+    } catch (error) {
+      console.error('Edit error:', error);
+      alert('Error de conexión al actualizar.');
+    }
+  };
 
   return (
     <MainLayout>
@@ -110,10 +156,18 @@ const MyStorePage: React.FC = () => {
                       </td>
                       <td className="px-8 py-6">
                         <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                          <button className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-brand-pink hover:bg-white hover:shadow-md transition-all">
+                          <button 
+                            onClick={() => handleEditPrice(p.id, p.price, p.name)}
+                            className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-brand-pink hover:bg-white hover:shadow-md transition-all"
+                            title="Ajustar Precio"
+                          >
                             <Edit2 size={16} />
                           </button>
-                          <button className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 hover:shadow-md transition-all">
+                          <button 
+                            onClick={() => handleDelete(p.id, p.name)}
+                            className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 hover:shadow-md transition-all"
+                            title="Eliminar Prenda"
+                          >
                             <Trash2 size={16} />
                           </button>
                         </div>

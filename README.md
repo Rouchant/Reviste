@@ -51,6 +51,24 @@ graph TD
     style Start fill:#111827,color:#fff
 ```
 
+## ♻️ Ciclo de Vida de la Prenda
+
+Cualquier usuario puede participar en la economía circular de REVISTE siguiendo este flujo de gestión:
+
+```mermaid
+graph LR
+    Subida[Subida de Prenda] --> Publicada[En Catálogo Público]
+    Publicada --> Gestion[Panel 'Mi Tienda']
+    Gestion --> Edicion[Ajuste de Precio / Info]
+    Edicion --> Publicada
+    Publicada --> Vendida[Venta Exitosa]
+    Publicada --> Borrada[Eliminación de Stock]
+    
+    style Subida fill:#D63D82,color:#fff
+    style Vendida fill:#84A98C,color:#fff
+    style Publicada fill:#111827,color:#fff
+```
+
 ## 🛠️ Stack Tecnológico
 
 - **Core**: [React 18](https://reactjs.org/) + [Vite](https://vitejs.dev/) (Build System)
@@ -72,7 +90,10 @@ El backend de REVISTE expone los siguientes endpoints para el manejo del catálo
 - `GET /api/catalog/categories`: Obtiene la lista de nombres de categorías.
 - `GET /api/catalog/products`: Obtiene todos los productos con sus imágenes y vendedores vinculados.
 - `GET /api/catalog/products/:id`: Obtiene el detalle completo de una prenda específica.
-- `POST /api/catalog/products`: Crea una nueva prenda (requiere body con detalles y URL de imagen).
+- `POST /api/catalog/products`: Crea una nueva prenda vinculada al usuario logueado.
+- `GET /api/catalog/products/seller/:sellerId`: Lista los productos de un vendedor específico.
+- `PUT /api/catalog/products/:id`: Actualiza precio o detalles de una prenda existente.
+- `DELETE /api/catalog/products/:id`: Elimina una prenda y sus imágenes del sistema.
 - `GET /api/catalog/hero-slides`: Obtiene las diapositivas dinámicas para el carrusel de inicio.
 
 ---
@@ -80,8 +101,9 @@ El backend de REVISTE expone los siguientes endpoints para el manejo del catálo
 ## 👕 Gestión de Productos (Vendedores/Admin)
 
 ¿Dónde se añaden las prendas?
-1. **Acceso Admin**: Los usuarios con permisos de administrador pueden acceder al panel central en `/admin`.
-2. **Subida Directa**: En el menú lateral del panel administrativo (o vía `/upload`), los usuarios pueden completar el formulario de curatoria para publicar nuevos tesoros circulares.
+1. **Mi Tienda (Todos los Usuarios)**: Cualquier usuario autenticado tiene acceso a `/my-store`, donde puede visualizar sus prendas activas, ajustar precios en tiempo real y eliminar stock.
+2. **Subida Directa**: A través del icono de tienda o vía `/upload`, se accede al formulario de curatoria para publicar nuevos tesoros.
+3. **Panel Admin (Administradores)**: Los administradores mantienen un control global en `/admin` para moderar el contenido de toda la plataforma.
 
 ---
 

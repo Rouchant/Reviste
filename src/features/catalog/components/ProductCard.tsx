@@ -3,6 +3,7 @@ import { Card, CardContent } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { Heart, ShoppingCart } from 'lucide-react';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { Link } from 'react-router-dom';
 import { getProductUrl } from '../../../lib/slugify';
 import { useCartStore, Product, CartState } from '../../cart/store/useCartStore';
@@ -27,6 +28,7 @@ const ProductCard: React.FC<{ children: React.ReactNode }> & ProductCardComposit
 const ProductImage: React.FC<{ src: string; alt: string; id: number; name: string; tag?: string; discount?: number; onQuickAdd?: () => void }> = ({ 
   src, alt, id, name, tag, discount, onQuickAdd 
 }) => {
+  const { isAuthenticated } = useAuthStore();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const favorite = isFavorite(id);
 
@@ -64,15 +66,17 @@ const ProductImage: React.FC<{ src: string; alt: string; id: number; name: strin
         ) : null}
       </div>
 
-      <button 
-        onClick={() => toggleFavorite(id)}
-        aria-label="Agregar a favoritos"
-        className={`absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-sm ${
-          favorite ? 'text-brand-pink opacity-100' : 'text-brand-dark opacity-0 group-hover:opacity-100'
-        }`}
-      >
-        <Heart size={20} fill={favorite ? 'currentColor' : 'none'} />
-      </button>
+      {isAuthenticated && (
+        <button 
+          onClick={() => toggleFavorite(id)}
+          aria-label="Agregar a favoritos"
+          className={`absolute top-4 right-4 w-10 h-10 bg-white/80 backdrop-blur-md rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-sm ${
+            favorite ? 'text-brand-pink opacity-100' : 'text-brand-dark opacity-0 group-hover:opacity-100'
+          }`}
+        >
+          <Heart size={20} fill={favorite ? 'currentColor' : 'none'} />
+        </button>
+      )}
 
       {onQuickAdd && (
         <div className="absolute inset-x-4 bottom-4 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">

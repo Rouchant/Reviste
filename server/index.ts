@@ -241,6 +241,48 @@ app.get('/api/catalog/products/seller/:sellerId', async (req, res) => {
   }
 });
 
+// 2.4 Update Product
+app.put('/api/catalog/products/:id', async (req, res) => {
+  const { id } = req.params;
+  const updates: any = {};
+  if (req.body.name !== undefined) updates.NOMBRE_PRENDA = req.body.name;
+  if (req.body.price !== undefined) updates.PRECIO_VENTA_PUBLICO = req.body.price;
+  if (req.body.description !== undefined) updates.DESCRIPCION = req.body.description;
+  if (req.body.status !== undefined) updates.ESTADO_VENTA = req.body.status;
+
+  console.log(`Actualizando producto ${id} con:`, updates);
+  try {
+    const updatedProduct = await Prenda.findOneAndUpdate(
+      { id: Number(id) },
+      { $set: updates },
+      { new: true }
+    );
+    if (!updatedProduct) return res.status(404).json({ error: 'Producto no encontrado' });
+    res.json(updatedProduct);
+  } catch (error) {
+    console.error('Error al actualizar producto:', error);
+    res.status(500).json({ error: 'Error al actualizar el producto' });
+  }
+});
+
+// 2.5 Delete Product
+app.delete('/api/catalog/products/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(`Eliminando producto: ${id}`);
+  try {
+    const product = await Prenda.findOneAndDelete({ id: Number(id) });
+    if (!product) return res.status(404).json({ error: 'Producto no encontrado' });
+    
+    // Also delete associated images
+    await PrendaImagen.deleteMany({ ID_PRENDA: Number(id) });
+    
+    res.json({ message: 'Producto eliminado exitosamente' });
+  } catch (error) {
+    console.error('Error al eliminar producto:', error);
+    res.status(500).json({ error: 'Error al eliminar el producto' });
+  }
+});
+
 // 3. Hero Slides
 app.get('/api/catalog/hero-slides', async (req, res) => {
   try {

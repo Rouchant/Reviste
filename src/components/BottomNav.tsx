@@ -17,10 +17,10 @@ const BottomNav: React.FC = () => {
 
   const navItems: NavItem[] = [
     { icon: <LayoutPanelLeft size={26} />, label: 'Explorar', path: '/', color: 'text-brand-muted' },
-    { icon: <Heart size={26} />, label: 'Favoritos', path: '/favorites', color: 'text-brand-pink' },
   ];
 
   if (isAuthenticated) {
+    navItems.push({ icon: <Heart size={26} />, label: 'Favoritos', path: '/favorites', color: 'text-brand-pink' });
     navItems.push({ icon: <Store size={26} />, label: 'Tienda', path: '/my-store', color: 'text-brand-muted' });
     navItems.push({ icon: <User size={26} />, label: 'Perfil', path: '/settings', color: 'text-brand-muted' });
   } else {
