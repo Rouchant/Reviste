@@ -13,6 +13,8 @@
 - **Micro-interacciones**: Animaciones fluidas, efectos de glassmorphism y hover states dinámicos.
 - **Sticky CTA**: Barra de compra persistente en móviles para agilizar la conversión.
 - **Componentes CVA**: Sistema de diseño basado en átomos reutilizables con variantes controladas (Class Variance Authority).
+- **Gestión de Stock**: Panel dedicado para vendedores con capacidades completas de CRUD (Crear, Editar, Eliminar).
+- **Control de Acceso**: Funcionalidades de favoritos y gestión de tienda protegidas mediante sistema de autenticación.
 
 ### 🏗️ Arquitectura de "Vertical Slices"
 El proyecto utiliza una estructura orientada a funcionalidades (**Feature-driven architecture**), eliminando el código espagueti y facilitando la escalabilidad:
@@ -101,9 +103,15 @@ El backend de REVISTE expone los siguientes endpoints para el manejo del catálo
 ## 👕 Gestión de Productos (Vendedores/Admin)
 
 ¿Dónde se añaden las prendas?
-1. **Mi Tienda (Todos los Usuarios)**: Cualquier usuario autenticado tiene acceso a `/my-store`, donde puede visualizar sus prendas activas, ajustar precios en tiempo real y eliminar stock.
+1. **Mi Tienda (Todos los Usuarios)**: Cualquier usuario autenticado tiene acceso a `/my-store`, donde puede visualizar sus prendas activas, ajustar precios y editar detalles técnicos en una página dedicada.
 2. **Subida Directa**: A través del icono de tienda o vía `/upload`, se accede al formulario de curatoria para publicar nuevos tesoros.
 3. **Panel Admin (Administradores)**: Los administradores mantienen un control global en `/admin` para moderar el contenido de toda la plataforma.
+
+### Control de Identidad y Negocio
+La arquitectura separa estrictamente la cuenta del usuario de la actividad comercial:
+- **Settings**: Gestión de perfil, seguridad y pagos (con navegación horizontal optimizada para móviles).
+- **My Store**: Dashboard de ventas y control de inventario.
+- **Global Logout**: Acceso inmediato al cierre de sesión desde la barra principal.
 
 ---
 
