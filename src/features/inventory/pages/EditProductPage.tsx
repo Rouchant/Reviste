@@ -142,7 +142,11 @@ const EditProductPage: React.FC = () => {
               <div className="relative group cursor-pointer aspect-[4/5] rounded-[32px] overflow-hidden border-2 border-dashed border-gray-100 hover:border-brand-pink/30 transition-all bg-gray-50 flex items-center justify-center">
                 {preview ? (
                   <>
-                    <img src={preview} className="w-full h-full object-cover" alt="Preview" />
+                    <img 
+                      src={preview.startsWith('data:') || preview.startsWith('http') ? preview : `/${preview}`} 
+                      className="w-full h-full object-cover" 
+                      alt="Preview" 
+                    />
                     <div className="absolute inset-0 bg-brand-dark/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <Camera className="text-white" size={32} />
                     </div>
