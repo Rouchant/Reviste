@@ -51,10 +51,10 @@ export const useCatalogStore = create<CatalogState>()(
               isLoading: false 
             });
           } else {
-            throw new Error('API not available');
+            throw new Error('La API no está disponible');
           }
         } catch (error) {
-          console.warn('API fetch failed, falling back to mock data:', error);
+          console.warn('La carga de la API falló, usando datos de respaldo (mock data):', error);
           // Fallback to local mock data
           set({ 
             categories: ['Todos', ...mockData.categories],

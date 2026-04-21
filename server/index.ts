@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI && process.env.NODE_ENV === 'production') {
-  console.error('CRITICAL: MONGODB_URI is not defined in production environment!');
+  console.error('CRÍTICO: ¡MONGODB_URI no está definido en el entorno de producción!');
 }
 
 const URI = MONGODB_URI || 'mongodb://localhost:27017/Reviste';
@@ -27,15 +27,15 @@ app.use(express.json());
 app.use(async (req, res, next) => {
   if (mongoose.connection.readyState !== 1) {
     try {
-      console.log('Attaching to MongoDB...');
+      console.log('Conectando a MongoDB...');
       await mongoose.connect(URI, { serverSelectionTimeoutMS: 5000 });
-      console.log('MongoDB Connected.');
+      console.log('MongoDB Conectado.');
     } catch (err) {
-      console.error('Database connection error during request:', err);
+      console.error('Error de conexión a la base de datos durante la petición:', err);
       return res.status(500).json({ 
-        error: 'Database connection failed', 
+        error: 'Conexión a la base de datos fallida', 
         details: (err as Error).message,
-        hint: 'Check MONGODB_URI in Vercel settings and Atlas IP Whitelist'
+        hint: 'Verifica MONGODB_URI en los ajustes de Vercel y la lista blanca de IPs en Atlas'
       });
     }
   }
@@ -56,22 +56,22 @@ app.get('/health', (req, res) => {
 
 // 1. Categories
 app.get('/api/catalog/categories', async (req, res) => {
-  console.log('Fetching categories...');
+  console.log('Obteniendo categorías...');
   try {
     const categories = await Categoria.find().sort({ id: 1 }).maxTimeMS(5000);
-    console.log(`Found ${categories.length} categories.`);
+    console.log(`Se encontraron ${categories.length} categorías.`);
     // Map to simple array of names to match mockData.categories format
     const names = categories.map(c => c.NOMBRE_CATEGORIA);
     res.json(names);
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    res.status(500).json({ error: 'Error fetching categories', details: (error as Error).message });
+    console.error('Error al obtener categorías:', error);
+    res.status(500).json({ error: 'Error al obtener categorías', details: (error as Error).message });
   }
 });
 
 // 2. Products (Prendas)
 app.get('/api/catalog/products', async (req, res) => {
-  console.log('Fetching products...');
+  console.log('Obteniendo productos...');
   try {
     const [prendas, images, sellers, categories] = await Promise.all([
       Prenda.find().lean().maxTimeMS(5000),
@@ -79,8 +79,7 @@ app.get('/api/catalog/products', async (req, res) => {
       Usuario.find().maxTimeMS(5000),
       Categoria.find().maxTimeMS(5000)
     ]);
-    console.log(`Fetched data: ${prendas.length} products, ${images.length} images.`);
-    console.log(`Fetched data: ${prendas.length} products, ${images.length} images.`);
+    console.log(`Datos obtenidos: ${prendas.length} productos, ${images.length} imágenes.`);
     
     // Create maps for quick lookup
     const imageMap = new Map(images.map(img => [img.ID_PRENDA, img.URL]));
@@ -119,8 +118,8 @@ app.get('/api/catalog/products', async (req, res) => {
 
     res.json(products);
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Error fetching products' });
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ error: 'Error al obtener productos' });
   }
 });
 
@@ -129,7 +128,7 @@ app.get('/api/catalog/products/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const prenda = await Prenda.findOne({ id: Number(id) });
-    if (!prenda) return res.status(404).json({ error: 'Product not found' });
+    if (!prenda) return res.status(404).json({ error: 'Producto no encontrado' });
 
     const [images, seller, category] = await Promise.all([
       PrendaImagen.find({ ID_PRENDA: prenda.id }),
@@ -157,7 +156,7 @@ app.get('/api/catalog/products/:id', async (req, res) => {
       seller: seller ? `@${seller.NOMBRE_USUARIO}` : 'Reviste'
     });
   } catch (error) {
-    res.status(500).json({ error: 'Error fetching product' });
+    res.status(500).json({ error: 'Error al obtener el producto' });
   }
 });
 
@@ -175,8 +174,8 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
     }));
     res.json(mappedSlides);
   } catch (error) {
-    console.error('Error fetching hero slides:', error);
-    res.status(500).json({ error: 'Error fetching hero slides' });
+    console.error('Error al obtener los hero slides:', error);
+    res.status(500).json({ error: 'Error al obtener los hero slides' });
   }
 });
 
@@ -190,6 +189,6 @@ if (process.env.NODE_ENV !== 'production') {
   });
   
   server.on('error', (err) => {
-    console.error('Server error:', err);
+    console.error('Error del servidor:', err);
   });
 }

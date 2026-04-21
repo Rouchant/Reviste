@@ -3,7 +3,8 @@ import {
   LayoutDashboard, ShoppingBag, ShoppingCart, Users, BarChart3, 
   ArrowLeft, LogOut
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, Navigate } from 'react-router-dom';
+import { useAuthStore } from '../features/auth/store/useAuthStore';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -11,6 +12,12 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   const location = useLocation();
+  const { user, isAuthenticated } = useAuthStore();
+  const logout = useAuthStore(state => state.logout);
+
+  if (!isAuthenticated || !user?.isAdmin) {
+    return <Navigate to="/" replace />;
+  }
 
   const sidebarLinks = [
     { icon: <LayoutDashboard size={20} />, label: "Resumen", path: "/admin" },
@@ -53,7 +60,10 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
           <Link to="/" className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-brand-pink font-bold transition-all rounded-xl hover:bg-pink-50">
             <ArrowLeft size={20} /> Volver a Tienda
           </Link>
-          <button className="w-full flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-red-500 font-bold transition-all rounded-xl hover:bg-red-50">
+          <button 
+            onClick={logout}
+            className="w-full flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-red-500 font-bold transition-all rounded-xl hover:bg-red-50"
+          >
             <LogOut size={20} /> Cerrar Sesión
           </button>
         </div>

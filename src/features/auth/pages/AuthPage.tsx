@@ -65,7 +65,7 @@ const AuthPage: React.FC = () => {
     e.preventDefault();
     if (!email) return;
     
-    // Simple magic: if email contains "admin", log in as admin
+    // Lógica mágica simple: si el correo contiene "admin", entra como administrador
     const role = email.includes('admin') ? 'admin' : 'user';
     login(email, role);
     navigate('/');

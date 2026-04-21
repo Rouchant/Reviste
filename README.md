@@ -22,6 +22,35 @@ El proyecto utiliza una estructura orientada a funcionalidades (**Feature-driven
 
 ---
 
+## 🛍️ Flujo de Compra (Customer Journey)
+
+A continuación se describe el proceso optimizado que sigue un cliente desde el descubrimiento hasta la conversión:
+
+```mermaid
+graph TD
+    Start((Inicio)) --> Home[Home / Catálogo]
+    Home --> Explore{¿Qué busca?}
+    
+    Explore -->|Búsqueda| Search[Página de Resultados]
+    Explore -->|Navegación| Detail[Detalle de Producto]
+    
+    Search --> Detail
+    
+    Detail --> AddCart[Añadir al Carrito]
+    AddCart --> ViewCart[Revisión en Carrito]
+    
+    ViewCart --> AuthCheck{¿Logueado?}
+    
+    AuthCheck -->|No| Auth[Login / Registro]
+    AuthCheck -->|Sí| Checkout[Checkout / Pago]
+    
+    Auth --> Checkout
+    Checkout --> Success((Éxito ✨))
+    
+    style Success fill:#D63D82,color:#fff
+    style Start fill:#111827,color:#fff
+```
+
 ## 🛠️ Stack Tecnológico
 
 - **Core**: [React 18](https://reactjs.org/) + [Vite](https://vitejs.dev/) (Build System)

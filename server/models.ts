@@ -47,6 +47,7 @@ export interface IUsuario extends Document {
   CONTRASENA: string;
   TELEFONO?: string;
   FECHA_REGISTRO: Date;
+  ES_ADMIN: boolean;
 }
 
 const UsuarioSchema = new Schema<IUsuario>({
@@ -57,7 +58,8 @@ const UsuarioSchema = new Schema<IUsuario>({
   CORREO: { type: String, required: true, unique: true },
   CONTRASENA: { type: String, required: true },
   TELEFONO: { type: String },
-  FECHA_REGISTRO: { type: Date, default: Date.now }
+  FECHA_REGISTRO: { type: Date, default: Date.now },
+  ES_ADMIN: { type: Boolean, default: false }
 });
 
 // --- CATALOG ---

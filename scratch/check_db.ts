@@ -7,16 +7,16 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 async function check() {
   try {
-    console.log('Connecting to:', MONGODB_URI);
+    console.log('Conectando a:', MONGODB_URI);
     await mongoose.connect(MONGODB_URI!, { serverSelectionTimeoutMS: 5000 });
-    console.log('Connected.');
+    console.log('Conectado.');
     
     const heroCount = await HeroSlide.countDocuments();
-    console.log('HeroSlides count:', heroCount);
+    console.log('Cantidad de HeroSlides:', heroCount);
     
     if (heroCount > 0) {
       const sampleHero = await HeroSlide.findOne().lean();
-      console.log('Sample HeroSlide Data:', JSON.stringify(sampleHero, null, 2));
+      console.log('Ejemplo de datos de HeroSlide:', JSON.stringify(sampleHero, null, 2));
     }
 
     process.exit(0);

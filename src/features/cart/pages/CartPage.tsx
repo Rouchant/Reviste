@@ -3,11 +3,14 @@ import MainLayout from '../../../layouts/MainLayout';
 import { Trash2, ShoppingBag, Truck, MapPin } from 'lucide-react';
 import { getProductUrl } from '../../../lib/slugify';
 import { useCartStore } from '../store/useCartStore';
-import { Link } from 'react-router-dom';
+import { useAuthStore } from '../../auth/store/useAuthStore';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
 import { Card } from '../../../components/ui/card';
 
 const CartPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuthStore();
   const { items, removeItem, updateQuantity, getItemCount, getTotalPrice } = useCartStore();
   const cartCount = getItemCount();
   const totalPrice = getTotalPrice();
@@ -138,6 +141,14 @@ const CartPage: React.FC = () => {
                 variant="primary"
                 className="w-full h-14"
                 disabled={items.length === 0}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    navigate('/auth');
+                  } else {
+                    // Here we would normally proceed to checkout logic
+                    alert('¡Procediendo al pago!');
+                  }
+                }}
               >
                 Continuar compra
               </Button>

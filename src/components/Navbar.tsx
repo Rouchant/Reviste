@@ -87,7 +87,7 @@ const Navbar: React.FC = () => {
 
         {/* Action Buttons */}
         <div className="flex items-center gap-1 md:gap-4 w-40 lg:w-48 justify-end">
-          {isAuthenticated && user?.role === 'admin' && (
+          {isAuthenticated && user?.isAdmin && (
             <Link to="/admin" className="p-2 text-brand-pink hover:bg-pink-50 rounded-xl transition-all hidden md:flex" title="Administración">
               <ShieldCheck size={24} />
             </Link>

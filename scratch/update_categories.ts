@@ -11,20 +11,19 @@ async function run() {
   // Verify category "Accesorios"
   const cat = await Categoria.findOne({ NOMBRE_CATEGORIA: 'Accesorios' });
   if (!cat) {
-    console.error('Accesorios category not found');
+    console.error('Categoría Accesorios no encontrada');
     process.exit(1);
   }
   
-  console.log('Target Category ID for Accesorios:', cat.id);
+  console.log('ID de categoría objetivo para Accesorios:', cat.id);
 
   // Update all accessories
-  const ids = [6, 9, 15, 16, 17, 18, 19];
   const result = await Prenda.updateMany(
-    { id: { $in: ids } },
+    { NOMBRE_PRENDA: /Accesorio/i },
     { $set: { ID_CATEGORIA: cat.id } }
   );
 
-  console.log(`Updated ${result.modifiedCount} products to category ID ${cat.id}.`);
+  console.log(`Se actualizaron ${result.modifiedCount} productos con el ID de categoría ${cat.id}.`);
   process.exit(0);
 }
 

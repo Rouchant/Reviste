@@ -6,6 +6,7 @@ interface User {
   name: string;
   email: string;
   role: 'user' | 'admin';
+  isAdmin: boolean;
   avatar?: string;
 }
 
@@ -22,12 +23,13 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       isAuthenticated: false,
       login: (email, role = 'user') => {
-        // Mock login logic
+        // Lógica de inicio de sesión simulada (Mock)
         const mockUser: User = {
           id: '1',
           name: email.split('@')[0],
           email: email,
           role: role,
+          isAdmin: role === 'admin',
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
         };
         set({ user: mockUser, isAuthenticated: true });

@@ -77,7 +77,8 @@ async function migrate() {
         CORREO: `${handle.replace('@', '').toLowerCase()}@reviste.cl`,
         CONTRASENA: 'hashed_password_placeholder',
         TELEFONO: '+56900000000',
-        FECHA_REGISTRO: new Date()
+        FECHA_REGISTRO: new Date(),
+        ES_ADMIN: handle === '@RevisteOfficial'
       };
     });
     await Usuario.insertMany(usersToInsert);

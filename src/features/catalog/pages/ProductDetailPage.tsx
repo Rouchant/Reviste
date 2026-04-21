@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Star, Truck, ShieldCheck, RotateCcw, Award, ShoppingBag } from 'lucide-react';
 import { parseProductId, getProductUrl } from '../../../lib/slugify';
 import MainLayout from '../../../layouts/MainLayout';
 import ProductCard from '../components/ProductCard';
 import GallerySection from '../../../components/GallerySection';
 import { useCartStore } from '../../cart/store/useCartStore';
+import { useAuthStore } from '../../auth/store/useAuthStore';
 import { Button } from '../../../components/ui/button';
 import { Card } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
@@ -13,10 +14,12 @@ import { useCatalog } from '../hooks/useCatalog';
 import { Product } from '../types';
 
 const ProductDetailPage: React.FC = () => {
+  const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const id = parseProductId(slug);
   const addItem = useCartStore((state) => state.addItem);
   const { allProducts } = useCatalog();
+  const { isAuthenticated } = useAuthStore();
   
   const [productDetail, setProductDetail] = useState<any>(null);
   const [isDetailLoading, setIsDetailLoading] = useState(true);
@@ -206,7 +209,14 @@ const ProductDetailPage: React.FC = () => {
 
                 <div className="space-y-4">
                   <Button 
-                    onClick={() => addItem(productDetail)}
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        navigate('/auth');
+                      } else {
+                        addItem(productDetail);
+                        navigate('/cart');
+                      }
+                    }}
                     className="w-full"
                     size="lg"
                   >
@@ -274,7 +284,14 @@ const ProductDetailPage: React.FC = () => {
                <ShoppingBag size={20} />
             </Button>
             <Button 
-              onClick={() => addItem(productDetail)}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  navigate('/auth');
+                } else {
+                  addItem(productDetail);
+                  navigate('/cart');
+                }
+              }}
               className="flex-grow max-w-[150px] h-12 rounded-xl"
             >
               Comprar
