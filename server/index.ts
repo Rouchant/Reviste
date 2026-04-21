@@ -147,14 +147,19 @@ app.get('/api/catalog/products/:id', async (req, res) => {
         oldPrice: prenda.OLD_PRICE,
         discount: prenda.DISCOUNT,
         tag: tags.join(' | '),
-      description: prenda.DESCRIPCION,
-      rating: prenda.RATING || 0,
-      reviews: prenda.REVIEWS_COUNT || 12, // fallback for UI
-      image: images[0]?.URL || '',
-      images: images.map(img => img.URL),
-      freeShipping: prenda.FREE_SHIPPING,
-      seller: seller ? `@${seller.NOMBRE_USUARIO}` : 'Reviste'
-    });
+        description: prenda.DESCRIPCION,
+        categoryId: prenda.ID_CATEGORIA,
+        talla: prenda.TALLA,
+        estado: prenda.ESTADO_PRENDA,
+        status: prenda.ESTADO_VENTA,
+        rating: prenda.RATING || 0,
+        reviews: prenda.REVIEWS_COUNT || 12,
+        image: images[0]?.URL || '',
+        images: images.map(img => img.URL),
+        freeShipping: prenda.FREE_SHIPPING,
+        sellerId: prenda.ID_USUARIO_VENDEDOR,
+        seller: seller ? `@${seller.NOMBRE_USUARIO}` : 'Reviste'
+      });
   } catch (error) {
     res.status(500).json({ error: 'Error al obtener el producto' });
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingBag, LogIn, ShieldCheck, Search, UserRoundCog, Store } from 'lucide-react';
+import { ShoppingBag, LogIn, ShieldCheck, Search, UserRoundCog, Store, LogOut } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useCartStore } from '../features/cart/store/useCartStore';
 import { useCatalogStore } from '../features/catalog/store/useCatalogStore';
@@ -9,7 +9,7 @@ import { Input } from './ui/input';
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, user } = useAuthStore();
+  const { isAuthenticated, user, logout } = useAuthStore();
   const cartCount = useCartStore((state) => state.getItemCount());
   const { searchQuery, setSearchQuery, setSelectedCategory } = useCatalogStore();
 
@@ -113,6 +113,16 @@ const Navbar: React.FC = () => {
           <Link to={isAuthenticated ? "/settings" : "/auth"} className="p-2 text-brand-dark hover:bg-gray-50 rounded-xl transition-all hidden md:inline-flex" title={isAuthenticated ? "Configuración" : "Iniciar Sesión"}>
             {isAuthenticated ? <UserRoundCog size={24} /> : <LogIn size={24} />}
           </Link>
+
+          {isAuthenticated && (
+            <button 
+              onClick={logout}
+              className="p-2 text-red-500 hover:bg-red-50 rounded-xl transition-all hidden md:inline-flex" 
+              title="Cerrar Sesión"
+            >
+              <LogOut size={24} />
+            </button>
+          )}
         </div>
       </div>
     </nav>

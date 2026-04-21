@@ -22,38 +22,39 @@ const SettingsPage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           
           {/* Menu Sidebar */}
-          <div className="md:col-span-4 space-y-2">
+          <div className="md:col-span-4 flex md:flex-col gap-2 overflow-x-auto md:overflow-visible pb-4 md:pb-0 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 mb-6 md:mb-0">
             <SettingsSidebarItem 
-              icon={<User size={18} />} 
+              icon={<User size={20} />} 
               label="Perfil" 
               active={activeTab === 'perfil'} 
               onClick={() => setActiveTab('perfil')}
             />
             <SettingsSidebarItem 
-              icon={<Bell size={18} />} 
+              icon={<Bell size={20} />} 
               label="Notificaciones" 
               active={activeTab === 'notificaciones'} 
               onClick={() => setActiveTab('notificaciones')}
             />
             <SettingsSidebarItem 
-              icon={<Shield size={18} />} 
+              icon={<Shield size={20} />} 
               label="Seguridad" 
               active={activeTab === 'seguridad'} 
               onClick={() => setActiveTab('seguridad')}
             />
             <SettingsSidebarItem 
-              icon={<CreditCard size={18} />} 
+              icon={<CreditCard size={20} />} 
               label="Pagos" 
               active={activeTab === 'pagos'} 
               onClick={() => setActiveTab('pagos')}
             />
-            <div className="pt-4 mt-4 border-t border-gray-100">
+            
+            <div className="md:pt-4 md:mt-4 md:border-t border-gray-100 flex-shrink-0">
               <button 
                 onClick={logout}
-                className="w-full flex items-center justify-between p-4 rounded-2xl text-red-500 hover:bg-red-50 font-bold transition-all group"
+                className="flex md:w-full items-center justify-center md:justify-between p-4 rounded-2xl text-red-500 hover:bg-red-50 font-bold transition-all group bg-red-50/30 md:bg-transparent"
               >
-                <span className="flex items-center gap-3"><LogOut size={18} /> Cerrar Sesión</span>
-                <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all" />
+                <span className="flex items-center gap-3"><LogOut size={20} /> <span className="hidden md:inline">Cerrar Sesión</span></span>
+                <ChevronRight size={16} className="hidden md:block opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all" />
               </button>
             </div>
           </div>
@@ -173,13 +174,13 @@ const SettingsPage: React.FC = () => {
 const SettingsSidebarItem = ({ icon, label, active = false, onClick }: { icon: React.ReactNode, label: string, active?: boolean, onClick: () => void }) => (
   <button 
     onClick={onClick}
-    className={`w-full flex items-center justify-between p-4 rounded-2xl font-bold transition-all group ${
+    className={`flex items-center justify-center md:justify-between p-4 rounded-2xl font-bold transition-all group flex-shrink-0 min-w-[56px] md:w-full ${
     active 
     ? "bg-brand-pink text-white shadow-lg shadow-brand-pink/20" 
-    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
+    : "text-gray-400 hover:text-gray-600 hover:bg-gray-50 bg-gray-50/50 md:bg-transparent"
   }`}>
-    <span className="flex items-center gap-3">{icon} {label}</span>
-    <ChevronRight size={16} className={`transition-all ${
+    <span className="flex items-center gap-3">{icon} <span className="hidden md:inline">{label}</span></span>
+    <ChevronRight size={16} className={`hidden md:block transition-all ${
       active ? "translate-x-0 opacity-100" : "opacity-0 translate-x-[-10px] group-hover:opacity-100 group-hover:translate-x-0"
     }`} />
   </button>

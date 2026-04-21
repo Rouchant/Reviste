@@ -35,6 +35,12 @@ const EditProductPage: React.FC = () => {
         const res = await fetch(`/api/catalog/products/${id}`);
         if (res.ok) {
           const product = await res.json();
+          if (product.sellerId !== Number(user?.id)) {
+            alert('No tienes permiso para editar esta prenda.');
+            navigate('/my-store');
+            return;
+          }
+
           setFormData({
             name: product.name,
             price: product.price.toString(),
