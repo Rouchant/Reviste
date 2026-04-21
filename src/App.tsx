@@ -7,7 +7,6 @@ const ProductDetailPage = lazy(() => import('./features/catalog/pages/ProductDet
 const CartPage = lazy(() => import('./features/cart/pages/CartPage'));
 const AuthPage = lazy(() => import('./features/auth/pages/AuthPage'));
 const AdminPage = lazy(() => import('./features/inventory/pages/AdminPage'));
-const MyGarmentsPage = lazy(() => import('./features/inventory/pages/MyGarmentsPage'));
 const UploadPage = lazy(() => import('./features/inventory/pages/UploadPage'));
 const SettingsPage = lazy(() => import('./features/auth/pages/SettingsPage'));
 const SearchPage = lazy(() => import('./features/catalog/pages/SearchPage'));
@@ -41,7 +40,6 @@ function App() {
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/my-store" element={<MyStorePage />} />
-            <Route path="/my-garments" element={<MyGarmentsPage />} />
             <Route path="/upload" element={<UploadPage />} />
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
