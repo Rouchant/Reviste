@@ -88,6 +88,95 @@ graph LR
     style Reservada fill:#ffa500,color:#fff
 ```
 
+## 🗄️ Esquema de Base de Datos (ERD)
+
+A continuación se detalla la estructura de datos de Reviste:
+
+```mermaid
+erDiagram
+    %% Entidades Principales
+    USER {
+        string id PK
+        string name
+        string email
+        string role "user | admin"
+        boolean isAdmin
+        string avatar
+        datetime createdAt
+    }
+
+    PRODUCT {
+        number id PK
+        string name
+        number price
+        number oldPrice
+        string image
+        string tag
+        number rating
+        string reviews
+        string discount
+        boolean freeShipping
+        string description
+        string categoryId FK
+        string sellerId FK
+    }
+
+    CATEGORY {
+        string id PK
+        string name
+    }
+
+    SELLER {
+        string id PK
+        string username
+        number rating
+        datetime joinedAt
+    }
+
+    %% Carrito de Compras
+    CART {
+        string id PK
+        string userId FK
+        datetime updatedAt
+    }
+
+    CART_ITEM {
+        string id PK
+        string cartId FK
+        number productId FK
+        number quantity
+    }
+
+    %% Relación Muchos-a-Muchos para Favoritos
+    USER_FAVORITE {
+        string userId FK
+        number productId FK
+        datetime addedAt
+    }
+
+    %% Componentes UI Dinámicos
+    HERO_SLIDE {
+        number id PK
+        string title
+        string subtitle
+        string image
+        string color
+        string link
+        string buttonText
+    }
+
+    %% Relaciones
+    USER ||--o| CART : "tiene un"
+    CART ||--o{ CART_ITEM : "contiene"
+    CART_ITEM }|--|| PRODUCT : "es un"
+    
+    USER ||--o{ USER_FAVORITE : "marca"
+    PRODUCT ||--o{ USER_FAVORITE : "es marcado como"
+    
+    CATEGORY ||--o{ PRODUCT : "agrupa"
+    SELLER ||--o{ PRODUCT : "vende"
+```
+
 ## 🛠️ Stack Tecnológico y Dependencias
 
 ### 🎨 Frontend & Interfaz
