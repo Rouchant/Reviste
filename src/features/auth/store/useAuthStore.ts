@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { toast } from 'sonner';
 
 interface User {
   id: string;
@@ -33,8 +34,12 @@ export const useAuthStore = create<AuthState>()(
           avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
         };
         set({ user: mockUser, isAuthenticated: true });
+        toast.success(`¡Bienvenido de vuelta, ${mockUser.name}!`);
       },
-      logout: () => set({ user: null, isAuthenticated: false }),
+      logout: () => {
+        set({ user: null, isAuthenticated: false });
+        toast.info('Has cerrado sesión correctamente');
+      },
     }),
     {
       name: 'reviste-auth-storage',

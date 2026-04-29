@@ -16,6 +16,11 @@
 - **Gestión de Stock**: Panel dedicado para vendedores con capacidades completas de CRUD (Crear, Editar, Eliminar).
 - **Control de Acceso**: Funcionalidades de favoritos y gestión de tienda protegidas mediante sistema de autenticación.
 
+### 🔍 Buscador Híbrido Inteligente (Atlas Search)
+- **Fuzzy Search & Stemming**: Integración directa con MongoDB Atlas Search (usando `lucene.spanish`) que comprende plurales, ignora errores ortográficos (maxEdits) y no depende de acentos (ej. "sueter" encuentra "suéter").
+- **Fusión Local/Servidor**: El frontend cruza la información en tiempo real, permitiendo buscar etiquetas dinámicas calculadas al vuelo (como "Oferta" o "Nuevo") al mismo tiempo que aprovecha la inteligencia de Atlas para el catálogo pesado.
+- **Debounce Optimizado**: Búsqueda asíncrona fluida sin saturar la API.
+
 ### 🏗️ Arquitectura de "Vertical Slices"
 El proyecto utiliza una estructura orientada a funcionalidades (**Feature-driven architecture**), eliminando el código espagueti y facilitando la escalabilidad:
 - **Features aisladas**: Cada funcionalidad (Carrito, Catálogo, Admin) contiene sus propios componentes, hooks y lógica.
@@ -31,26 +36,31 @@ A continuación se describe el proceso optimizado que sigue un cliente desde el 
 ```mermaid
 graph TD
     Start((Inicio)) --> Home[Home / Catálogo]
-    Home --> Explore{¿Qué busca?}
     
-    Explore -->|Búsqueda| Search[Página de Resultados]
-    Explore -->|Navegación| Detail[Detalle de Producto]
+    Home --> Explore{¿Cómo navega?}
+    
+    Explore -->|Barra de búsqueda| Search[Página de Resultados]
+    Explore -->|Navegación directa| Detail[Detalle de Producto]
+    Explore -->|Guarda para después| Favorites[Mis Favoritos]
     
     Search --> Detail
+    Favorites --> Detail
     
     Detail --> AddCart[Añadir al Carrito]
+    
     AddCart --> ViewCart[Revisión en Carrito]
     
-    ViewCart --> AuthCheck{¿Logueado?}
+    ViewCart -->|Proceder al pago| AuthCheck{¿Logueado?}
     
     AuthCheck -->|No| Auth[Login / Registro]
     AuthCheck -->|Sí| Checkout[Checkout / Pago]
     
-    Auth --> Checkout
+    Auth -->|Una vez logueado| Checkout
     Checkout --> Success((Éxito ✨))
     
     style Success fill:#D63D82,color:#fff
     style Start fill:#111827,color:#fff
+    style Favorites fill:#84A98C,color:#fff
 ```
 
 ## ♻️ Ciclo de Vida de la Prenda
@@ -59,28 +69,47 @@ Cualquier usuario puede participar en la economía circular de REVISTE siguiendo
 
 ```mermaid
 graph LR
-    Subida[Subida de Prenda] --> Publicada[En Catálogo Público]
-    Publicada --> Gestion[Panel 'Mi Tienda']
-    Gestion --> Edicion[Ajuste de Precio / Info]
-    Edicion --> Publicada
-    Publicada --> Vendida[Venta Exitosa]
-    Publicada --> Borrada[Eliminación de Stock]
+    Subida[Subida de Prenda] --> Disponible[Disponible en Catálogo]
+    
+    %% Acciones del Vendedor en 'Mi Tienda'
+    Disponible -->|Edita info/precio| Disponible
+    Disponible -->|Elimina stock| Borrada[Prenda Eliminada]
+    
+    %% Flujo de Compra
+    Disponible -->|Alguien inicia compra| Reservada[Reservada]
+    Reservada -.->|Cancela| Disponible
+    
+    Reservada -->|Pago completado| Vendida[Venta Exitosa]
+    Disponible -->|Compra directa| Vendida
     
     style Subida fill:#D63D82,color:#fff
     style Vendida fill:#84A98C,color:#fff
-    style Publicada fill:#111827,color:#fff
+    style Disponible fill:#111827,color:#fff
+    style Reservada fill:#ffa500,color:#fff
 ```
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Stack Tecnológico y Dependencias
 
-- **Core**: [React 18](https://reactjs.org/) + [Vite](https://vitejs.dev/) (Build System)
-- **Lenguaje**: [TypeScript](https://www.typescriptlang.org/) (Estabilidad y tipado fuerte)
-- **Estilos**: 
-  - [Tailwind CSS](https://tailwindcss.com/) (Styling utilitario)
-  - [CVA](https://cva.style/) (Gestión de variantes de componentes)
-  - [Lucide React](https://lucide.dev/) (Iconografía dinámica)
-- **Estado**: [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) (Store reactivo)
-- **Navegación**: [React Router v6](https://reactrouter.com/)
+### 🎨 Frontend & Interfaz
+- **Core**: [React 18](https://reactjs.org/) + [React Router v6](https://reactrouter.com/) para navegación.
+- **Estilos**: [Tailwind CSS](https://tailwindcss.com/) (Styling utilitario).
+- **Componentes Base**: [@radix-ui](https://www.radix-ui.com/) para primitivas accesibles (Modales, Acordeones, Menús).
+- **Herramientas de UI**: [CVA](https://cva.style/), `clsx` y `tailwind-merge` para gestión dinámica de clases y variantes.
+- **Iconografía**: [Lucide React](https://lucide.dev/).
+- **Notificaciones**: [Sonner](https://sonner.emilkowal.ski/) para popups (toasts) elegantes.
+- **Estado Global**: [Zustand](https://docs.pmnd.rs/zustand/getting-started/introduction) para carritos y sesiones.
+
+### ⚙️ Backend & Base de Datos
+- **Servidor**: [Express.js](https://expressjs.com/) para la API REST, con soporte [CORS](https://expressjs.com/en/resources/middleware/cors.html).
+- **Base de Datos**: [MongoDB](https://www.mongodb.com/) (Driver Nativo).
+- **ODM**: [Mongoose](https://mongoosejs.com/) para modelado y esquemas de datos.
+
+### 🛠️ Herramientas de Desarrollo
+- **Lenguaje**: [TypeScript](https://www.typescriptlang.org/) (Tipado fuerte en todo el stack).
+- **Empaquetador**: [Vite](https://vitejs.dev/) para tiempos de carga y construcción ultrarrápidos.
+- **Ejecución de Servidor**: `tsx` y `concurrently` para correr el backend y el frontend simultáneamente en desarrollo.
+- **Calidad de Código**: `eslint` y sus plugins para mantener buenas prácticas.
+- **Variables de Entorno**: `dotenv` para configuración segura.
 
 ---
 
@@ -91,6 +120,7 @@ El backend de REVISTE expone los siguientes endpoints para el manejo del catálo
 ### Catálogo
 - `GET /api/catalog/categories`: Obtiene la lista de nombres de categorías.
 - `GET /api/catalog/products`: Obtiene todos los productos con sus imágenes y vendedores vinculados.
+- `GET /api/catalog/search?q=...`: Endpoint dedicado para búsqueda inteligente y difusa impulsado por MongoDB Atlas Search.
 - `GET /api/catalog/products/:id`: Obtiene el detalle completo de una prenda específica.
 - `POST /api/catalog/products`: Crea una nueva prenda vinculada al usuario logueado.
 - `GET /api/catalog/products/seller/:sellerId`: Lista los productos de un vendedor específico.

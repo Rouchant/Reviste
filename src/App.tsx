@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'sonner';
 
 // Lazy loading features
 const HomePage = lazy(() => import('./features/catalog/pages/HomePage'));
@@ -46,6 +47,7 @@ function App() {
             <Route path="/settings" element={<SettingsPage />} />
           </Routes>
         </Suspense>
+        <Toaster richColors position="top-center" />
       </div>
     </Router>
   );

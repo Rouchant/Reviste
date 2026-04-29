@@ -4,7 +4,7 @@ import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { Heart, ShoppingCart } from 'lucide-react';
 import { useAuthStore } from '../../auth/store/useAuthStore';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getProductUrl } from '../../../lib/slugify';
 import { useCartStore, Product, CartState } from '../../cart/store/useCartStore';
 import { useFavoritesStore } from '../store/useFavoritesStore';
@@ -29,6 +29,7 @@ const ProductImage: React.FC<{ src: string; alt: string; id: number; name: strin
   src, alt, id, name, tag, discount, onQuickAdd 
 }) => {
   const { isAuthenticated } = useAuthStore();
+  const navigate = useNavigate();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const favorite = isFavorite(id);
 
@@ -85,6 +86,10 @@ const ProductImage: React.FC<{ src: string; alt: string; id: number; name: strin
             size="sm"
             onClick={(e: React.MouseEvent) => {
               e.preventDefault();
+              if (!isAuthenticated) {
+                navigate('/auth');
+                return;
+              }
               onQuickAdd();
             }}
           >

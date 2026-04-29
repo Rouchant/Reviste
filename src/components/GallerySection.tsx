@@ -31,7 +31,9 @@ const GallerySection: React.FC<GallerySectionProps> = ({ title, linkText, linkHr
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
       const { clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.8;
+      // Reducimos la cantidad de scroll (del 80% de la pantalla al 40%)
+      // para que el usuario no sienta que se saltan tantas prendas de golpe.
+      const scrollAmount = clientWidth * 0.4;
       scrollRef.current.scrollBy({
         left: direction === 'left' ? -scrollAmount : scrollAmount,
         behavior: 'smooth',

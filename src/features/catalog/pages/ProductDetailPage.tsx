@@ -223,7 +223,13 @@ const ProductDetailPage: React.FC = () => {
                     Comprar ahora
                   </Button>
                   <Button 
-                    onClick={() => addItem(productDetail)}
+                    onClick={() => {
+                      if (!isAuthenticated) {
+                        navigate('/auth');
+                      } else {
+                        addItem(productDetail);
+                      }
+                    }}
                     variant="outline"
                     className="w-full"
                     size="lg"
@@ -278,7 +284,13 @@ const ProductDetailPage: React.FC = () => {
               variant="outline"
               size="icon"
               aria-label="Agregar al carrito"
-              onClick={() => addItem(productDetail)}
+              onClick={() => {
+                if (!isAuthenticated) {
+                  navigate('/auth');
+                } else {
+                  addItem(productDetail);
+                }
+              }}
               className="rounded-xl h-12 w-12"
             >
                <ShoppingBag size={20} />

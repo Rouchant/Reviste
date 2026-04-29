@@ -11,6 +11,8 @@ const SearchPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { searchQuery, setSearchQuery, selectedCategory, setSelectedCategory, allProducts } = useCatalog();
+  const [atlasResults, setAtlasResults] = React.useState<any[]>([]);
+  const [isSearching, setIsSearching] = React.useState(false);
 
   // Sync with URL parameters
   React.useEffect(() => {
@@ -21,17 +23,47 @@ const SearchPage: React.FC = () => {
     setSelectedCategory(cat);
   }, [searchParams, setSearchQuery, setSelectedCategory]);
 
-  // Enhanced filtering logic
+  // Atlas Search Debounce
+  React.useEffect(() => {
+    if (!searchQuery) {
+      setAtlasResults([]);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const res = await fetch(`/api/catalog/search?q=${encodeURIComponent(searchQuery)}`);
+        const data = await res.json();
+        setAtlasResults(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 400); // 400ms debounce delay
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // Enhanced filtering logic (Combines Local Search + Atlas Search)
   const filteredProducts = allProducts.filter(p => {
-    const matchesSearch = !searchQuery || 
+    // 1. Local Search (Atrapa tags virtuales como "Oferta", "Nuevo" y coincidencias exactas)
+    const matchesLocalSearch = !searchQuery || 
       p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.tag?.toLowerCase().includes(searchQuery.toLowerCase());
+      
+    // 2. Atlas Search (Atrapa errores ortográficos y plurales que el local search no ve)
+    const matchesAtlasSearch = atlasResults.some(ar => ar.id === p.id);
     
+    // Debe coincidir con alguna de las dos búsquedas
+    const matchesSearch = !searchQuery || matchesLocalSearch || matchesAtlasSearch;
+
+    // 3. Filtro de Categoría (Por Tag de categoría o si el nombre incluye la palabra)
     const matchesCategory = selectedCategory === 'Todos' || 
-      p.tag?.split(' | ').some(t => 
+      p.tag?.split(' | ').some((t: string) => 
         t === selectedCategory || 
         (selectedCategory === 'Accesorios' && t === 'Accesorio')
-      );
+      ) || 
+      p.name.toLowerCase().includes(selectedCategory.toLowerCase());
     
     return matchesSearch && matchesCategory;
   });
@@ -61,18 +93,48 @@ const SearchPage: React.FC = () => {
           </div>
         </div>
 
+        {/* Category Filter Badge */}
+        {selectedCategory !== 'Todos' && (
+          <div className="flex flex-wrap items-center gap-2 mb-6 px-2">
+            <span className="text-sm font-bold text-gray-500">Filtrando por categoría:</span>
+            <div className="flex items-center gap-2 bg-brand-pink/10 text-brand-pink px-3 py-1.5 rounded-full text-sm font-bold">
+              {selectedCategory}
+              <button 
+                onClick={() => {
+                  setSelectedCategory('Todos');
+                  // Update URL parameter as well so it doesn't get stuck on refresh
+                  navigate('/search');
+                }}
+                className="hover:bg-brand-pink/20 rounded-full p-0.5 transition-colors"
+                aria-label="Quitar filtro"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Results */}
         <div className="space-y-6">
           <div className="flex justify-between items-baseline px-2">
             <h2 className="text-xl font-black font-brand text-brand-dark">
-              {searchQuery ? `Resultados para "${searchQuery}"` : 'Sugerencias para ti'}
+              {searchQuery 
+                ? `Resultados para "${searchQuery}"` 
+                : selectedCategory !== 'Todos'
+                  ? `Catálogo de ${selectedCategory}`
+                  : 'Sugerencias para ti'}
             </h2>
             <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
               {filteredProducts.length} productos
             </span>
           </div>
 
-          {filteredProducts.length > 0 ? (
+          {isSearching ? (
+            <div className="py-20 text-center">
+              <div className="w-12 h-12 border-4 border-brand-pink/20 border-t-brand-pink rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-500 font-medium animate-pulse">Buscando inteligentemente...</p>
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
               {filteredProducts.map(product => (
                 <div key={product.id}>

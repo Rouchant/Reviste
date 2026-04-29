@@ -123,7 +123,74 @@ app.get('/api/catalog/products', async (req, res) => {
   }
 });
 
-// 2.1 Single Product
+// 2.1 Atlas Search (Búsqueda Avanzada)
+app.get('/api/catalog/search', async (req, res) => {
+  const { q } = req.query;
+  console.log(`Búsqueda Atlas Search: ${q}`);
+  
+  if (!q) {
+    return res.json([]);
+  }
+
+  try {
+    const prendas = await Prenda.aggregate([
+      {
+        $search: {
+          index: 'prendas', // Índice de prendas creado en Atlas
+          text: {
+            query: q as string,
+            path: { wildcard: '*' }, // Busca en TODOS los campos de texto
+            fuzzy: {
+              maxEdits: 1, // Reducido a 1 para evitar demasiados "falsos positivos"
+              prefixLength: 2 // Exige que al menos las 2 primeras letras coincidan (ej. "ga...")
+            }
+          }
+        }
+      },
+      { $limit: 20 }
+    ]);
+
+    const prendaIds = prendas.map(p => p.id);
+    
+    const [images, sellers, categories] = await Promise.all([
+      PrendaImagen.find({ ID_PRENDA: { $in: prendaIds } }),
+      Usuario.find(),
+      Categoria.find()
+    ]);
+    
+    const imageMap = new Map(images.map(img => [img.ID_PRENDA, img.URL]));
+    const sellerMap = new Map(sellers.map(s => [s.id, s.NOMBRE_USUARIO]));
+    const catMap = new Map(categories.map(c => [c.id, c.NOMBRE_CATEGORIA]));
+
+    const products = prendas.map(p => {
+      const categoryName = catMap.get(p.ID_CATEGORIA) || 'Sin Categoría';
+      const tags = [categoryName];
+      if (p.OLD_PRICE && p.OLD_PRICE > p.PRECIO_VENTA_PUBLICO) tags.push('Oferta');
+      
+      return {
+        id: p.id,
+        name: p.NOMBRE_PRENDA,
+        price: p.PRECIO_VENTA_PUBLICO,
+        oldPrice: p.OLD_PRICE,
+        discount: p.DISCOUNT,
+        tag: tags.join(' | '),
+        description: p.DESCRIPCION,
+        rating: p.RATING || 0,
+        reviews: p.REVIEWS_COUNT || 0,
+        image: imageMap.get(p.id) || '',
+        freeShipping: p.FREE_SHIPPING || false,
+        seller: sellerMap.has(p.ID_USUARIO_VENDEDOR) ? `@${sellerMap.get(p.ID_USUARIO_VENDEDOR)}` : 'Reviste'
+      };
+    });
+
+    res.json(products);
+  } catch (error) {
+    console.error('Error en Atlas Search:', error);
+    res.status(500).json({ error: 'Error en la búsqueda avanzada. Verifica que el índice exista y se llame "default".' });
+  }
+});
+
+// 2.2 Single Product
 app.get('/api/catalog/products/:id', async (req, res) => {
   const { id } = req.params;
   try {
@@ -150,7 +217,7 @@ app.get('/api/catalog/products/:id', async (req, res) => {
         description: prenda.DESCRIPCION,
         categoryId: prenda.ID_CATEGORIA,
         talla: prenda.TALLA,
-        estado: prenda.ESTADO_PRENDA,
+        estado: prenda.ESTADO_CONSERVACION,
         status: prenda.ESTADO_VENTA,
         rating: prenda.RATING || 0,
         reviews: prenda.REVIEWS_COUNT || 12,
@@ -256,7 +323,7 @@ app.put('/api/catalog/products/:id', async (req, res) => {
   if (req.body.status !== undefined) updates.ESTADO_VENTA = req.body.status;
   if (req.body.categoryId !== undefined) updates.ID_CATEGORIA = req.body.categoryId;
   if (req.body.talla !== undefined) updates.TALLA = req.body.talla;
-  if (req.body.estado !== undefined) updates.ESTADO_PRENDA = req.body.estado;
+  if (req.body.estado !== undefined) updates.ESTADO_CONSERVACION = req.body.estado;
 
   console.log(`Actualizando producto ${id} con:`, updates);
   try {
