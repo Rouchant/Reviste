@@ -90,91 +90,144 @@ graph LR
 
 ## 🗄️ Esquema de Base de Datos (ERD)
 
-A continuación se detalla la estructura de datos de Reviste:
+A continuación se detalla la estructura de datos real de Reviste, basada en los modelos de MongoDB (`server/models.ts`):
 
 ```mermaid
 erDiagram
-    %% Entidades Principales
-    USER {
-        string id PK
-        string name
-        string email
-        string role "user | admin"
-        boolean isAdmin
-        string avatar
-        datetime createdAt
-    }
-
-    PRODUCT {
+    REGION {
         number id PK
-        string name
-        number price
-        number oldPrice
-        string image
-        string tag
-        number rating
-        string reviews
-        string discount
-        boolean freeShipping
-        string description
-        string categoryId FK
-        string sellerId FK
+        string NOMBRE_REGION
     }
-
-    CATEGORY {
-        string id PK
-        string name
+    COMUNA {
+        number id PK
+        number ID_REGION FK
+        string NOMBRE_COMUNA
     }
-
-    SELLER {
-        string id PK
-        string username
-        number rating
-        datetime joinedAt
+    DIRECCION {
+        number id PK
+        string CALLE
+        number ID_COMUNA FK
     }
-
-    %% Carrito de Compras
-    CART {
-        string id PK
-        string userId FK
-        datetime updatedAt
+    USUARIO {
+        number id PK
+        number ID_DIRECCION FK
+        string NOMBRE_USUARIO
+        string NOMBRE_COMPLETO
+        string CORREO
+        string CONTRASENA
+        string TELEFONO
+        date FECHA_REGISTRO
+        boolean ES_ADMIN
     }
-
-    CART_ITEM {
-        string id PK
-        string cartId FK
-        number productId FK
-        number quantity
+    CATEGORIA {
+        number id PK
+        string NOMBRE_CATEGORIA
+        string DESCRIPCION
     }
-
-    %% Relación Muchos-a-Muchos para Favoritos
-    USER_FAVORITE {
-        string userId FK
-        number productId FK
-        datetime addedAt
+    PRENDA {
+        number id PK
+        string NOMBRE_PRENDA
+        number ID_USUARIO_VENDEDOR FK
+        number ID_CATEGORIA FK
+        date FECHA_PUBLICACION
+        string DESCRIPCION
+        string ESTADO_VENTA
+        string TALLA
+        number PRECIO_VENTA_PUBLICO
+        string ESTADO_CONSERVACION
+        number OLD_PRICE
+        string DISCOUNT
+        number RATING
+        number REVIEWS_COUNT
+        boolean FREE_SHIPPING
     }
-
-    %% Componentes UI Dinámicos
-    HERO_SLIDE {
+    PRENDA_IMAGEN {
+        number id PK
+        number ID_PRENDA FK
+        string URL
+    }
+    CARRITO {
+        number id PK
+        number ID_USUARIO FK
+        date FECHA_CREACION
+    }
+    CARRITO_ITEM {
+        number id PK
+        number ID_CARRITO FK
+        number ID_PRENDA FK
+        number CANTIDAD
+    }
+    ORDEN {
+        number id PK
+        number ID_USUARIO_COMPRADOR FK
+        date FECHA_COMPRA
+        number MONTO_TOTAL
+        string ESTADO_ENVIO
+    }
+    DETALLE_ORDEN {
+        number ID_ORDEN FK
+        number ID_PRENDA FK
+        number CANTIDAD
+        number PRECIO_UNITARIO
+    }
+    PAGO {
+        number id PK
+        number ID_ORDEN FK
+        string METODO
+        string ESTADO
+        date FECHA
+    }
+    ENVIO {
+        number id PK
+        number ID_ORDEN FK
+        number ID_DIRECCION FK
+        string TRACKING
+        string ESTADO
+    }
+    CALIFICACION {
+        number id PK
+        number ID_ORDEN FK
+        number ID_USUARIO_VENDEDOR FK
+        number ID_USUARIO_COMPRADOR FK
+        number CALIFICACION
+        string COMENTARIO
+    }
+    FAVORITO {
+        number ID_USUARIO FK
+        number ID_PRENDA FK
+    }
+    HEROSLIDE {
         number id PK
         string title
         string subtitle
-        string image
-        string color
-        string link
         string buttonText
+        string image
+        string link
     }
 
-    %% Relaciones
-    USER ||--o| CART : "tiene un"
-    CART ||--o{ CART_ITEM : "contiene"
-    CART_ITEM }|--|| PRODUCT : "es un"
+    REGION ||--o{ COMUNA : "tiene"
+    COMUNA ||--o{ DIRECCION : "tiene"
+    DIRECCION ||--o{ USUARIO : "es hogar de"
+    DIRECCION ||--o{ ENVIO : "es destino de"
     
-    USER ||--o{ USER_FAVORITE : "marca"
-    PRODUCT ||--o{ USER_FAVORITE : "es marcado como"
+    USUARIO ||--o{ PRENDA : "vende"
+    USUARIO ||--o| CARRITO : "posee"
+    USUARIO ||--o{ ORDEN : "compra"
+    USUARIO ||--o{ CALIFICACION : "recibe/da"
+    USUARIO ||--o{ FAVORITO : "guarda"
     
-    CATEGORY ||--o{ PRODUCT : "agrupa"
-    SELLER ||--o{ PRODUCT : "vende"
+    CATEGORIA ||--o{ PRENDA : "agrupa"
+    PRENDA ||--o{ PRENDA_IMAGEN : "tiene fotos"
+    PRENDA ||--o{ CARRITO_ITEM : "añadida a"
+    PRENDA ||--o{ DETALLE_ORDEN : "incluida en"
+    PRENDA ||--o{ FAVORITO : "marcada por"
+    
+    CARRITO ||--o{ CARRITO_ITEM : "contiene"
+    
+    ORDEN ||--o{ DETALLE_ORDEN : "incluye"
+    ORDEN ||--o| PAGO : "tiene"
+    ORDEN ||--o| ENVIO : "requiere"
+    ORDEN ||--o| CALIFICACION : "genera"
 ```
 
 ## 🛠️ Stack Tecnológico y Dependencias

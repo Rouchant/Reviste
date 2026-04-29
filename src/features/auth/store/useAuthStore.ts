@@ -14,7 +14,7 @@ interface User {
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, role?: 'user' | 'admin') => void;
+  login: (user: User) => void;
   logout: () => void;
 }
 
@@ -23,18 +23,9 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       user: null,
       isAuthenticated: false,
-      login: (email, role = 'user') => {
-        // Lógica de inicio de sesión simulada (Mock)
-        const mockUser: User = {
-          id: '1',
-          name: email.split('@')[0],
-          email: email,
-          role: role,
-          isAdmin: role === 'admin',
-          avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${email}`
-        };
-        set({ user: mockUser, isAuthenticated: true });
-        toast.success(`¡Bienvenido de vuelta, ${mockUser.name}!`);
+      login: (userData: User) => {
+        set({ user: userData, isAuthenticated: true });
+        toast.success(`¡Bienvenido, ${userData.name}!`);
       },
       logout: () => {
         set({ user: null, isAuthenticated: false });

@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { 
-  Categoria, Prenda, PrendaImagen, HeroSlide, Usuario 
+  Categoria, Prenda, PrendaImagen, HeroSlide, Usuario, Region, Comuna 
 } from './models.js';
 
 dotenv.config();
@@ -50,6 +50,26 @@ app.use((req, res, next) => {
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date() });
+});
+
+// --- GEOGRAPHY ---
+app.get('/api/location/regions', async (req, res) => {
+  try {
+    const regions = await Region.find().sort({ id: 1 });
+    res.json(regions.map(r => ({ id: r.id, name: r.NOMBRE_REGION })));
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener regiones' });
+  }
+});
+
+app.get('/api/location/comunas/:regionId', async (req, res) => {
+  try {
+    const { regionId } = req.params;
+    const comunas = await Comuna.find({ ID_REGION: Number(regionId) }).sort({ NOMBRE_COMUNA: 1 });
+    res.json(comunas.map(c => ({ id: c.id, name: c.NOMBRE_COMUNA })));
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener comunas' });
+  }
 });
 
 // --- ROUTES ---
@@ -385,6 +405,69 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
   } catch (error) {
     console.error('Error al obtener los hero slides:', error);
     res.status(500).json({ error: 'Error al obtener los hero slides' });
+  }
+});
+
+// --- AUTHENTICATION ---
+
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { email, password, name, phone } = req.body;
+    const existing = await Usuario.findOne({ CORREO: email });
+    if (existing) {
+      return res.status(400).json({ error: 'El correo ya está registrado' });
+    }
+
+    const lastUser = await Usuario.findOne().sort({ id: -1 });
+    const nextId = (lastUser?.id || 0) + 1;
+
+    const newUser = new Usuario({
+      id: nextId,
+      NOMBRE_USUARIO: name ? name.split(' ')[0] : email.split('@')[0],
+      NOMBRE_COMPLETO: name || email.split('@')[0],
+      CORREO: email,
+      CONTRASENA: password, // Almacenamiento en texto plano (solo para dev)
+      TELEFONO: phone,
+      ES_ADMIN: false,
+      FECHA_REGISTRO: new Date()
+    });
+
+    await newUser.save();
+    
+    res.status(201).json({
+      id: newUser.id.toString(),
+      name: newUser.NOMBRE_COMPLETO,
+      email: newUser.CORREO,
+      role: newUser.ES_ADMIN ? 'admin' : 'user',
+      isAdmin: newUser.ES_ADMIN,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${newUser.CORREO}`
+    });
+  } catch (error) {
+    console.error('Error en registro:', error);
+    res.status(500).json({ error: 'Error al registrar usuario' });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await Usuario.findOne({ CORREO: email, CONTRASENA: password });
+    
+    if (!user) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    res.json({
+      id: user.id.toString(),
+      name: user.NOMBRE_COMPLETO,
+      email: user.CORREO,
+      role: user.ES_ADMIN ? 'admin' : 'user',
+      isAdmin: user.ES_ADMIN,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.CORREO}`
+    });
+  } catch (error) {
+    console.error('Error en login:', error);
+    res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 });
 

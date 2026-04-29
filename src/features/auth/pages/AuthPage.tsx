@@ -7,11 +7,9 @@ import { Card } from '../../../components/ui/card';
 import { useAuthStore } from '../store/useAuthStore';
 import AuthLayout from '../../../layouts/AuthLayout';
 
-const comunasMap: Record<string, string[]> = {
-  'RM': ['Santiago', 'Providencia', 'Las Condes', 'Ñuñoa', 'Maipú', 'Puente Alto'],
-  'VA': ['Valparaíso', 'Viña del Mar', 'Quilpué', 'Villa Alemana', 'Concón'],
-  'BI': ['Concepción', 'Talcahuano', 'San Pedro de la Paz', 'Chiguayante']
-};
+import { toast } from 'sonner';
+
+
 
 const AuthPage: React.FC = () => {
   const location = useLocation();
@@ -30,6 +28,27 @@ const AuthPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [strength, setStrength] = useState({ label: '', color: '', width: '0%' });
+  const [isLoading, setIsLoading] = useState(false);
+  const [regionsList, setRegionsList] = useState<{id: number, name: string}[]>([]);
+  const [comunasList, setComunasList] = useState<{id: number, name: string}[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/location/regions')
+      .then(res => res.json())
+      .then(data => setRegionsList(data))
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedRegion) {
+      setComunasList([]);
+      return;
+    }
+    fetch(`http://localhost:5000/api/location/comunas/${selectedRegion}`)
+      .then(res => res.json())
+      .then(data => setComunasList(data))
+      .catch(console.error);
+  }, [selectedRegion]);
 
   useEffect(() => {
     if (location.hash === '#register') {
@@ -61,14 +80,60 @@ const AuthPage: React.FC = () => {
     setStrength(levels[Math.min(s, levels.length - 1)]);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email) return;
     
-    // Lógica mágica simple: si el correo contiene "admin", entra como administrador
-    const role = email.includes('admin') ? 'admin' : 'user';
-    login(email, role);
-    navigate('/');
+    if (activeTab === 'login') {
+      if (!email || !password) {
+        toast.error('Por favor ingresa correo y contraseña');
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Error al iniciar sesión');
+        
+        login(data);
+        navigate('/');
+      } catch (err) {
+        toast.error((err as Error).message);
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      if (!email || !password || !fullName) {
+        toast.error('Por favor completa los campos obligatorios (Nombre, Correo, Contraseña)');
+        return;
+      }
+      if (password !== confirmPassword) {
+        toast.error('Las contraseñas no coinciden');
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const response = await fetch('http://localhost:5000/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, name: fullName, phone })
+        });
+        
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error || 'Error al registrarse');
+        
+        login(data);
+        navigate('/');
+      } catch (err) {
+        toast.error((err as Error).message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
   };
 
   return (
@@ -107,7 +172,7 @@ const AuthPage: React.FC = () => {
         {activeTab === 'login' ? (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <h2 className="text-xl font-bold mb-6 text-gray-800 font-brand">Te extrañamos ✨</h2>
-            <form className="space-y-4" onSubmit={handleLogin}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Correo Electrónico</label>
                 <Input 
@@ -133,15 +198,15 @@ const AuthPage: React.FC = () => {
                 </label>
                 <a href="#" className="text-brand-pink font-bold hover:underline">¿Olvidaste tu clave?</a>
               </div>
-              <Button type="submit" className="w-full mt-4" size="lg">
-                Iniciar Sesión
+              <Button type="submit" className="w-full mt-4" size="lg" disabled={isLoading}>
+                {isLoading ? 'Cargando...' : 'Iniciar Sesión'}
               </Button>
             </form>
           </div>
         ) : (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-h-[60vh] overflow-y-auto pr-2 scrollbar-thin">
             <h2 className="text-xl font-bold mb-6 text-gray-800 font-brand">Únete a Reviste 🌿</h2>
-            <form className="space-y-4" onSubmit={handleLogin}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div>
                 <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre Completo</label>
                 <Input 
@@ -211,9 +276,9 @@ const AuthPage: React.FC = () => {
                     }}
                   >
                     <option value="">Selecciona</option>
-                    <option value="RM">Metropolitana</option>
-                    <option value="VA">Valparaíso</option>
-                    <option value="BI">Biobío</option>
+                    {regionsList.map(r => (
+                      <option key={r.id} value={r.id}>{r.name}</option>
+                    ))}
                   </select>
                 </div>
                 <div>
@@ -225,8 +290,8 @@ const AuthPage: React.FC = () => {
                     onChange={(e) => setSelectedComuna(e.target.value)}
                   >
                     <option value="">Comuna</option>
-                    {selectedRegion && comunasMap[selectedRegion].map(c => (
-                      <option key={c} value={c}>{c}</option>
+                    {comunasList.map(c => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
                     ))}
                   </select>
                 </div>
@@ -262,8 +327,8 @@ const AuthPage: React.FC = () => {
                   <p className="text-[10px] text-red-500 font-bold mt-1 ml-1">Las contraseñas no coinciden</p>
                 )}
               </div>
-              <Button type="submit" className="w-full mt-4" size="lg">
-                Crear mi cuenta
+              <Button type="submit" className="w-full mt-4" size="lg" disabled={isLoading}>
+                {isLoading ? 'Creando cuenta...' : 'Crear mi cuenta'}
               </Button>
             </form>
           </div>
