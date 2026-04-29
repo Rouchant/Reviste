@@ -93,7 +93,56 @@ graph LR
 A continuación se detalla la estructura de datos real de Reviste, basada en los modelos de MongoDB (`server/models.ts`):
 
 ```mermaid
+---
+title: Diagrama Entidad-Relación - REVISTE
+config:
+  layout: elk
+  theme: neutral
+  er:
+    layoutDirection: TB
+    entityPadding: 15
+    minEntityWidth: 160
+---
 erDiagram
+    direction TB
+
+    %% ==========================================
+    %% RELACIONES (ORDENADAS PARA FLUJO VERTICAL)
+    %% ==========================================
+    
+    %% Nivel 1: Localización
+    REGION ||--o{ COMUNA : "tiene"
+    COMUNA ||--o{ DIRECCION : "tiene"
+    DIRECCION ||--o{ USUARIO : "es hogar de"
+    DIRECCION ||--o{ ENVIO : "es destino de"
+
+    %% Nivel 2: Identidad y Catálogo
+    USUARIO ||--o{ PRENDA : "vende"
+    CATEGORIA ||--o{ PRENDA : "agrupa"
+    PRENDA ||--o{ PRENDA_IMAGEN : "tiene fotos"
+    
+    %% Nivel 3: Interacción Social y Carrito
+    USUARIO ||--o{ FAVORITO : "guarda"
+    PRENDA ||--o{ FAVORITO : "marcada por"
+    USUARIO ||--o| CARRITO : "posee"
+    CARRITO ||--o{ CARRITO_ITEM : "contiene"
+    PRENDA ||--o{ CARRITO_ITEM : "añadida a"
+
+    %% Nivel 4: Transacción
+    USUARIO ||--o{ ORDEN : "compra"
+    ORDEN ||--o{ DETALLE_ORDEN : "incluye"
+    PRENDA ||--o{ DETALLE_ORDEN : "incluida en"
+    
+    %% Nivel 5: Post-Venta
+    ORDEN ||--o| PAGO : "tiene"
+    ORDEN ||--o| ENVIO : "requiere"
+    ORDEN ||--o| CALIFICACION : "genera"
+    USUARIO ||--o{ CALIFICACION : "recibe/da"
+
+    %% ==========================================
+    %% DEFINICIÓN COMPLETA DE ATRIBUTOS
+    %% ==========================================
+
     REGION {
         number id PK
         string NOMBRE_REGION
@@ -204,30 +253,6 @@ erDiagram
         string image
         string link
     }
-
-    REGION ||--o{ COMUNA : "tiene"
-    COMUNA ||--o{ DIRECCION : "tiene"
-    DIRECCION ||--o{ USUARIO : "es hogar de"
-    DIRECCION ||--o{ ENVIO : "es destino de"
-    
-    USUARIO ||--o{ PRENDA : "vende"
-    USUARIO ||--o| CARRITO : "posee"
-    USUARIO ||--o{ ORDEN : "compra"
-    USUARIO ||--o{ CALIFICACION : "recibe/da"
-    USUARIO ||--o{ FAVORITO : "guarda"
-    
-    CATEGORIA ||--o{ PRENDA : "agrupa"
-    PRENDA ||--o{ PRENDA_IMAGEN : "tiene fotos"
-    PRENDA ||--o{ CARRITO_ITEM : "añadida a"
-    PRENDA ||--o{ DETALLE_ORDEN : "incluida en"
-    PRENDA ||--o{ FAVORITO : "marcada por"
-    
-    CARRITO ||--o{ CARRITO_ITEM : "contiene"
-    
-    ORDEN ||--o{ DETALLE_ORDEN : "incluye"
-    ORDEN ||--o| PAGO : "tiene"
-    ORDEN ||--o| ENVIO : "requiere"
-    ORDEN ||--o| CALIFICACION : "genera"
 ```
 
 ## 🛠️ Stack Tecnológico y Dependencias
