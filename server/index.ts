@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { 
   Categoria, Prenda, PrendaImagen, HeroSlide, Usuario, Region, Comuna, Direccion
 } from './models.js';
+import bcrypt from 'bcryptjs';
 
 dotenv.config();
 
@@ -440,7 +441,7 @@ app.post('/api/auth/register', async (req, res) => {
       NOMBRE_USUARIO: username || (name ? name.split(' ')[0] : email.split('@')[0]),
       NOMBRE_COMPLETO: name || email.split('@')[0],
       CORREO: email,
-      CONTRASENA: password, // Almacenamiento en texto plano (solo para dev)
+      CONTRASENA: await bcrypt.hash(password, 10),
       TELEFONO: phone,
       ES_ADMIN: false,
       FECHA_REGISTRO: new Date()
@@ -471,9 +472,17 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await Usuario.findOne({ CORREO: email, CONTRASENA: password });
+    const user = await Usuario.findOne({ CORREO: email });
     
     if (!user) {
+      return res.status(401).json({ error: 'Credenciales inválidas' });
+    }
+
+    const isMatch = user.CONTRASENA.startsWith('$2') 
+      ? await bcrypt.compare(password, user.CONTRASENA) 
+      : password === user.CONTRASENA;
+
+    if (!isMatch) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
