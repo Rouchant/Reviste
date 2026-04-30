@@ -10,8 +10,22 @@ import { Card } from '../../../components/ui/card';
 
 const CartPage: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const { items, removeItem, updateQuantity, getItemCount, getTotalPrice } = useCartStore();
+  const [comunaName, setComunaName] = React.useState('');
+
+  React.useEffect(() => {
+    if (user?.comunaId && user?.regionId) {
+      fetch(`/api/location/comunas/${user.regionId}`)
+        .then(res => res.json())
+        .then((data: any[]) => {
+          const comuna = data.find(c => c.id.toString() === user.comunaId?.toString());
+          if (comuna) setComunaName(comuna.name);
+        })
+        .catch(console.error);
+    }
+  }, [user?.comunaId, user?.regionId]);
+
   const cartCount = getItemCount();
   const totalPrice = getTotalPrice();
 
@@ -97,12 +111,26 @@ const CartPage: React.FC = () => {
                         <MapPin size={20} />
                       </div>
                       <div>
-                        <p className="font-bold text-sm text-gray-800">Enviar a: Mi Casa (Santiago)</p>
-                        <p className="text-xs text-gray-400">Llegada estimada: 12-14 de Abril</p>
+                        {isAuthenticated && user?.street ? (
+                          <>
+                            <p className="font-bold text-sm text-gray-800">Enviar a: {user.street} {comunaName ? `(${comunaName})` : ''}</p>
+                            <p className="text-xs text-gray-400">Llegada estimada: En 3 a 5 días hábiles</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="font-bold text-sm text-gray-800">No has configurado tu dirección</p>
+                            <p className="text-xs text-gray-400">Ingresa tu dirección para el envío</p>
+                          </>
+                        )}
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm" className="text-brand-pink font-bold uppercase tracking-widest px-0 hover:bg-transparent hover:underline">
-                      Cambiar
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      className="text-brand-pink font-bold uppercase tracking-widest px-0 hover:bg-transparent hover:underline"
+                      onClick={() => navigate(isAuthenticated ? '/settings' : '/auth')}
+                    >
+                      {user?.street ? 'Cambiar' : 'Agregar'}
                     </Button>
                   </div>
                 </Card>
