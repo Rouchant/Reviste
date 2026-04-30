@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Images, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Images, Trash2, Plus, Loader2, Edit2, X } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
@@ -18,6 +18,9 @@ const AdminHeroPage: React.FC = () => {
   const [slides, setSlides] = useState<HeroSlideData[]>([]);
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
+
+  const getImageUrl = (url: string) => url.startsWith('http') || url.startsWith('/') ? url : `/${url}`;
 
   // Form State
   const [formData, setFormData] = useState({
@@ -50,26 +53,57 @@ const AdminHeroPage: React.FC = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleAddSlide = async (e: React.FormEvent) => {
+  const handleSubmitSlide = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsAdding(true);
     try {
-      const res = await fetch('/api/catalog/hero-slides', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      if (res.ok) {
-        setFormData({ title: '', subtitle: '', buttonText: '', image: '', link: '' });
-        fetchSlides();
+      if (editingId !== null) {
+        const res = await fetch(`/api/catalog/hero-slides/${editingId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        if (res.ok) {
+          handleCancelEdit();
+          fetchSlides();
+        } else {
+          alert('Error al actualizar slide');
+        }
       } else {
-        alert('Error al agregar slide');
+        const res = await fetch('/api/catalog/hero-slides', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        if (res.ok) {
+          setFormData({ title: '', subtitle: '', buttonText: '', image: '', link: '' });
+          fetchSlides();
+        } else {
+          alert('Error al agregar slide');
+        }
       }
     } catch (error) {
       console.error(error);
     } finally {
       setIsAdding(false);
     }
+  };
+
+  const handleEditInit = (slide: HeroSlideData) => {
+    setEditingId(slide.id);
+    setFormData({
+      title: slide.title,
+      subtitle: slide.subtitle,
+      buttonText: slide.buttonText,
+      image: slide.image,
+      link: slide.link
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setFormData({ title: '', subtitle: '', buttonText: '', image: '', link: '' });
   };
 
   const handleDelete = async (id: number) => {
@@ -98,11 +132,15 @@ const AdminHeroPage: React.FC = () => {
           <Card className="border-transparent shadow-xl shadow-brand-pink/5 sticky top-8">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Plus size={20} className="text-brand-pink" /> Nuevo Slide
+                {editingId !== null ? (
+                  <><Edit2 size={20} className="text-brand-pink" /> Editar Slide</>
+                ) : (
+                  <><Plus size={20} className="text-brand-pink" /> Nuevo Slide</>
+                )}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleAddSlide} className="space-y-4">
+              <form onSubmit={handleSubmitSlide} className="space-y-4">
                 <div>
                   <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Título</label>
                   <Input name="title" value={formData.title} onChange={handleInputChange} placeholder="Ej: Moda Vintage" required />
@@ -123,9 +161,16 @@ const AdminHeroPage: React.FC = () => {
                   <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Enlace (Destino)</label>
                   <Input name="link" value={formData.link} onChange={handleInputChange} placeholder="/search" required />
                 </div>
-                <Button type="submit" className="w-full" disabled={isAdding}>
-                  {isAdding ? <Loader2 className="animate-spin" /> : 'Agregar Slide'}
-                </Button>
+                <div className="flex gap-2">
+                  <Button type="submit" className="flex-1" disabled={isAdding}>
+                    {isAdding ? <Loader2 className="animate-spin mx-auto" /> : (editingId !== null ? 'Guardar Cambios' : 'Agregar Slide')}
+                  </Button>
+                  {editingId !== null && (
+                    <Button type="button" variant="outline" onClick={handleCancelEdit} title="Cancelar">
+                      <X size={20} />
+                    </Button>
+                  )}
+                </div>
               </form>
             </CardContent>
           </Card>
@@ -139,9 +184,9 @@ const AdminHeroPage: React.FC = () => {
             <div className="text-center py-12 text-gray-400">No hay slides configurados.</div>
           ) : (
             slides.map((slide) => (
-              <Card key={slide.id} className="border-transparent shadow-xl shadow-brand-pink/5 overflow-hidden flex flex-col sm:flex-row">
+              <Card key={slide.id} className={`border-transparent shadow-xl shadow-brand-pink/5 overflow-hidden flex flex-col sm:flex-row transition-all ${editingId === slide.id ? 'ring-2 ring-brand-pink' : ''}`}>
                 <div className="sm:w-1/3 aspect-video sm:aspect-auto bg-gray-100 flex-shrink-0 relative">
-                  <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+                  <img src={getImageUrl(slide.image)} alt={slide.title} className="w-full h-full object-cover" />
                 </div>
                 <div className="p-6 flex-grow flex flex-col justify-between">
                   <div>
@@ -152,7 +197,13 @@ const AdminHeroPage: React.FC = () => {
                       <span className="bg-gray-100 px-2 py-1 rounded-md border">Link: {slide.link}</span>
                     </div>
                   </div>
-                  <div className="mt-4 flex justify-end">
+                  <div className="mt-4 flex justify-end gap-2">
+                    <button 
+                      onClick={() => handleEditInit(slide)}
+                      className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-brand-pink hover:bg-pink-50 transition-all shadow-sm flex items-center gap-2 text-sm font-bold"
+                    >
+                      <Edit2 size={16} /> Editar
+                    </button>
                     <button 
                       onClick={() => handleDelete(slide.id)}
                       className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm flex items-center gap-2 text-sm font-bold"
