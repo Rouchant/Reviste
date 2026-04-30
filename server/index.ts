@@ -437,7 +437,11 @@ app.post('/api/auth/register', async (req, res) => {
     res.status(201).json({
       id: newUser.id.toString(),
       name: newUser.NOMBRE_COMPLETO,
+      username: newUser.NOMBRE_USUARIO,
       email: newUser.CORREO,
+      phone: newUser.TELEFONO,
+      bio: newUser.BIOGRAFIA,
+      address: newUser.DIRECCION_TEXTO,
       role: newUser.ES_ADMIN ? 'admin' : 'user',
       isAdmin: newUser.ES_ADMIN,
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${newUser.CORREO}`
@@ -460,7 +464,11 @@ app.post('/api/auth/login', async (req, res) => {
     res.json({
       id: user.id.toString(),
       name: user.NOMBRE_COMPLETO,
+      username: user.NOMBRE_USUARIO,
       email: user.CORREO,
+      phone: user.TELEFONO,
+      bio: user.BIOGRAFIA,
+      address: user.DIRECCION_TEXTO,
       role: user.ES_ADMIN ? 'admin' : 'user',
       isAdmin: user.ES_ADMIN,
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.CORREO}`
@@ -468,6 +476,46 @@ app.post('/api/auth/login', async (req, res) => {
   } catch (error) {
     console.error('Error en login:', error);
     res.status(500).json({ error: 'Error al iniciar sesión' });
+  }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, username, bio, phone, address } = req.body;
+    
+    const updates: any = {};
+    if (name !== undefined) updates.NOMBRE_COMPLETO = name;
+    if (username !== undefined) updates.NOMBRE_USUARIO = username;
+    if (bio !== undefined) updates.BIOGRAFIA = bio;
+    if (phone !== undefined) updates.TELEFONO = phone;
+    if (address !== undefined) updates.DIRECCION_TEXTO = address;
+
+    const updatedUser = await Usuario.findOneAndUpdate(
+      { id: Number(id) },
+      { $set: updates },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    res.json({
+      id: updatedUser.id.toString(),
+      name: updatedUser.NOMBRE_COMPLETO,
+      username: updatedUser.NOMBRE_USUARIO,
+      email: updatedUser.CORREO,
+      phone: updatedUser.TELEFONO,
+      bio: updatedUser.BIOGRAFIA,
+      address: updatedUser.DIRECCION_TEXTO,
+      role: updatedUser.ES_ADMIN ? 'admin' : 'user',
+      isAdmin: updatedUser.ES_ADMIN,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${updatedUser.CORREO}`
+    });
+  } catch (error) {
+    console.error('Error al actualizar usuario:', error);
+    res.status(500).json({ error: 'Error al actualizar perfil' });
   }
 });
 

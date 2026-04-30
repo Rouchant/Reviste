@@ -8,10 +8,38 @@ import { Button } from '../../../components/ui/button';
 import { Card } from '../../../components/ui/card';
 import { Input } from '../../../components/ui/input';
 import { useAuthStore } from '../store/useAuthStore';
+import { toast } from 'sonner';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = React.useState<'perfil' | 'notificaciones' | 'seguridad' | 'pagos'>('perfil');
-  const { user, logout } = useAuthStore();
+  const { user, logout, updateUser } = useAuthStore();
+
+  const [name, setName] = React.useState(user?.name || '');
+  const [username, setUsername] = React.useState(user?.username || user?.name?.toLowerCase().replace(/\s/g, '_') || '');
+  const [bio, setBio] = React.useState(user?.bio || '');
+  const [phone, setPhone] = React.useState(user?.phone || '');
+  const [address, setAddress] = React.useState(user?.address || '');
+  const [isSaving, setIsSaving] = React.useState(false);
+
+  const handleSave = async () => {
+    if (!user) return;
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, username, bio, phone, address })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Error al guardar');
+      updateUser(data);
+      toast.success('Perfil actualizado correctamente');
+    } catch (error) {
+      toast.error((error as Error).message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <MainLayout>
@@ -72,9 +100,6 @@ const SettingsPage: React.FC = () => {
                         <div className="w-24 h-24 rounded-[32px] bg-brand-pink/10 border-2 border-brand-pink/20 flex items-center justify-center text-brand-pink text-4xl font-black overflow-hidden shadow-inner">
                           {user?.name?.substring(0, 2).toUpperCase() || 'JP'}
                         </div>
-                        <button className="absolute -bottom-2 -right-2 w-10 h-10 bg-white rounded-2xl shadow-lg border border-gray-100 flex items-center justify-center text-gray-400 hover:text-brand-pink transition-all">
-                          <Camera size={18} />
-                        </button>
                       </div>
                       <div>
                         <p className="font-bold text-gray-800">Foto de perfil</p>
@@ -84,12 +109,23 @@ const SettingsPage: React.FC = () => {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Nombre</label>
-                        <Input defaultValue={user?.name || "Juan Pérez"} />
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Nombre Completo</label>
+                        <Input value={name} onChange={(e) => setName(e.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Alias</label>
-                        <Input defaultValue={`@${user?.name?.toLowerCase().replace(/\s/g, '_') || 'usuario'}`} />
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Alias (Usuario)</label>
+                        <Input value={username} onChange={(e) => setUsername(e.target.value.replace(/^@/, ''))} />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Teléfono</label>
+                        <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+56 9..." />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Dirección</label>
+                        <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Ej: Av. Providencia 1234" />
                       </div>
                     </div>
 
@@ -98,12 +134,16 @@ const SettingsPage: React.FC = () => {
                       <textarea 
                         className="flex w-full rounded-[24px] border border-transparent bg-gray-50 px-6 py-4 text-sm transition-all focus:bg-white focus:border-brand-pink outline-none"
                         rows={3}
-                        defaultValue="Amante de lo vintage y la moda circular 🌿"
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        placeholder="Cuéntanos un poco sobre ti..."
                       ></textarea>
                     </div>
 
                     <div className="flex justify-end pt-4">
-                      <Button className="px-8 h-12">Guardar cambios</Button>
+                      <Button onClick={handleSave} disabled={isSaving} className="px-8 h-12">
+                        {isSaving ? 'Guardando...' : 'Guardar cambios'}
+                      </Button>
                     </div>
                   </div>
                 </Card>

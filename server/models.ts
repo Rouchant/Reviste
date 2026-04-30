@@ -46,6 +46,8 @@ export interface IUsuario extends Document {
   CORREO: string;
   CONTRASENA: string;
   TELEFONO?: string;
+  BIOGRAFIA?: string;
+  DIRECCION_TEXTO?: string;
   FECHA_REGISTRO: Date;
   ES_ADMIN: boolean;
 }
@@ -58,6 +60,8 @@ const UsuarioSchema = new Schema<IUsuario>({
   CORREO: { type: String, required: true, unique: true },
   CONTRASENA: { type: String, required: true },
   TELEFONO: { type: String },
+  BIOGRAFIA: { type: String },
+  DIRECCION_TEXTO: { type: String },
   FECHA_REGISTRO: { type: Date, default: Date.now },
   ES_ADMIN: { type: Boolean, default: false }
 });

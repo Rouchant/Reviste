@@ -5,7 +5,11 @@ import { toast } from 'sonner';
 interface User {
   id: string;
   name: string;
+  username?: string;
   email: string;
+  phone?: string;
+  bio?: string;
+  address?: string;
   role: 'user' | 'admin';
   isAdmin: boolean;
   avatar?: string;
@@ -15,6 +19,7 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   login: (user: User) => void;
+  updateUser: (data: Partial<User>) => void;
   logout: () => void;
 }
 
@@ -26,6 +31,11 @@ export const useAuthStore = create<AuthState>()(
       login: (userData: User) => {
         set({ user: userData, isAuthenticated: true });
         toast.success(`¡Bienvenido, ${userData.name}!`);
+      },
+      updateUser: (data) => {
+        set((state) => ({
+          user: state.user ? { ...state.user, ...data } : null
+        }));
       },
       logout: () => {
         set({ user: null, isAuthenticated: false });
