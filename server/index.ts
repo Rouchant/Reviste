@@ -132,6 +132,7 @@ app.get('/api/catalog/products', async (req, res) => {
         rating: p.RATING || 0,
         reviews: p.REVIEWS_COUNT || 0,
         image: imageMap.get(p.id) || '',
+        status: p.ESTADO_VENTA || 'Disponible',
         freeShipping: p.FREE_SHIPPING || false,
         seller: sellerMap.has(p.ID_USUARIO_VENDEDOR) ? `@${sellerMap.get(p.ID_USUARIO_VENDEDOR)}` : 'Reviste'
       };
@@ -409,6 +410,53 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
   }
 });
 
+app.post('/api/catalog/hero-slides', async (req, res) => {
+  try {
+    const { title, subtitle, buttonText, image, link } = req.body;
+    const lastSlide = await HeroSlide.findOne().sort({ id: -1 });
+    const nextId = (lastSlide?.id || 0) + 1;
+
+    const newSlide = new HeroSlide({
+      id: nextId,
+      title,
+      subtitle,
+      buttonText,
+      image,
+      link
+    });
+    await newSlide.save();
+    res.status(201).json(newSlide);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear hero slide' });
+  }
+});
+
+app.put('/api/catalog/hero-slides/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    const updatedSlide = await HeroSlide.findOneAndUpdate(
+      { id: Number(id) },
+      { $set: updates },
+      { new: true }
+    );
+    if (!updatedSlide) return res.status(404).json({ error: 'Slide no encontrado' });
+    res.json(updatedSlide);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar hero slide' });
+  }
+});
+
+app.delete('/api/catalog/hero-slides/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await HeroSlide.findOneAndDelete({ id: Number(id) });
+    res.json({ message: 'Slide eliminado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar hero slide' });
+  }
+});
+
 // --- AUTHENTICATION ---
 
 app.post('/api/auth/register', async (req, res) => {
@@ -597,6 +645,46 @@ app.put('/api/users/:id/password', async (req, res) => {
   } catch (error) {
     console.error('Error al actualizar contraseña:', error);
     res.status(500).json({ error: 'Error al actualizar contraseña' });
+  }
+});
+
+// --- ADMIN USER MANAGEMENT ---
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await Usuario.find().lean();
+    const mappedUsers = users.map(u => ({
+      id: u.id,
+      name: u.NOMBRE_COMPLETO,
+      username: u.NOMBRE_USUARIO,
+      email: u.CORREO,
+      isAdmin: u.ES_ADMIN,
+      registeredAt: u.FECHA_REGISTRO
+    }));
+    res.json(mappedUsers);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al obtener usuarios' });
+  }
+});
+
+app.put('/api/users/:id/role', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isAdmin } = req.body;
+    const user = await Usuario.findOneAndUpdate({ id: Number(id) }, { ES_ADMIN: isAdmin }, { new: true });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+    res.json({ message: 'Rol actualizado', isAdmin: user.ES_ADMIN });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al actualizar rol' });
+  }
+});
+
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await Usuario.findOneAndDelete({ id: Number(id) });
+    res.json({ message: 'Usuario eliminado' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al eliminar usuario' });
   }
 });
 

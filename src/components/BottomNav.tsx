@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutPanelLeft, LogIn, Heart, User, Store } from 'lucide-react';
+import { LayoutPanelLeft, LogIn, Heart, User, Store, ShieldCheck } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../features/auth/store/useAuthStore';
 
@@ -13,13 +13,16 @@ interface NavItem {
 
 const BottomNav: React.FC = () => {
   const location = useLocation();
-  const { isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
 
   const navItems: NavItem[] = [
     { icon: <LayoutPanelLeft size={26} />, label: 'Explorar', path: '/', color: 'text-brand-muted' },
   ];
 
   if (isAuthenticated) {
+    if (user?.isAdmin) {
+      navItems.push({ icon: <ShieldCheck size={26} />, label: 'Admin', path: '/admin', color: 'text-brand-pink' });
+    }
     navItems.push({ icon: <Heart size={26} />, label: 'Favoritos', path: '/favorites', color: 'text-brand-pink' });
     navItems.push({ icon: <Store size={26} />, label: 'Tienda', path: '/my-store', color: 'text-brand-muted' });
     navItems.push({ icon: <User size={26} />, label: 'Perfil', path: '/settings', color: 'text-brand-muted' });

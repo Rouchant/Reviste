@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   LayoutDashboard, ShoppingBag, ShoppingCart, Users, BarChart3, 
-  ArrowLeft, LogOut
+  ArrowLeft, LogOut, Images
 } from 'lucide-react';
 import { Link, useLocation, Navigate } from 'react-router-dom';
 import { useAuthStore } from '../features/auth/store/useAuthStore';
@@ -20,11 +20,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   }
 
   const sidebarLinks = [
-    { icon: <LayoutDashboard size={20} />, label: "Resumen", path: "/admin" },
-    { icon: <ShoppingBag size={20} />, label: "Inventario", path: "/admin/inventory" },
-    { icon: <ShoppingCart size={20} />, label: "Pedidos", path: "/admin/orders" },
+    { icon: <LayoutDashboard size={20} />, label: "Resumen Global", path: "/admin" },
     { icon: <Users size={20} />, label: "Usuarios", path: "/admin/users" },
-    { icon: <BarChart3 size={20} />, label: "Reportes", path: "/admin/reports" },
+    { icon: <Images size={20} />, label: "Carrusel", path: "/admin/hero" },
   ];
 
   return (

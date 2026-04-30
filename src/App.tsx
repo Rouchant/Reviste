@@ -8,6 +8,8 @@ const ProductDetailPage = lazy(() => import('./features/catalog/pages/ProductDet
 const CartPage = lazy(() => import('./features/cart/pages/CartPage'));
 const AuthPage = lazy(() => import('./features/auth/pages/AuthPage'));
 const AdminPage = lazy(() => import('./features/inventory/pages/AdminPage'));
+const AdminUsersPage = lazy(() => import('./features/inventory/pages/AdminUsersPage'));
+const AdminHeroPage = lazy(() => import('./features/inventory/pages/AdminHeroPage'));
 const UploadPage = lazy(() => import('./features/inventory/pages/UploadPage'));
 const SettingsPage = lazy(() => import('./features/auth/pages/SettingsPage'));
 const SearchPage = lazy(() => import('./features/catalog/pages/SearchPage'));
@@ -41,6 +43,8 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/admin/users" element={<AdminUsersPage />} />
+            <Route path="/admin/hero" element={<AdminHeroPage />} />
             <Route path="/my-store" element={<MyStorePage />} />
             <Route path="/edit-product/:id" element={<EditProductPage />} />
             <Route path="/upload" element={<UploadPage />} />

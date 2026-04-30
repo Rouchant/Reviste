@@ -1,15 +1,60 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Plus, DollarSign, Package, ShoppingCart, Users, User, Menu,
-  TrendingUp, Edit2, Trash2
+  TrendingUp, Edit2, Trash2, RefreshCw
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
 import { Card, CardHeader, CardTitle } from '../../../components/ui/card';
 import { Badge } from '../../../components/ui/badge';
 import AdminLayout from '../../../layouts/AdminLayout';
 
 const AdminPage: React.FC = () => {
+  const navigate = useNavigate();
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch('/api/catalog/products');
+      const data = await res.json();
+      setProducts(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm('¿Seguro que deseas eliminar esta prenda de forma permanente?')) {
+      try {
+        const res = await fetch(`/api/catalog/products/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          fetchProducts();
+        } else {
+          alert('Error al eliminar la prenda');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('Error al eliminar la prenda');
+      }
+    }
+  };
+
+  const getStatusVariant = (status: string) => {
+    switch (status?.toLowerCase()) {
+      case 'disponible': return 'success';
+      case 'vendido': return 'destructive';
+      case 'reservado': return 'warning';
+      default: return 'default';
+    }
+  };
   return (
     <AdminLayout>
       {/* Mobile Header */}
@@ -28,13 +73,8 @@ const AdminPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-10">
         <div>
           <h1 className="text-2xl md:text-3xl font-black font-brand text-brand-dark mb-1 tracking-tight">Panel de Control</h1>
-          <p className="text-gray-400 font-medium text-sm">Bienvenido de nuevo, Administrador Reviste.</p>
+          <p className="text-gray-400 font-medium text-sm">Visión Global de Inventario (Todas las prendas de todos los usuarios)</p>
         </div>
-        <Link to="/upload">
-          <Button className="h-12 px-6">
-            <Plus size={20} className="mr-2" /> Nueva Prenda
-          </Button>
-        </Link>
       </div>
 
       {/* Stats Grid */}
@@ -90,33 +130,30 @@ const AdminPage: React.FC = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-50 text-sm">
-              <InventoryRow 
-                img="assets/images/products/item1.png"
-                name="Chaqueta Denim Vintage"
-                id="#4592"
-                category="Denim"
-                price="$25.990"
-                status="Disponible"
-                statusVariant="success"
-              />
-              <InventoryRow 
-                img="assets/images/products/item2.png"
-                name="Suéter Retro Color Block"
-                id="#4588"
-                category="Vintage 90s"
-                price="$18.500"
-                status="Vendido"
-                statusVariant="destructive"
-              />
-              <InventoryRow 
-                img="assets/images/products/item3.png"
-                name="Pantalones Cargo Earthy"
-                id="#4580"
-                category="Streetwear"
-                price="$22.000"
-                status="Reservado"
-                statusVariant="warning"
-              />
+              {loading ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-gray-400">Cargando inventario...</td>
+                </tr>
+              ) : products.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="text-center py-8 text-gray-400">No hay prendas publicadas.</td>
+                </tr>
+              ) : (
+                products.map(product => (
+                  <InventoryRow 
+                    key={product.id}
+                    img={product.image || 'https://via.placeholder.com/150'}
+                    name={product.name}
+                    id={`#${product.id}`}
+                    category={product.tag?.split(' | ')[0] || 'Sin categoría'}
+                    price={`$${product.price.toLocaleString()}`}
+                    status={product.status || 'Disponible'}
+                    statusVariant={getStatusVariant(product.status)}
+                    onDelete={() => handleDelete(product.id)}
+                    onEdit={() => navigate(`/edit-product/${product.id}`)}
+                  />
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -171,9 +208,11 @@ interface InventoryRowProps {
   price: string;
   status: string;
   statusVariant: 'success' | 'destructive' | 'warning' | 'default' | 'muted';
+  onDelete: () => void;
+  onEdit: () => void;
 }
 
-const InventoryRow = ({ img, name, id, category, price, status, statusVariant }: InventoryRowProps) => (
+const InventoryRow = ({ img, name, id, category, price, status, statusVariant, onDelete, onEdit }: InventoryRowProps) => (
   <tr className="hover:bg-gray-50/80 transition-colors">
     <td className="px-6 sm:px-8 py-4">
       <img 
@@ -197,12 +236,14 @@ const InventoryRow = ({ img, name, id, category, price, status, statusVariant }:
       <div className="flex gap-2">
         <button 
           aria-label="Editar"
+          onClick={onEdit}
           className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-all shadow-sm"
         >
           <Edit2 size={16} />
         </button>
         <button 
           aria-label="Eliminar"
+          onClick={onDelete}
           className="p-2 border border-gray-100 rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-all shadow-sm"
         >
           <Trash2 size={16} />
