@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import { 
-  Categoria, Prenda, PrendaImagen, HeroSlide, Usuario, Region, Comuna 
+  Categoria, Prenda, PrendaImagen, HeroSlide, Usuario, Region, Comuna, Direccion
 } from './models.js';
 
 dotenv.config();
@@ -412,10 +412,23 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { email, password, name, username, phone, address } = req.body;
+    const { email, password, name, username, phone, street, regionId, comunaId } = req.body;
     const existing = await Usuario.findOne({ CORREO: email });
     if (existing) {
       return res.status(400).json({ error: 'El correo ya está registrado' });
+    }
+
+    let direccionId = null;
+    if (street && comunaId) {
+      const lastDir = await Direccion.findOne().sort({ id: -1 });
+      const nextDirId = (lastDir?.id || 0) + 1;
+      const nuevaDireccion = new Direccion({
+        id: nextDirId,
+        CALLE: street,
+        ID_COMUNA: Number(comunaId)
+      });
+      await nuevaDireccion.save();
+      direccionId = nextDirId;
     }
 
     const lastUser = await Usuario.findOne().sort({ id: -1 });
@@ -423,12 +436,12 @@ app.post('/api/auth/register', async (req, res) => {
 
     const newUser = new Usuario({
       id: nextId,
+      ID_DIRECCION: direccionId,
       NOMBRE_USUARIO: username || (name ? name.split(' ')[0] : email.split('@')[0]),
       NOMBRE_COMPLETO: name || email.split('@')[0],
       CORREO: email,
       CONTRASENA: password, // Almacenamiento en texto plano (solo para dev)
       TELEFONO: phone,
-      DIRECCION_TEXTO: address,
       ES_ADMIN: false,
       FECHA_REGISTRO: new Date()
     });
@@ -442,7 +455,9 @@ app.post('/api/auth/register', async (req, res) => {
       email: newUser.CORREO,
       phone: newUser.TELEFONO,
       bio: newUser.BIOGRAFIA,
-      address: newUser.DIRECCION_TEXTO,
+      street: street,
+      regionId: regionId?.toString(),
+      comunaId: comunaId?.toString(),
       role: newUser.ES_ADMIN ? 'admin' : 'user',
       isAdmin: newUser.ES_ADMIN,
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${newUser.CORREO}`
@@ -462,6 +477,9 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
+    const userDir = user.ID_DIRECCION ? await Direccion.findOne({ id: user.ID_DIRECCION }) : null;
+    const userComuna = userDir ? await Comuna.findOne({ id: userDir.ID_COMUNA }) : null;
+
     res.json({
       id: user.id.toString(),
       name: user.NOMBRE_COMPLETO,
@@ -469,7 +487,9 @@ app.post('/api/auth/login', async (req, res) => {
       email: user.CORREO,
       phone: user.TELEFONO,
       bio: user.BIOGRAFIA,
-      address: user.DIRECCION_TEXTO,
+      street: userDir?.CALLE,
+      regionId: userComuna?.ID_REGION?.toString(),
+      comunaId: userDir?.ID_COMUNA?.toString(),
       role: user.ES_ADMIN ? 'admin' : 'user',
       isAdmin: user.ES_ADMIN,
       avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${user.CORREO}`
@@ -483,14 +503,37 @@ app.post('/api/auth/login', async (req, res) => {
 app.put('/api/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, username, bio, phone, address } = req.body;
+    const { name, username, bio, phone, street, regionId, comunaId } = req.body;
     
     const updates: any = {};
     if (name !== undefined) updates.NOMBRE_COMPLETO = name;
     if (username !== undefined) updates.NOMBRE_USUARIO = username;
     if (bio !== undefined) updates.BIOGRAFIA = bio;
     if (phone !== undefined) updates.TELEFONO = phone;
-    if (address !== undefined) updates.DIRECCION_TEXTO = address;
+
+    const user = await Usuario.findOne({ id: Number(id) });
+    if (!user) {
+      return res.status(404).json({ error: 'Usuario no encontrado' });
+    }
+
+    if (street !== undefined || comunaId !== undefined) {
+      if (user.ID_DIRECCION) {
+        const dirUpdates: any = {};
+        if (street !== undefined) dirUpdates.CALLE = street;
+        if (comunaId !== undefined) dirUpdates.ID_COMUNA = Number(comunaId);
+        await Direccion.findOneAndUpdate({ id: user.ID_DIRECCION }, { $set: dirUpdates });
+      } else if (street && comunaId) {
+        const lastDir = await Direccion.findOne().sort({ id: -1 });
+        const nextDirId = (lastDir?.id || 0) + 1;
+        const nuevaDireccion = new Direccion({
+          id: nextDirId,
+          CALLE: street,
+          ID_COMUNA: Number(comunaId)
+        });
+        await nuevaDireccion.save();
+        updates.ID_DIRECCION = nextDirId;
+      }
+    }
 
     const updatedUser = await Usuario.findOneAndUpdate(
       { id: Number(id) },
@@ -498,21 +541,22 @@ app.put('/api/users/:id', async (req, res) => {
       { new: true }
     );
 
-    if (!updatedUser) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
+    const userDir = updatedUser?.ID_DIRECCION ? await Direccion.findOne({ id: updatedUser.ID_DIRECCION }) : null;
+    const userComuna = userDir ? await Comuna.findOne({ id: userDir.ID_COMUNA }) : null;
 
     res.json({
-      id: updatedUser.id.toString(),
-      name: updatedUser.NOMBRE_COMPLETO,
-      username: updatedUser.NOMBRE_USUARIO,
-      email: updatedUser.CORREO,
-      phone: updatedUser.TELEFONO,
-      bio: updatedUser.BIOGRAFIA,
-      address: updatedUser.DIRECCION_TEXTO,
-      role: updatedUser.ES_ADMIN ? 'admin' : 'user',
-      isAdmin: updatedUser.ES_ADMIN,
-      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${updatedUser.CORREO}`
+      id: updatedUser!.id.toString(),
+      name: updatedUser!.NOMBRE_COMPLETO,
+      username: updatedUser!.NOMBRE_USUARIO,
+      email: updatedUser!.CORREO,
+      phone: updatedUser!.TELEFONO,
+      bio: updatedUser!.BIOGRAFIA,
+      street: userDir?.CALLE,
+      regionId: userComuna?.ID_REGION?.toString(),
+      comunaId: userDir?.ID_COMUNA?.toString(),
+      role: updatedUser!.ES_ADMIN ? 'admin' : 'user',
+      isAdmin: updatedUser!.ES_ADMIN,
+      avatar: `https://api.dicebear.com/7.x/avataaars/svg?seed=${updatedUser!.CORREO}`
     });
   } catch (error) {
     console.error('Error al actualizar usuario:', error);

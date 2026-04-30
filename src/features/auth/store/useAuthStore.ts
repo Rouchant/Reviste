@@ -9,7 +9,9 @@ interface User {
   email: string;
   phone?: string;
   bio?: string;
-  address?: string;
+  street?: string;
+  regionId?: string;
+  comunaId?: string;
   role: 'user' | 'admin';
   isAdmin: boolean;
   avatar?: string;

@@ -18,8 +18,30 @@ const SettingsPage: React.FC = () => {
   const [username, setUsername] = React.useState(user?.username || user?.name?.toLowerCase().replace(/\s/g, '_') || '');
   const [bio, setBio] = React.useState(user?.bio || '');
   const [phone, setPhone] = React.useState(user?.phone || '');
-  const [address, setAddress] = React.useState(user?.address || '');
+  const [street, setStreet] = React.useState(user?.street || '');
+  const [selectedRegion, setSelectedRegion] = React.useState(user?.regionId || '');
+  const [selectedComuna, setSelectedComuna] = React.useState(user?.comunaId || '');
+  const [regionsList, setRegionsList] = React.useState<{id: number, name: string}[]>([]);
+  const [comunasList, setComunasList] = React.useState<{id: number, name: string}[]>([]);
   const [isSaving, setIsSaving] = React.useState(false);
+
+  React.useEffect(() => {
+    fetch('/api/location/regions')
+      .then(res => res.json())
+      .then(data => setRegionsList(data))
+      .catch(console.error);
+  }, []);
+
+  React.useEffect(() => {
+    if (!selectedRegion) {
+      setComunasList([]);
+      return;
+    }
+    fetch(`/api/location/comunas/${selectedRegion}`)
+      .then(res => res.json())
+      .then(data => setComunasList(data))
+      .catch(console.error);
+  }, [selectedRegion]);
 
   const handleSave = async () => {
     if (!user) return;
@@ -28,7 +50,7 @@ const SettingsPage: React.FC = () => {
       const response = await fetch(`/api/users/${user.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, username, bio, phone, address })
+        body: JSON.stringify({ name, username, bio, phone, street, regionId: selectedRegion, comunaId: selectedComuna })
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Error al guardar');
@@ -102,8 +124,8 @@ const SettingsPage: React.FC = () => {
                         </div>
                       </div>
                       <div>
-                        <p className="font-bold text-gray-800">Foto de perfil</p>
-                        <p className="text-xs text-gray-400">JPG o PNG. Máximo 1MB.</p>
+                        <p className="font-bold text-gray-800">Avatar de cuenta</p>
+                        <p className="text-xs text-gray-400">Tu avatar se genera automáticamente según tu nombre.</p>
                       </div>
                     </div>
 
@@ -123,9 +145,43 @@ const SettingsPage: React.FC = () => {
                         <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Teléfono</label>
                         <Input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+56 9..." />
                       </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Dirección (Calle y Número)</label>
+                      <Input value={street} onChange={(e) => setStreet(e.target.value)} placeholder="Ej: Av. Providencia 1234, depto 501" />
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Dirección</label>
-                        <Input value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Ej: Av. Providencia 1234" />
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Región</label>
+                        <select 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          value={selectedRegion}
+                          onChange={(e) => {
+                            setSelectedRegion(e.target.value);
+                            setSelectedComuna('');
+                          }}
+                        >
+                          <option value="">Selecciona</option>
+                          {regionsList.map(r => (
+                            <option key={r.id} value={r.id}>{r.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Comuna</label>
+                        <select 
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          disabled={!selectedRegion}
+                          value={selectedComuna}
+                          onChange={(e) => setSelectedComuna(e.target.value)}
+                        >
+                          <option value="">Comuna</option>
+                          {comunasList.map(c => (
+                            <option key={c.id} value={c.id}>{c.name}</option>
+                          ))}
+                        </select>
                       </div>
                     </div>
 
