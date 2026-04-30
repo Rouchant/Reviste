@@ -63,6 +63,47 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  const [currentPassword, setCurrentPassword] = React.useState('');
+  const [newPassword, setNewPassword] = React.useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = React.useState('');
+  const [isChangingPassword, setIsChangingPassword] = React.useState(false);
+
+  const handlePasswordChange = async () => {
+    if (!user) return;
+    if (!currentPassword || !newPassword || !confirmNewPassword) {
+      toast.error('Por favor completa todos los campos de contraseña');
+      return;
+    }
+    if (newPassword !== confirmNewPassword) {
+      toast.error('Las contraseñas nuevas no coinciden');
+      return;
+    }
+    if (newPassword.length < 8) {
+      toast.error('La nueva contraseña debe tener al menos 8 caracteres');
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      const response = await fetch(`/api/users/${user.id}/password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ currentPassword, newPassword })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'Error al cambiar contraseña');
+      
+      toast.success('Contraseña actualizada correctamente');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (error) {
+      toast.error((error as Error).message);
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   return (
     <MainLayout>
       <div className="container mx-auto px-4 py-8 max-w-5xl">
@@ -234,13 +275,38 @@ const SettingsPage: React.FC = () => {
                   <div className="space-y-6">
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Contraseña Actual</label>
-                      <Input type="password" placeholder="••••••••" />
+                      <Input 
+                        type="password" 
+                        placeholder="••••••••" 
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Nueva Contraseña</label>
-                      <Input type="password" placeholder="Mínimo 8 caracteres" />
+                      <Input 
+                        type="password" 
+                        placeholder="Mínimo 8 caracteres" 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
                     </div>
-                    <Button className="w-full">Cambiar contraseña</Button>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Repetir Nueva Contraseña</label>
+                      <Input 
+                        type="password" 
+                        placeholder="Confirma tu nueva contraseña" 
+                        value={confirmNewPassword}
+                        onChange={(e) => setConfirmNewPassword(e.target.value)}
+                      />
+                    </div>
+                    <Button 
+                      className="w-full" 
+                      onClick={handlePasswordChange}
+                      disabled={isChangingPassword}
+                    >
+                      {isChangingPassword ? 'Actualizando...' : 'Cambiar contraseña'}
+                    </Button>
                   </div>
                 </Card>
               </div>

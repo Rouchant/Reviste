@@ -573,6 +573,33 @@ app.put('/api/users/:id', async (req, res) => {
   }
 });
 
+// --- PASSWORD UPDATE ---
+app.put('/api/users/:id/password', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { currentPassword, newPassword } = req.body;
+    
+    const user = await Usuario.findOne({ id: Number(id) });
+    if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+    const isMatch = user.CONTRASENA.startsWith('$2') 
+      ? await bcrypt.compare(currentPassword, user.CONTRASENA) 
+      : currentPassword === user.CONTRASENA;
+
+    if (!isMatch) {
+      return res.status(400).json({ error: 'La contraseña actual es incorrecta' });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+    await Usuario.findOneAndUpdate({ id: Number(id) }, { CONTRASENA: hashedNewPassword });
+
+    res.json({ message: 'Contraseña actualizada exitosamente' });
+  } catch (error) {
+    console.error('Error al actualizar contraseña:', error);
+    res.status(500).json({ error: 'Error al actualizar contraseña' });
+  }
+});
+
 // --- SERVER START ---
 
 export default app;
