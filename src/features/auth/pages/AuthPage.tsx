@@ -33,7 +33,7 @@ const AuthPage: React.FC = () => {
   const [comunasList, setComunasList] = useState<{id: number, name: string}[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/location/regions')
+    fetch('/api/location/regions')
       .then(res => res.json())
       .then(data => setRegionsList(data))
       .catch(console.error);
@@ -44,7 +44,7 @@ const AuthPage: React.FC = () => {
       setComunasList([]);
       return;
     }
-    fetch(`http://localhost:5000/api/location/comunas/${selectedRegion}`)
+    fetch(`/api/location/comunas/${selectedRegion}`)
       .then(res => res.json())
       .then(data => setComunasList(data))
       .catch(console.error);
@@ -90,7 +90,7 @@ const AuthPage: React.FC = () => {
       }
       setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:5000/api/auth/login', {
+        const response = await fetch('/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password })
@@ -117,7 +117,7 @@ const AuthPage: React.FC = () => {
       }
       setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:5000/api/auth/register', {
+        const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email, password, name: fullName, phone })
