@@ -412,7 +412,7 @@ app.get('/api/catalog/hero-slides', async (req, res) => {
 
 app.post('/api/auth/register', async (req, res) => {
   try {
-    const { email, password, name, username, phone } = req.body;
+    const { email, password, name, username, phone, address } = req.body;
     const existing = await Usuario.findOne({ CORREO: email });
     if (existing) {
       return res.status(400).json({ error: 'El correo ya está registrado' });
@@ -428,6 +428,7 @@ app.post('/api/auth/register', async (req, res) => {
       CORREO: email,
       CONTRASENA: password, // Almacenamiento en texto plano (solo para dev)
       TELEFONO: phone,
+      DIRECCION_TEXTO: address,
       ES_ADMIN: false,
       FECHA_REGISTRO: new Date()
     });

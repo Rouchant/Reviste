@@ -116,11 +116,16 @@ const AuthPage: React.FC = () => {
         return;
       }
       setIsLoading(true);
+
+      const rName = regionsList.find(r => r.id.toString() === selectedRegion)?.name || '';
+      const cName = comunasList.find(c => c.id.toString() === selectedComuna)?.name || '';
+      const fullAddress = [street, cName, rName].filter(Boolean).join(', ');
+
       try {
         const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, name: fullName, username, phone })
+          body: JSON.stringify({ email, password, name: fullName, username, phone, address: fullAddress })
         });
         
         const data = await response.json();
