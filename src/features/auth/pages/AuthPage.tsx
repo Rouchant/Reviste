@@ -107,8 +107,8 @@ const AuthPage: React.FC = () => {
         setIsLoading(false);
       }
     } else {
-      if (!email || !password || !fullName) {
-        toast.error('Por favor completa los campos obligatorios (Nombre, Correo, Contraseña)');
+      if (!email || !password || !fullName || !username) {
+        toast.error('Por favor completa los campos obligatorios (Nombre, Usuario, Correo, Contraseña)');
         return;
       }
       if (password !== confirmPassword) {
@@ -120,7 +120,7 @@ const AuthPage: React.FC = () => {
         const response = await fetch('/api/auth/register', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, name: fullName, phone })
+          body: JSON.stringify({ email, password, name: fullName, username, phone })
         });
         
         const data = await response.json();
