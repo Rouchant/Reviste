@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Images, Trash2, Plus, Loader2, Edit2, X } from 'lucide-react';
+import { Images, Trash2, Plus, Loader2, Edit2, X, Camera } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Input } from '../../../components/ui/input';
@@ -51,6 +51,16 @@ const AdminHeroPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setFormData(prev => ({ ...prev, image: event.target?.result as string }));
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
   };
 
   const handleSubmitSlide = async (e: React.FormEvent) => {
@@ -154,12 +164,32 @@ const AdminHeroPage: React.FC = () => {
                   <Input name="buttonText" value={formData.buttonText} onChange={handleInputChange} placeholder="Ej: Comprar ahora" required />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">URL de la Imagen</label>
-                  <Input name="image" value={formData.image} onChange={handleInputChange} placeholder="https://ejemplo.com/imagen.jpg" required />
+                  <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Imagen del Slide</label>
+                  <div 
+                    onClick={() => document.getElementById('heroImageInput')?.click()}
+                    className="relative aspect-video rounded-2xl border-2 border-dashed border-gray-100 bg-gray-50/50 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 hover:border-brand-pink/30 transition-all overflow-hidden group mb-2"
+                  >
+                    {formData.image ? (
+                      <img src={getImageUrl(formData.image)} alt="Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="text-center p-4">
+                        <Camera size={24} className="text-gray-300 mx-auto mb-2 group-hover:text-brand-pink transition-colors" />
+                        <p className="text-[10px] font-bold text-gray-400">Subir imagen</p>
+                      </div>
+                    )}
+                    <input type="file" id="heroImageInput" hidden accept="image/*" onChange={handleImageChange} />
+                  </div>
+                  <Input 
+                    name="image" 
+                    value={formData.image} 
+                    onChange={handleInputChange} 
+                    placeholder="O pega una URL aquí..." 
+                    className="h-8 text-[10px]"
+                  />
                 </div>
                 <div>
                   <label className="block text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 ml-1">Enlace (Destino)</label>
-                  <Input name="link" value={formData.link} onChange={handleInputChange} placeholder="/search" required />
+                  <Input name="link" value={formData.link} onChange={handleInputChange} placeholder="Ej: /search o /product/nombre" required />
                 </div>
                 <div className="flex gap-2">
                   <Button type="submit" className="flex-1" disabled={isAdding}>

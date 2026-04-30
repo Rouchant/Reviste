@@ -59,7 +59,7 @@ const AdminPage: React.FC = () => {
     <AdminLayout>
       {/* Mobile Header */}
       <div className="md:hidden flex justify-between items-center mb-8 px-2">
-        <img src="assets/images/ui/logo-h.png" alt="REVISTE" className="h-8" />
+        <img src="/assets/images/ui/logo-h.png" alt="REVISTE" className="h-8" />
         <div className="flex gap-2">
           <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-brand-pink bg-white shadow-sm">
             <User size={20} />
